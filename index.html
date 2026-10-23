@@ -37,7 +37,7 @@
             }
         };
 
-        // Генератор постеров-заглушек для отсутствующих картинок
+        // Гарантированно глобальный генератор SVG-постеров для отсутствующих картинок
         window.createCustomPoster = function(title, subtitle, bgColor1, accentColor, emoji) {
             const svg = `
             <svg xmlns="http://www.w3.org/2000/svg" width="600" height="750" viewBox="0 0 600 750">
@@ -52,13 +52,16 @@
             return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
         };
 
+        // Встроенные иллюстрации для улова (низкополигональное мясо на шампуре и рваный сапог с крючком)
         window.createFishingLootSvg = function(type) {
             if (type === 'meat') {
                 const svg = `
                 <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
                     <rect width="600" height="600" fill="#0f172a"/>
                     <rect x="18" y="18" width="564" height="564" fill="#1e293b" stroke="#f59e0b" stroke-width="6"/>
+                    <!-- Шампур -->
                     <line x1="70" y1="110" x2="530" y2="470" stroke="#cbd5e1" stroke-width="14" stroke-linecap="round"/>
+                    <!-- Куски низкополигонального мяса -->
                     <polygon points="110,170 175,120 220,175 160,235" fill="#78350f" stroke="#d97706" stroke-width="3"/>
                     <polygon points="175,120 220,175 190,210 140,165" fill="#92400e"/>
                     <polygon points="195,235 265,180 315,240 245,305" fill="#713f12" stroke="#b45309" stroke-width="3"/>
@@ -66,6 +69,7 @@
                     <polygon points="285,305 350,255 395,310 335,365" fill="#78350f" stroke="#d97706" stroke-width="3"/>
                     <polygon points="365,375 435,320 485,380 415,440" fill="#713f12" stroke="#f59e0b" stroke-width="3"/>
                     <text x="50%" y="86%" dominant-baseline="middle" text-anchor="middle" fill="#fbbf24" font-family="sans-serif" font-weight="900" font-size="28">СТРАННОЕ МЯСО (LOW-POLY)</text>
+                    <text x="50%" y="93%" dominant-baseline="middle" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="16">Шашлык из полигонов прямиком из Готики</text>
                 </svg>`;
                 return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
             }
@@ -74,8 +78,21 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
                     <rect width="600" height="600" fill="#18181b"/>
                     <rect x="18" y="18" width="564" height="564" fill="#27272a" stroke="#a1a1aa" stroke-width="6"/>
+                    <!-- Старый кожаный сапог -->
                     <path d="M160,130 L270,120 L295,310 L440,350 C475,360 480,415 440,435 L150,435 L145,280 Z" fill="#3f3f46" stroke="#18181b" stroke-width="8"/>
+                    <!-- Оторванная подошва с гвоздями -->
+                    <path d="M290,430 L455,395 L465,445 L150,445 L150,425 Z" fill="#18181b"/>
+                    <circle cx="330" cy="415" r="4" fill="#d97706"/>
+                    <circle cx="355" cy="410" r="4" fill="#d97706"/>
+                    <circle cx="380" cy="405" r="4" fill="#d97706"/>
+                    <circle cx="405" cy="400" r="4" fill="#d97706"/>
+                    <!-- Рыболовный крючок и леска -->
+                    <path d="M380,340 C410,340 425,290 445,210" fill="none" stroke="#e4e4e7" stroke-width="5"/>
+                    <path d="M445,210 C520,270 535,410 420,455" fill="none" stroke="#d6d3d1" stroke-width="4" stroke-dasharray="8 4"/>
+                    <!-- Пробковый поплавок -->
+                    <rect x="355" y="430" width="65" height="42" rx="12" fill="#b45309" stroke="#78350f" stroke-width="4"/>
                     <text x="50%" y="88%" dominant-baseline="middle" text-anchor="middle" fill="#facc15" font-family="sans-serif" font-weight="900" font-size="28">РВАНЫЙ САПОГ С КРЮЧКОМ</text>
+                    <text x="50%" y="94%" dominant-baseline="middle" text-anchor="middle" fill="#a1a1aa" font-family="monospace" font-size="16">+0 к улову, +100 к желанию сделать додеп</text>
                 </svg>`;
                 return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
             }
@@ -147,36 +164,6 @@
             border-color: #090a10;
             box-shadow: 0 4px 0 #92400e;
             font-weight: 900;
-        }
-
-        /* Исправленные модальные окна строго по центру без сброса прокрутки */
-        .arcade-modal-overlay {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            height: 100dvh !important;
-            background-color: rgba(0, 0, 0, 0.88) !important;
-            z-index: 99999 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 16px !important;
-            box-sizing: border-box !important;
-            overflow-y: auto !important;
-        }
-        .arcade-modal-overlay.hidden {
-            display: none !important;
-        }
-        .arcade-modal-box {
-            margin: auto !important;
-            max-height: calc(100vh - 32px) !important;
-            max-height: calc(100dvh - 32px) !important;
-            overflow-y: auto !important;
-            width: 100%;
-            max-width: 600px;
-            box-sizing: border-box !important;
         }
 
         @keyframes menacingFloat {
@@ -253,18 +240,22 @@
         <span class="menacing-symbol absolute bottom-20 left-12 text-4xl md:text-6xl font-display text-red-500" style="animation-delay: 2s;">ドドド</span>
     </div>
 
-    <!-- Верхняя панель загрузки фото/звуков -->
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ ЗАГРУЗКИ ФОТО (автоматически скрывается на GitHub Pages) -->
     <div id="photoHelperBar" class="relative z-40 bg-slate-900 border-b-2 border-amber-400 px-4 py-2 text-xs">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
                 <span class="bg-amber-400 text-black font-pixel text-[10px] px-2 py-1 rounded">SLOT-1 (ФАЙЛЫ)</span>
-                <span class="text-gray-200 font-bold">Выдели все фото, гифки и твои .mp3 для саундбода:</span>
-                <span id="loadedFilesCountBadge" class="hidden bg-emerald-400 text-black font-extrabold px-2 py-0.5 rounded border border-black">Загружено: 0</span>
+                <span class="text-gray-200 font-bold">
+                    Выдели все фото, гифки и звук для мгновенной проверки в превью:
+                </span>
+                <span id="loadedFilesCountBadge" class="hidden bg-emerald-400 text-black font-extrabold px-2 py-0.5 rounded border border-black">
+                    Загружено: 0
+                </span>
             </div>
             <div class="flex items-center gap-3">
                 <label class="cursor-pointer bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3 py-1 rounded border-2 border-black shadow-[2px_2px_0px_#000] transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-floppy-disk"></i> Вставить файлы (.mp3 / фото)
-                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*,.mp3,.wav,.ogg" class="hidden">
+                    <i class="fa-solid fa-floppy-disk"></i> Вставить файлы
+                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*" class="hidden">
                 </label>
                 <button onclick="document.getElementById('photoHelperBar').classList.add('hidden')" class="text-gray-400 hover:text-white px-1">
                     <i class="fa-solid fa-xmark text-base"></i>
@@ -273,7 +264,7 @@
         </div>
     </div>
 
-    <!-- Шапка и навигация -->
+    <!-- ШАПКА И НАВИГАЦИЯ ПО КАРТРИДЖАМ -->
     <header class="sticky top-0 z-40 bg-[#161929] border-b-4 border-[#090a10] shadow-xl">
         <div class="max-w-7xl mx-auto px-4 pt-3 pb-2">
             <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-slate-800">
@@ -284,9 +275,13 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <span class="font-pixel text-[10px] bg-red-600 text-white px-2 py-0.5 rounded">1UP</span>
-                            <span class="font-display text-base md:text-lg tracking-wide text-white">DIMA-STATION 64</span>
+                            <span class="font-display text-base md:text-lg tracking-wide text-white">
+                                DIMA-STATION 64
+                            </span>
                         </div>
-                        <div class="text-xs font-mono text-amber-400">ИГРОК 1: ДИМА // КЛАН «ДИМАСТИЯ» [★ PERSONA VIBES]</div>
+                        <div class="text-xs font-mono text-amber-400">
+                            ИГРОК 1: ДИМА // КЛАН «ДИМАСТИЯ» [★ PERSONA VIBES]
+                        </div>
                     </div>
                 </div>
 
@@ -330,17 +325,18 @@
         </div>
     </header>
 
-    <!-- Основной контент -->
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
     <main class="flex-1 relative z-10">
 
-        <!-- ================= PAGE 1: HOME (С твой Саундбодом из 6 карточек) ================= -->
+        <!-- ================= PAGE 1: HOME ================= -->
         <div id="page-home" class="page-view max-w-7xl mx-auto px-4 py-8 space-y-10">
             
             <div class="arcade-card rounded-xl p-3.5 bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div class="flex items-center gap-3 text-center sm:text-left">
                     <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1.5 rounded border border-black shrink-0">SPONSOR</span>
                     <p class="text-xs sm:text-sm font-bold text-gray-200">
-                        Не хватает на ипотеку, додеп и мазь для поясницы? Официальный партнёр Димы — <strong class="text-amber-400">Three Kidneys</strong>!
+                        Не хватает на ипотеку, додеп и мазь для поясницы? Официальный партнёр Димы —
+                        <strong class="text-amber-400">Three Kidneys</strong> (когда двух почек уже мало)!
                     </p>
                 </div>
                 <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
@@ -350,7 +346,71 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <div class="lg:col-span-5 space-y-6">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-amber-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black shadow-[3px_3px_0px_#000]">
+                        <i class="fa-solid fa-trophy"></i> PLAY OF THE GAME // ДИМА (ПАТРИАРХ ДИМАСТИИ)
+                    </div>
+
+                    <h1 class="font-display text-3xl sm:text-5xl leading-tight text-white uppercase">
+                        С ДНЁМ РОЖДЕНИЯ, <span class="text-amber-400">ДИМА!</span> <br>
+                        <span class="text-2xl sm:text-3xl text-sky-400">ГЛАВА КЛАНА «ДИМАСТИЯ»</span>
+                    </h1>
+
+                    <div class="arcade-card rounded-xl p-4 bg-[#161928] border-l-8 border-l-amber-400">
+                        <p class="text-gray-200 text-base sm:text-lg font-bold leading-relaxed">
+                            Поздравляем, легенда! Сегодня ты официально стал на <span class="text-amber-400 underline">один шаг ближе к смерти</span>, очереди в поликлинике в 6 утра и пенсионному удостоверению. Но пока спина держится — пиши свои шедевральные новеллы, тащи катки в Овервотче, вызывай Стенд и веди за собой великую <strong class="text-amber-400">«Димастию»</strong>!
+                        </p>
+                    </div>
+
+                    <!-- Persona-inspired HUD badge -->
+                    <div class="arcade-card p-3 rounded-xl bg-gradient-to-r from-red-950 via-slate-900 to-black border-red-500 flex items-center gap-3">
+                        <span class="text-2xl">🎭✨</span>
+                        <div>
+                            <div class="text-[10px] font-pixel text-red-400">METAVERSE NAVIGATOR [PERSONA VIBES]</div>
+                            <div class="text-xs font-bold text-white">«Твои когнитивные искажения успешно переписаны в новый том новеллы!»</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">УРОВЕНЬ</div>
+                            <div class="font-display text-lg text-amber-400 mt-1">LVL UP! 💀</div>
+                            <div class="text-xs font-bold text-red-400 mt-0.5">+1 шаг к пенсии</div>
+                        </div>
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">АВТОР НОВЕЛЛ</div>
+                            <div class="font-display text-lg text-emerald-400 mt-1">100/10 ✍️</div>
+                            <div class="text-xs font-bold text-gray-300 mt-0.5">Гений сюжетов</div>
+                        </div>
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">OVERWATCH</div>
+                            <div class="font-display text-lg text-orange-400 mt-1">ТИЛЬТ 500</div>
+                            <div class="text-xs font-bold text-gray-300 mt-0.5">Тиммейты раки</div>
+                        </div>
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">КЛАН ЯКУДЗА</div>
+                            <div class="font-display text-lg text-sky-400 mt-1">ДИМАСТИЯ</div>
+                            <div class="text-xs font-bold text-amber-300 mt-0.5">Дракон Додзимы</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 pt-1">
+                        <button onclick="triggerOverwatchUlt()" class="arcade-btn bg-orange-500 hover:bg-orange-400 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <span class="bg-black text-orange-400 font-pixel px-2 py-1 rounded text-[10px]">Q</span>
+                            УЛЬТАНУТЬ (NERF THIS!)
+                        </button>
+
+                        <button onclick="triggerYakuzaBoss()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-dragon text-amber-300"></i> БОСС-ТИТР ДИМЫ
+                        </button>
+
+                        <button onclick="switchPage('dimasty')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-users"></i> ОТРЯД «ДИМАСТИЯ» →
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
                     <div class="arcade-card rounded-2xl overflow-hidden max-w-md mx-auto">
                         <div class="bg-slate-900 px-4 py-2.5 flex items-center justify-between border-b-3 border-slate-700">
                             <span class="font-pixel text-[10px] text-amber-400">★ P1: ДИМА (STAND MASTER)</span>
@@ -369,7 +429,9 @@
                                  onerror="this.src=createCustomPoster('ЯРЕ ЯРЕ ДАЗЕ...', 'Дима в фуражке и очках', '#312e81', '#fbbf24', '🧢🕶️')"
                                  class="w-full h-full object-cover object-center">
 
-                            <div class="absolute top-3 right-3 font-display text-2xl text-amber-400 bg-black/80 px-2.5 py-1 rounded border-2 border-black">ゴゴゴ</div>
+                            <div class="absolute top-3 right-3 font-display text-2xl text-amber-400 bg-black/80 px-2.5 py-1 rounded border-2 border-black">
+                                ゴゴゴ
+                            </div>
 
                             <button onclick="switchHeroPose()" class="arcade-btn absolute bottom-3 right-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5">
                                 <i class="fa-solid fa-bolt"></i> Сменить позу Стенда
@@ -386,127 +448,123 @@
                             </p>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="flex flex-wrap gap-3">
-                        <button onclick="triggerOverwatchUlt()" class="arcade-btn bg-orange-500 hover:bg-orange-400 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm">
-                            <span class="bg-black text-orange-400 font-pixel px-2 py-1 rounded text-[10px]">Q</span> УЛЬТАНУТЬ (NERF THIS!)
-                        </button>
-                        <button onclick="triggerYakuzaBoss()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm">
-                            <i class="fa-solid fa-dragon text-amber-300"></i> БОСС-ТИТР ДИМЫ
-                        </button>
+            <!-- ИНТЕРАКТИВНАЯ МИНИ-НОВЕЛЛА ДИМЫ -->
+            <div class="arcade-card rounded-2xl p-6 bg-[#181c2e]">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b-2 border-slate-700">
+                    <div class="flex items-center gap-2.5">
+                        <span class="bg-emerald-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">VISUAL NOVEL ENGINE</span>
+                        <h2 class="font-display text-lg sm:text-2xl text-white">
+                            📖 РЕЖИМ АВТОРА НОВЕЛЛ: ВЫБЕРИ РУТ ДЛЯ ДИМЫ
+                        </h2>
                     </div>
+                    <span class="text-xs font-mono text-emerald-300">Сценарист: Дима</span>
                 </div>
 
-                <!-- Правая колонка: ТВОЙ САУНДБОД ИЗ 6 КАРТОЧЕК С НАСТОЯЩИМИ .MP3 ФАЙЛАМИ -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="arcade-card rounded-2xl p-6 bg-[#161928]">
-                        <div class="flex items-center justify-between gap-2 mb-4">
-                            <div>
-                                <span class="bg-amber-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">SOUNDBOARD DECK</span>
-                                <h2 class="font-display text-xl sm:text-2xl text-amber-400 mt-2">🎛️ САУНДБОД ИМЕНИННИКА (ТВОИ .MP3)</h2>
-                            </div>
-                            <span class="bg-amber-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">6 ТЕМ</span>
-                        </div>
-                        <p class="text-xs sm:text-sm font-bold text-gray-300 mb-4">
-                            Нажми на любую карточку ниже, чтобы воспроизвести твой аудиофайл прямо из репозитория!
-                        </p>
-
-                        <!-- Сетка из 6 карточек саундбода -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                            
-                            <!-- 1. ZA WARUDO -->
-                            <button onclick="playTrackFile('za-warudo-effect-green-screen_160k-1.mp3', 'ZA WARUDO!')"
-                                    class="arcade-btn bg-purple-700 hover:bg-purple-600 text-white p-4 text-center flex flex-col items-center justify-center gap-1.5 border-3 border-purple-400">
-                                <div class="text-2xl">⏱️🧛</div>
-                                <div class="font-display text-base text-yellow-300">ZA WARUDO!</div>
-                                <div class="text-[11px] text-purple-200">Стоп-время (.mp3)</div>
-                            </button>
-
-                            <!-- 2. CINEMA -->
-                            <button onclick="playTrackFile('absolut-cinema-meme.mp3', 'Absolute Cinema')"
-                                    class="arcade-btn bg-slate-200 hover:bg-white text-black p-4 text-center flex flex-col items-center justify-center gap-1.5 border-3 border-slate-400">
-                                <div class="text-2xl">🐱🎬</div>
-                                <div class="font-display text-base text-slate-900">CINEMA</div>
-                                <div class="text-[11px] text-slate-700">Режим Скорсезе (.mp3)</div>
-                            </button>
-
-                            <!-- 3. ДЖАРВИС -->
-                            <button onclick="playTrackFile('welcome-home-from-jarvis.mp3', 'Джарвис (Welcome Home)')"
-                                    class="arcade-btn bg-cyan-700 hover:bg-cyan-600 text-white p-4 text-center flex flex-col items-center justify-center gap-1.5 border-3 border-cyan-400">
-                                <div class="text-2xl">🤖🛢️</div>
-                                <div class="font-display text-base text-yellow-300">ДЖАРВИС</div>
-                                <div class="text-[11px] text-cyan-200">Сканер Старка (.mp3)</div>
-                            </button>
-
-                            <!-- 4. ПИВА В ГОРШОК -->
-                            <button onclick="playTrackFile('pivkom-polei-menia.mp3', 'Пивком полей меня!')"
-                                    class="arcade-btn bg-amber-600 hover:bg-amber-500 text-black p-4 text-center flex flex-col items-center justify-center gap-1.5 border-3 border-amber-400">
-                                <div class="text-2xl">🍺🚬</div>
-                                <div class="font-display text-base text-white">ПИВА В ГОРШОК</div>
-                                <div class="text-[11px] text-yellow-100">Полить мухоловку (.mp3)</div>
-                            </button>
-
-                            <!-- 5. ШАКАЛ 144p -->
-                            <button onclick="toggleDeepFry(); playTrackFile('za-warudo-effect-green-screen_160k-1.mp3', 'Шакал 144p')"
-                                    class="arcade-btn bg-red-700 hover:bg-red-600 text-white p-4 text-center flex flex-col items-center justify-center gap-1.5 border-3 border-red-400">
-                                <div class="text-2xl">⚡🐺</div>
-                                <div class="font-display text-base text-yellow-300">ШАКАЛ 144p</div>
-                                <div class="text-[11px] text-red-200">Пережарить графику</div>
-                            </button>
-
-                            <!-- 6. ROUNDABOUT -->
-                            <button onclick="playTrackFile('untitled_1071.mp3', 'Roundabout (To Be Continued)')"
-                                    class="arcade-btn bg-amber-900 hover:bg-amber-800 text-white p-4 text-center flex flex-col items-center justify-center gap-1.5 border-3 border-amber-500">
-                                <div class="text-2xl">🎸⬅️</div>
-                                <div class="font-display text-base text-yellow-300">ROUNDABOUT</div>
-                                <div class="text-[11px] text-amber-200">To Be Continued (.mp3)</div>
-                            </button>
-
-                        </div>
+                <div class="bg-slate-950 border-3 border-slate-600 rounded-xl p-5 space-y-4">
+                    <div class="flex items-center gap-2 text-xs font-mono text-amber-400">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span id="vnSpeakerName">РАССКАЗЧИК (ИЗ НОВЕЛЛЫ ДИМЫ):</span>
                     </div>
-
-                    <!-- Интерактивная мини-новелла Димы -->
-                    <div class="arcade-card rounded-2xl p-6 bg-[#181c2e]">
-                        <div class="flex items-center gap-2.5 mb-3 pb-2 border-b-2 border-slate-700">
-                            <span class="bg-emerald-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">VISUAL NOVEL</span>
-                            <h2 class="font-display text-lg text-white">📖 РЕЖИМ АВТОРА НОВЕЛЛ: ВЫБЕРИ РУТ</h2>
-                        </div>
-                        <div class="bg-slate-950 border-3 border-slate-600 rounded-xl p-4 space-y-3">
-                            <div class="text-xs font-mono text-amber-400" id="vnSpeakerName">РАССКАЗЧИК:</div>
-                            <p id="vnDialogueText" class="text-sm sm:text-base font-bold text-gray-100 leading-relaxed min-h-[3rem]">
-                                «Глава 2026. Именинник Дима открыл глаза. Какой сюжетный рут он выберет сегодня?»
-                            </p>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                                <button onclick="chooseNovelRoute(1)" class="arcade-btn bg-emerald-500 text-black font-extrabold py-2 px-2 rounded text-xs text-left">▶ Рут А: Бестселлер</button>
-                                <button onclick="chooseNovelRoute(2)" class="arcade-btn bg-amber-400 text-black font-extrabold py-2 px-2 rounded text-xs text-left">▶ Рут Б: Додепмен</button>
-                                <button onclick="chooseNovelRoute(3)" class="arcade-btn bg-sky-400 text-black font-extrabold py-2 px-2 rounded text-xs text-left">▶ Рут В: Пиво в горшок</button>
-                            </div>
-                        </div>
+                    <p id="vnDialogueText" class="text-base sm:text-lg font-bold text-gray-100 leading-relaxed min-h-[3.5rem]">
+                        «Глава 2026. Именинник Дима открыл глаза. Позади — десятки написанных глав, выбитых легарок и выпитых напитков. Какой сюжетный рут он выберет сегодня?»
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                        <button onclick="chooseNovelRoute(1)" class="arcade-btn bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
+                            ▶ Рут А: «Бестселлер и Миллионы» ✍️💰
+                        </button>
+                        <button onclick="chooseNovelRoute(2)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
+                            ▶ Рут Б: «Алхимия с Додепменом» 🍾🎰
+                        </button>
+                        <button onclick="chooseNovelRoute(3)" class="arcade-btn bg-sky-400 hover:bg-sky-300 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
+                            ▶ Рут В: «Полить мухоловку пивом» 🪴🍺
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Пульт спецэффектов -->
+            <!-- ПУЛЬТ СПЕЦЭФФЕКТОВ -->
             <div class="arcade-card rounded-2xl p-6">
-                <div class="flex items-center justify-between gap-4 mb-4">
-                    <h2 class="font-display text-xl text-white">🎛️ ДОПОЛНИТЕЛЬНЫЕ ЭФФЕКТЫ</h2>
-                    <div class="bg-slate-900 border-2 border-amber-400 px-3 py-1.5 rounded-xl text-xs font-mono text-amber-300">
-                        🍺 Пиво: <strong id="beerLitersCounter" class="text-white">0.0</strong> л
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <span class="bg-amber-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">SOUND & FX DECK</span>
+                        <h2 class="font-display text-xl sm:text-2xl text-white mt-2">
+                            🎛️ КОНСОЛЬНЫЙ ПУЛЬТ СПЕЦЭФФЕКТОВ
+                        </h2>
+                    </div>
+                    <div class="bg-slate-900 border-2 border-amber-400 px-4 py-2 rounded-xl text-xs font-mono text-amber-300">
+                        🍺 Пиво в горшок выпито: <strong id="beerLitersCounter" class="text-white text-base">0.0</strong> л
                     </div>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <button onclick="triggerZaWarudo()" class="arcade-btn bg-purple-600 text-white p-3 rounded-xl text-center">
-                        <span class="font-display text-xs">⏱️ ZA WARUDO!</span>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <button onclick="triggerZaWarudo()" class="arcade-btn bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">⏱️🧛</span>
+                        <span class="font-display text-xs text-amber-300">ZA WARUDO!</span>
+                        <span class="text-[11px] font-bold text-purple-100">Стоп-время 4с</span>
                     </button>
-                    <button onclick="triggerAbsoluteCinema()" class="arcade-btn bg-slate-200 text-black p-3 rounded-xl text-center">
-                        <span class="font-display text-xs">🎬 CINEMA</span>
+
+                    <button onclick="triggerAbsoluteCinema()" class="arcade-btn bg-slate-200 hover:bg-white text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🐱🎬</span>
+                        <span class="font-display text-xs">CINEMA</span>
+                        <span class="text-[11px] font-bold text-gray-700">Режим Скорсезе</span>
                     </button>
-                    <button onclick="triggerJarvisHud()" class="arcade-btn bg-cyan-500 text-black p-3 rounded-xl text-center">
-                        <span class="font-display text-xs">🤖 ДЖАРВИС</span>
+
+                    <button onclick="triggerJarvisHud()" class="arcade-btn bg-cyan-500 hover:bg-cyan-400 text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🤖🥃</span>
+                        <span class="font-display text-xs">ДЖАРВИС</span>
+                        <span class="text-[11px] font-bold text-slate-900">Сканер Старка</span>
                     </button>
-                    <button onclick="triggerBeerPlant()" class="arcade-btn bg-amber-400 text-black p-3 rounded-xl text-center">
-                        <span class="font-display text-xs">🪴 ПИВО В ГОРШОК</span>
+
+                    <button onclick="triggerBeerPlant()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🪴🍺</span>
+                        <span class="font-display text-xs">ПИВА В ГОРШОК</span>
+                        <span class="text-[11px] font-bold text-slate-900">Полить мухоловку</span>
                     </button>
+
+                    <button onclick="toggleDeepFry()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">⚡🐺</span>
+                        <span class="font-display text-xs text-amber-300">ШАКАЛ 144p</span>
+                        <span class="text-[11px] font-bold text-red-100">Пережарить</span>
+                    </button>
+
+                    <button onclick="toggleToBeContinued()" class="arcade-btn bg-amber-700 hover:bg-amber-600 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🎸⬅️</span>
+                        <span class="font-display text-xs text-amber-200">ROUNDABOUT</span>
+                        <span class="text-[11px] font-bold text-amber-100">To Be Continued</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ШКАЛА ВЫЖИВАНИЯ -->
+            <div id="mortality" class="arcade-card rounded-2xl p-6 bg-[#1b1626] border-red-500">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <span class="bg-red-600 text-white font-pixel text-[10px] px-2.5 py-1 rounded border border-black">HP & AGE MONITOR</span>
+                        <h2 class="font-display text-xl sm:text-2xl text-white mt-2">
+                            ⚰️ ШКАЛА ВЫЖИВАНИЯ ДИМЫ: ЕЩЁ НА 1 ШАГ БЛИЖЕ К ПЕНСИИ
+                        </h2>
+                    </div>
+                    <button onclick="generateDarkToast()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm">
+                        🎲 Сгенерировать жёсткий тост
+                    </button>
+                </div>
+
+                <div class="mb-5">
+                    <div class="flex justify-between text-xs font-mono text-gray-300 mb-2">
+                        <span>👶 Старт игры (0 пинга)</span>
+                        <span class="text-amber-400 font-extrabold">📍 ДИМА ЗДЕСЬ (Пишет новеллы, MAX активен)</span>
+                        <span>⚰️ Финальный титр (Пенсия)</span>
+                    </div>
+                    <div class="w-full h-6 bg-slate-950 rounded-lg overflow-hidden border-2 border-black p-1">
+                        <div class="h-full w-[69%] bg-gradient-to-r from-green-400 via-amber-400 to-red-600 rounded"></div>
+                    </div>
+                </div>
+
+                <div id="darkToastOutput" class="bg-slate-950 border-2 border-amber-400 rounded-xl p-4 text-sm sm:text-base text-amber-300 font-bold text-center">
+                    «Дима, поздравляем! Ты в том прекрасном возрасте, когда на приёме у врача вопрос "Что вас беспокоит?" вызывает истерический смех на полчаса!»
                 </div>
             </div>
 
@@ -517,145 +575,293 @@
             </div>
         </div>
 
-        <!-- ================= PAGE 2: DIMASTY SQUAD (Вся Димастия + Додепмен 2-в-1) ================= -->
+        <!-- ================= PAGE 2: DIMASTY SQUAD ================= -->
         <div id="page-dimasty" class="page-view hidden max-w-7xl mx-auto px-4 py-8 space-y-8">
             <div class="arcade-card rounded-2xl p-6 text-center bg-[#181d30]">
                 <span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black uppercase">SELECT YOUR FIGHTER // ROSTER</span>
-                <h2 class="font-display text-2xl sm:text-4xl text-white mt-3">👑 ОТРЯД «ДИМАСТИЯ» 👑</h2>
-                <p class="text-gray-300 text-sm font-bold max-w-3xl mx-auto mt-2">
-                    Вся братва в сборе. Нажимай кнопки ульты — модальные окна открываются строго по центру экрана!
+                <h2 class="font-display text-2xl sm:text-4xl text-white mt-3">
+                    👑 ОТРЯД «ДИМАСТИЯ» 👑
+                </h2>
+                <p class="text-gray-300 text-sm sm:text-base font-bold max-w-3xl mx-auto mt-2">
+                    Патриарх клана — <strong class="text-amber-400">Дима</strong>, а вот его верная гвардия! У каждой карточки снизу есть интерактивная кнопка ульты (включая переключение двух личностей Додепмена).
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 1. Додепмен & Cool Skeleton (2 в 1) -->
-                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col border-amber-400 sm:col-span-2 lg:col-span-1">
+                
+                <!-- Карточка 1: Додепмен & Cool Skeleton (2 личности в 1) -->
+                <div id="dodepCardContainer" class="arcade-card rounded-2xl overflow-hidden flex flex-col border-amber-400 sm:col-span-2 lg:col-span-1">
                     <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
                         <span id="dodepHeaderBadge" class="font-pixel text-[9px] bg-red-600 text-white px-2 py-0.5 rounded">ЛИЧНОСТЬ №1: АЗАРТ</span>
                         <span class="text-xs font-mono text-amber-400">2-В-1 ПЕРСОНАЖ</span>
                     </div>
+
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img id="dodepImg1" src="photo_2026-10-22_23-48-30.jpg" data-filename="photo_2026-10-22_23-48-30.jpg" class="w-full h-full object-cover">
-                        <img id="dodepImg2" src="photo_2026-10-23_01-23-19.jpg" data-filename="photo_2026-10-23_01-23-19.jpg" class="hidden w-full h-full object-cover">
+                        <img id="dodepImg1"
+                             src="photo_2026-10-22_23-48-30.jpg"
+                             data-filename="photo_2026-10-22_23-48-30.jpg"
+                             alt="Додепмен"
+                             onerror="this.src=createCustomPoster('ДОДЕПМЕН', 'Красные глаза + жест ОК', '#1e3a8a', '#ef4444', '👌🎰')"
+                             class="w-full h-full object-cover transition duration-300">
+
+                        <img id="dodepImg2"
+                             src="photo_2026-10-23_01-23-19.jpg"
+                             data-filename="photo_2026-10-23_01-23-19.jpg"
+                             alt="Алхимик Cool Skeleton"
+                             onerror="this.src=createCustomPoster('COOL SKELETON', 'Алхимик с жёлтой бутылкой', '#78350f', '#fbbf24', '🍾☠️')"
+                             class="hidden w-full h-full object-cover transition duration-300">
+
+                        <button onclick="toggleDodepPersonality()" class="arcade-btn absolute bottom-3 right-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5">
+                            <i class="fa-solid fa-masks-theater"></i> Сменить личность (Фаза 2)
+                        </button>
                     </div>
+
                     <div class="p-4 flex-1 flex flex-col justify-between bg-[#161a2b]">
                         <div>
-                            <h3 id="dodepTitle" class="font-display text-xl text-amber-400">ДОДЕПМЕН 👌🎰</h3>
-                            <p id="dodepDesc" class="text-xs sm:text-sm font-bold text-gray-200 mt-1.5 leading-relaxed">Красные глаза, жест ОК. Вечером превращается в Cool Skeleton!</p>
+                            <h3 id="dodepTitle" class="font-display text-xl text-amber-400">
+                                ДОДЕПМЕН 👌🎰
+                            </h3>
+                            <p id="dodepDesc" class="text-xs sm:text-sm font-bold text-gray-200 mt-1.5 leading-relaxed">
+                                <strong>Дневная личность:</strong> Активировал красные глаза и жест «ОК». Готов на додеп в любой гаче. По вечерам трансформируется в Cool Skeleton!
+                            </p>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mt-4">
-                            <button onclick="toggleDodepPersonality()" class="arcade-btn bg-purple-600 text-white text-xs font-extrabold py-2.5 rounded-lg">🔄 Альтер-Эго</button>
-                            <button onclick="triggerDodepAction()" class="arcade-btn bg-red-600 text-white text-xs font-extrabold py-2.5 rounded-lg">⚡ Ультануть!</button>
+                            <button onclick="toggleDodepPersonality()" class="arcade-btn bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold py-2.5 px-2 rounded-lg">
+                                🔄 Альтер-Эго
+                            </button>
+                            <button onclick="triggerDodepAction()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold py-2.5 px-2 rounded-lg">
+                                ⚡ Ультануть!
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Казначей -->
+                <!-- Карточка 2: Казначей -->
                 <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
                     <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                        <span class="font-pixel text-[9px] bg-purple-600 text-white px-2 py-0.5 rounded">999 IQ</span>
+                        <span class="font-pixel text-[9px] bg-purple-600 text-white px-2 py-0.5 rounded">999 IQ СОВЕТНИК</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img src="photo_2026-10-22_23-49-07.jpg" data-filename="photo_2026-10-22_23-49-07.jpg" class="w-full h-full object-cover">
+                        <img src="photo_2026-10-22_23-49-07.jpg" data-filename="photo_2026-10-22_23-49-07.jpg"
+                             onerror="this.src=createCustomPoster('ТАКТИЧЕСКИЙ ГЕНИЙ', 'Ухмылка в аудитории', '#312e81', '#38bdf8', '🤓📈')"
+                             class="w-full h-full object-cover">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <div>
                             <h3 class="font-display text-lg text-sky-400">КАЗНАЧЕЙ «ДИМАСТИИ» 🎓</h3>
-                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">Просчитал вероятность легендарного застолья.</p>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Просчитал все сюжетные дыры в новеллах и переписал третью почку на баланс клана.
+                            </p>
                         </div>
-                        <button onclick="openSquadModal('КАЗНАЧЕЙ «ДИМАСТИИ» 🎓', '999 IQ СОВЕТНИК', 'photo_2026-10-22_23-49-07.jpg', 'Вероятность легендарного застолья сегодня — ровно 146%!', '🤓📈')" class="arcade-btn mt-4 w-full bg-sky-500 text-black text-xs font-extrabold py-2.5 rounded-lg">📐 Просчитать тактику</button>
+                        <button onclick="openSquadModal('КАЗНАЧЕЙ «ДИМАСТИИ» 🎓', '999 IQ СОВЕТНИК', 'photo_2026-10-22_23-49-07.jpg', 'Казначей Димастии рассчитал: вероятность легендарного застолья сегодня составляет ровно 146%!', '🤓📈')" class="arcade-btn mt-4 w-full bg-sky-500 hover:bg-sky-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            📐 Просчитать тактику
+                        </button>
                     </div>
                 </div>
 
-                <!-- 3. Войс-чат -->
+                <!-- Карточка 3: Легенда Войс-Чата -->
                 <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
                     <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                        <span class="font-pixel text-[9px] bg-amber-400 text-black px-2 py-0.5 rounded">SUPPORT</span>
+                        <span class="font-pixel text-[9px] bg-amber-400 text-black px-2 py-0.5 rounded">VOICE SUPPORT</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img src="photo_2026-10-22_23-49-15.jpg" data-filename="photo_2026-10-22_23-49-15.jpg" class="w-full h-full object-cover">
+                        <img src="photo_2026-10-22_23-49-15.jpg" data-filename="photo_2026-10-22_23-49-15.jpg"
+                             onerror="this.src=createCustomPoster('ГОЛОСОВОЙ ЧАТ', 'Улыбка в наушниках', '#854d0e', '#facc15', '🎧😂')"
+                             class="w-full h-full object-cover">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <div>
                             <h3 class="font-display text-lg text-amber-400">ЛЕГЕНДА ВОЙС-ЧАТА 🎧</h3>
-                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">Слив катки превращается в стендап.</p>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Тот самый бро в наушниках, с которым слитая катка в Overwatch превращается в стендап.
+                            </p>
                         </div>
-                        <button onclick="openSquadModal('ЛЕГЕНДА ВОЙС-ЧАТА 🎧', 'VOICE SUPPORT', 'photo_2026-10-22_23-49-15.jpg', 'В войс-чате Димастии дикий ор! Мораль Димы на максимуме!', '🎧😂')" class="arcade-btn mt-4 w-full bg-amber-400 text-black text-xs font-extrabold py-2.5 rounded-lg">🎙️ Ворваться в голосовой</button>
+                        <button onclick="openSquadModal('ЛЕГЕНДА ВОЙС-ЧАТА 🎧', 'VOICE SUPPORT', 'photo_2026-10-22_23-49-15.jpg', 'В войс-чате Димастии раздался дикий ор! Мораль Димы повышена до максимума!', '🎧😂')" class="arcade-btn mt-4 w-full bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🎙️ Ворваться в голосовой
+                        </button>
                     </div>
                 </div>
 
-                <!-- 4. Пресс-секретарь -->
+                <!-- Карточка 4: Пресс-секретарь -->
                 <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
                     <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
                         <span class="font-pixel text-[9px] bg-emerald-500 text-black px-2 py-0.5 rounded">ПРЯМОЙ ЭФИР</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg" class="w-full h-full object-cover">
+                        <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
+                             onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
+                             class="w-full h-full object-cover">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <div>
                             <h3 class="font-display text-lg text-emerald-400">ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️</h3>
-                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">Заявляет федеральным каналам о дне рождении.</p>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Заявляет федеральным каналам: «Глава Димастии постарел на год, но его Стенд безупречен».
+                            </p>
                         </div>
-                        <button onclick="openSquadModal('ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️', 'ПРЯМОЙ ЭФИР', 'photo_2026-10-22_23-49-48.jpg', 'СРОЧНО В НОМЕР: День Рождения Димы объявлен государственным праздником!', '🎙️📺')" class="arcade-btn mt-4 w-full bg-emerald-500 text-black text-xs font-extrabold py-2.5 rounded-lg">📺 Заявление прессе</button>
+                        <button onclick="openSquadModal('ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️', 'ПРЯМОЙ ЭФИР', 'photo_2026-10-22_23-49-48.jpg', 'СРОЧНО В НОМЕР: День Рождения Димы официально объявлен государственным праздником!', '🎙️📺')" class="arcade-btn mt-4 w-full bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            📺 Заявление прессе
+                        </button>
                     </div>
                 </div>
 
-                <!-- 5. Мухоловка -->
+                <!-- Карточка 5: Мухоловка -->
                 <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
                     <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                        <span class="font-pixel text-[9px] bg-amber-500 text-black px-2 py-0.5 rounded">ДЕНДРО</span>
+                        <span class="font-pixel text-[9px] bg-amber-500 text-black px-2 py-0.5 rounded">ДЕНДРО-АРХОНТ</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden flex items-center justify-center p-2">
-                        <img src="photo_2026-10-23_01-23-27.jpg" data-filename="photo_2026-10-23_01-23-27.jpg" class="w-full h-full object-contain">
+                        <img src="photo_2026-10-23_01-23-27.jpg" data-filename="photo_2026-10-23_01-23-27.jpg"
+                             onerror="this.src=createCustomPoster('ПИВКОМ ПОЛЕЙ МЕНЯ', 'Пива в горшок мне', '#14532d', '#facc15', '🪴🚬')"
+                             class="w-full h-full object-contain rounded-lg">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <div>
                             <h3 class="font-display text-lg text-amber-400">МУХОЛОВКА ДИМАСТИИ 🪴</h3>
-                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">«ПИВКОМ ПОЛЕЙ МЕНЯ В ГОРШОК!»</p>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                «ПИВКОМ ПОЛЕЙ МЕНЯ! ПИВА БЛЯДЬ В ГОРШОК МНЕ!»
+                            </p>
                         </div>
-                        <button onclick="triggerBeerPlant()" class="arcade-btn mt-4 w-full bg-amber-400 text-black text-xs font-extrabold py-2.5 rounded-lg">🍺 Налить пива в горшок!</button>
+                        <button onclick="triggerBeerPlant()" class="arcade-btn mt-4 w-full bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🍺 Налить пива в горшок!
+                        </button>
                     </div>
                 </div>
 
-                <!-- 6. Джарвис -->
+                <!-- Карточка 6: Джарвис -->
                 <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
                     <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                        <span class="font-pixel text-[9px] bg-cyan-400 text-black px-2 py-0.5 rounded">AI</span>
+                        <span class="font-pixel text-[9px] bg-cyan-400 text-black px-2 py-0.5 rounded">AI СКАНЕР</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img src="photo_2026-10-23_01-21-42.jpg" data-filename="photo_2026-10-23_01-21-42.jpg" class="w-full h-full object-cover">
+                        <img src="photo_2026-10-23_01-21-42.jpg" data-filename="photo_2026-10-23_01-21-42.jpg"
+                             onerror="this.src=createCustomPoster('ДЖАРВИС...', 'Чё за хуйня?!', '#083344', '#22d3ee', '🤖😳')"
+                             class="w-full h-full object-cover">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <div>
                             <h3 class="font-display text-lg text-cyan-400">ДЖАРВИС, ЧЁ ЗА Х*ЙНЯ 🤖</h3>
-                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">Лицо Димы при виде рандомов.</p>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Лицо Димы при виде рандомов на поинте в Overwatch.
+                            </p>
                         </div>
-                        <button onclick="triggerJarvisHud()" class="arcade-btn mt-4 w-full bg-cyan-400 text-black text-xs font-extrabold py-2.5 rounded-lg">🔍 Запустить сканер</button>
+                        <button onclick="triggerJarvisHud()" class="arcade-btn mt-4 w-full bg-cyan-400 hover:bg-cyan-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🔍 Запустить сканер
+                        </button>
                     </div>
                 </div>
+
+                <!-- Карточка 7: Мудрый Орангутан -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-orange-500 text-black px-2 py-0.5 rounded">WINSTON MAIN</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-22-52.jpg" data-filename="photo_2026-10-23_01-22-52.jpg"
+                             onerror="this.src=createCustomPoster('БОСС КАЧКИ', 'Ухмылка примата', '#7c2d12', '#fb923c', '🦧😏')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-orange-400">МУДРЫЙ PRIMAL RAGE 🦧</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Знает, чем закончится сегодняшняя тусовка.
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('МУДРЫЙ PRIMAL RAGE 🦧', 'WINSTON MAIN', 'photo_2026-10-23_01-22-52.jpg', 'У-У-А-А! Мудрый Орангутан благословил Диму на винстрик и мощный сюжетный поворот!', '🦧😏')" class="arcade-btn mt-4 w-full bg-orange-500 hover:bg-orange-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🍌 Банановая мудрость
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 8: Кото-Батон -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-amber-300 text-black px-2 py-0.5 rounded">ХИЛЕР СПИНЫ</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-21-49.jpg" data-filename="photo_2026-10-23_01-21-49.jpg"
+                             onerror="this.src=createCustomPoster('КОТ-БУХАНКА', 'Вежливый батон', '#9a3412', '#fdba74', '🐱🍞')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-amber-300">ВЕЖЛИВЫЙ КОТО-БАТОН 🐱🍞</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Сидит буханкой и вдохновляет Диму на уютные главы новеллы.
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('ВЕЖЛИВЫЙ КОТО-БАТОН 🐱🍞', 'ХИЛЕР СПИНЫ', 'photo_2026-10-23_01-21-49.jpg', 'МЯУ! Рыжий Кото-Батон помурчал — боль в спине снижена на 100%, уют повышен до максимума!', '🐱🍞')" class="arcade-btn mt-4 w-full bg-amber-300 hover:bg-amber-200 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🐾 Погладить буханку
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 9: Absolute Cinema -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-white text-black px-2 py-0.5 rounded">10/10 ОСКАРОВ</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-23-01.jpg" data-filename="photo_2026-10-23_01-23-01.jpg"
+                             onerror="this.src=createCustomPoster('ABSOLUTE CINEMA', 'Шедевр', '#1f2937', '#ffffff', '🙌🎥')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-white">ABSOLUTE CINEMA 🙌</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Реакция читателей на финалы новелл Димы.
+                            </p>
+                        </div>
+                        <button onclick="triggerAbsoluteCinema()" class="arcade-btn mt-4 w-full bg-white hover:bg-gray-200 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🎬 Включить Cinema
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
             <div class="flex justify-between">
-                <button onclick="switchPage('home')" class="arcade-btn bg-slate-700 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">← НА ГЛАВНУЮ</button>
-                <button onclick="switchPage('gacha')" class="arcade-btn bg-amber-400 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">ДАЛЕЕ: ГАЧА ДОДЕПА →</button>
+                <button onclick="switchPage('home')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НА ГЛАВНУЮ
+                </button>
+                <button onclick="switchPage('gacha')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: ГАЧА ДОДЕПА →
+                </button>
             </div>
         </div>
 
         <!-- ================= PAGE 3: GACHA ================= -->
         <div id="page-gacha" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
-            <div class="arcade-card rounded-2xl p-6 bg-[#181d30] flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="arcade-card rounded-2xl p-6 bg-[#181d30] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                     <span class="bg-sky-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">GACHA MACHINE // ДОДЕП EDITION</span>
-                    <h2 class="font-display text-2xl sm:text-4xl text-white mt-2">🎰 МОЛИТВА «ДИМАСТИИ»</h2>
+                    <h2 class="font-display text-2xl sm:text-4xl text-white mt-2">
+                        🎰 МОЛИТВА «ДИМАСТИИ»: БАННЕР СТАРОСТИ И МЕМАСОВ
+                    </h2>
+                    <p class="text-sm font-bold text-gray-300 mt-1">
+                        Крути слот-машину! В пуле Патриарх Дима, Двойная Лега Додепмен/Cool Skeleton, Мухоловка и другие легенды.
+                    </p>
                 </div>
+
                 <div class="flex items-center gap-3 bg-slate-950 border-3 border-amber-400 px-4 py-2.5 rounded-xl shrink-0">
                     <span class="text-2xl">💎</span>
                     <div>
                         <div class="text-[10px] font-pixel text-amber-300">ПРИМОГЕМЫ:</div>
                         <div id="primogemBalance" class="font-mono font-extrabold text-lg text-white">32 000</div>
                     </div>
-                    <button onclick="refillPrimogems()" class="arcade-btn ml-2 bg-amber-400 text-black text-xs font-extrabold px-2.5 py-1.5 rounded-lg">+ Додеп</button>
+                    <button onclick="refillPrimogems()" class="arcade-btn ml-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold px-2.5 py-1.5 rounded-lg">
+                        + Додеп
+                    </button>
                 </div>
             </div>
 
@@ -663,115 +869,299 @@
                 <div id="gachaStage" class="min-h-[320px] flex flex-col items-center justify-center text-center p-5 rounded-xl border-3 border-slate-700 bg-slate-950">
                     <div id="gachaDefaultView" class="space-y-4 max-w-lg">
                         <div class="text-5xl">🌠</div>
-                        <h3 class="font-display text-xl text-amber-400">АВТОМАТ ЗАРЯЖЕН НА 5★ ЛЕГЕНДУ!</h3>
+                        <h3 class="font-display text-xl sm:text-2xl text-amber-400">
+                            АВТОМАТ ЗАРЯЖЕН НА 5★ ЛЕГЕНДУ!
+                        </h3>
+                        <p class="text-sm font-bold text-gray-300">
+                            Жми «Крутка ×1» или «ДЕСЯТКА ×10»! (Собери все 13/13).
+                        </p>
                     </div>
                     <div id="gachaResultView" class="hidden w-full"></div>
                 </div>
 
                 <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
-                    <div class="text-xs font-mono text-gray-300">Коллекция: <strong id="collectionCounter" class="text-sky-400">0 / 13</strong></div>
-                    <div class="flex gap-3">
-                        <button onclick="rollGenshinGacha(1)" class="arcade-btn bg-amber-200 text-black font-extrabold px-5 py-3 rounded-xl text-sm">✨ Крутка ×1</button>
-                        <button onclick="rollGenshinGacha(10)" class="arcade-btn bg-amber-400 text-black font-extrabold px-6 py-3 rounded-xl text-sm">🌟 ДЕСЯТКА ×10</button>
+                    <div class="text-xs font-mono text-gray-300">
+                        Сделано круток: <strong id="pityCounter" class="text-amber-400">0</strong> | Коллекция: <strong id="collectionCounter" class="text-sky-400">0 / 13</strong>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="rollGenshinGacha(1)" class="arcade-btn bg-amber-200 hover:bg-white text-black font-extrabold px-5 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <span>✨ Крутка ×1</span>
+                            <span class="bg-black text-amber-300 px-2 py-0.5 rounded text-xs font-mono">💎 160</span>
+                        </button>
+                        <button onclick="rollGenshinGacha(10)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-6 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <span>🌟 ДЕСЯТКА ×10</span>
+                            <span class="bg-black text-amber-400 px-2 py-0.5 rounded text-xs font-mono">💎 1600</span>
+                        </button>
                     </div>
                 </div>
-                <div id="gachaInventoryList" class="flex flex-wrap gap-2 text-xs text-gray-400 font-bold mt-4">Пока пусто</div>
+
+                <div class="mt-6 pt-5 border-t-2 border-slate-800">
+                    <div class="text-xs font-pixel text-gray-400 uppercase mb-3">
+                        🎒 ИНВЕНТАРЬ ДИМЫ:
+                    </div>
+                    <div id="gachaInventoryList" class="flex flex-wrap gap-2 text-xs text-gray-400 font-bold">
+                        Пока пусто — крути барабан!
+                    </div>
+                </div>
             </div>
 
             <div class="flex justify-between">
-                <button onclick="switchPage('dimasty')" class="arcade-btn bg-slate-700 text-white font-display px-5 py-3 rounded-xl text-xs">← НАЗАД</button>
-                <button onclick="switchPage('arcade')" class="arcade-btn bg-amber-400 text-black font-display px-5 py-3 rounded-xl text-xs">МИНИ-ИГРЫ →</button>
+                <button onclick="switchPage('dimasty')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НАЗАД К ОТРЯДУ
+                </button>
+                <button onclick="switchPage('arcade')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: МИНИ-ИГРЫ & РЫБАЛКА →
+                </button>
             </div>
         </div>
 
-        <!-- ================= PAGE 4: ARCADE & FISHING (Рыбалка с Мегаладоном + JoJo + Караоке с GIF) ================= -->
+        <!-- ================= PAGE 4: ARCADE & FISHING ================= -->
         <div id="page-arcade" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- JoJo Stand Rush -->
                 <div class="arcade-card rounded-2xl p-6 flex flex-col justify-between">
                     <div>
-                        <span class="bg-purple-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">JOJO STAND RUSH</span>
+                        <span class="bg-purple-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">ARCADE SLOT #1 // JOJO</span>
                         <h3 class="font-display text-2xl text-white mt-3">СТЕНД-РАШ: «ORA ORA ORA!» 👊</h3>
-                        <p class="text-sm font-bold text-gray-300 mt-1">Каждые +93 удара приближают пасхалку (проверь 1488!).</p>
+                        <p class="text-sm font-bold text-gray-300 mt-1">
+                            Набей комбо за здоровье Димы! Каждые +93 удара приближают легендарную пасхалку.
+                        </p>
                     </div>
                     <div class="my-5 text-center py-4 bg-slate-950 rounded-xl border-2 border-purple-500">
-                        <div id="oraCount" class="font-display text-5xl text-amber-400">0</div>
+                        <div class="text-[10px] font-pixel text-purple-300">КОМБО УДАРОВ СТЕНДА:</div>
+                        <div id="oraCount" class="font-display text-5xl text-amber-400 mt-2">0</div>
                     </div>
-                    <button onclick="oraOraPunch()" class="arcade-btn w-full bg-purple-600 text-white font-display py-3.5 rounded-xl">👊 УДАРИТЬ СТЕНДОМ (+93)</button>
+                    <button onclick="oraOraPunch()" class="arcade-btn w-full bg-purple-600 hover:bg-purple-500 text-white font-display text-base py-3.5 rounded-xl">
+                        👊 УДАРИТЬ СТЕНДОМ (ORA! +93)
+                    </button>
                 </div>
 
-                <!-- Yakuza Караоке + гифки Мадзимы и Кирю -->
+                <!-- Yakuza Караоке + GIFS -->
                 <div class="arcade-card rounded-2xl p-6 flex flex-col justify-between">
-                    <div>
-                        <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">YAKUZA KARAOKE</span>
-                        <h3 class="font-display text-xl sm:text-2xl text-white mt-2">КАРАОКЕ И ТАНЦЫ ДИМЫ 🎤</h3>
+                    <div class="flex items-center gap-4">
+                        <!-- GIF Фрейм 1 -->
+                        <div class="w-28 h-24 rounded-xl overflow-hidden border-3 border-red-500 shrink-0 bg-black relative flex items-center justify-center">
+                            <img id="yakuzaGif1"
+                                 src="friday-night-yakuza0.gif"
+                                 data-filename="friday-night-yakuza0.gif"
+                                 data-alt-filename="friday-night-yakuza0.jpg"
+                                 alt="Friday Night Yakuza"
+                                 onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='friday-night-yakuza0.jpg';}else if(!this.dataset.triedWeb){this.dataset.triedWeb='1';this.src='https://media.tenor.com/images/c4c12113049c3d46d7a03c1b027b1775/tenor.gif';}else{this.src=createCustomPoster('YAKUZA DANCE', 'Friday Night', '#991b1b', '#facc15', '🕺');}"
+                                 class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">ARCADE SLOT #2 // YAKUZA</span>
+                            <h3 class="font-display text-xl sm:text-2xl text-white mt-2">КАРАОКЕ И ТАНЦЫ ДИМЫ 🎤</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-300 mt-1">Спеть Baka Mitai или пробить Tiger Drop!</p>
+                        </div>
                     </div>
-                    <!-- GIF Фрейм (goro-majima-hustle.gif) -->
-                    <div class="my-4 w-full h-72 rounded-xl overflow-hidden border-3 border-red-600 bg-slate-950 relative flex items-center justify-center p-1">
-                        <img id="yakuzaGif2" src="goro-majima-hustle.gif" data-filename="goro-majima-hustle.gif"
-                             onerror="this.src=createCustomPoster('MAJIMA HUSTLE', 'Let\'s Dance!', '#7f1d1d', '#f87171', '💃')"
+
+                    <!-- GIF Фрейм 2 (Goro Majima Hustle — подогнан под полный размер без обрезки) -->
+                    <div class="my-4 w-full h-72 sm:h-80 rounded-xl overflow-hidden border-3 border-red-600 bg-slate-950 relative flex items-center justify-center p-1">
+                        <img id="yakuzaGif2"
+                             src="goro-majima-hustle.gif"
+                             data-filename="goro-majima-hustle.gif"
+                             data-alt-filename="goro-majima-hustle.jpg"
+                             alt="Goro Majima Hustle"
+                             onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='goro-majima-hustle.jpg';}else if(!this.dataset.triedWeb){this.dataset.triedWeb='1';this.src='https://media1.tenor.com/m/D5_t6n_8y4kAAAAC/goro-majima-hustle.gif';}else{this.src=createCustomPoster('MAJIMA HUSTLE', 'Let\'s Dance!', '#7f1d1d', '#f87171', '💃');}"
                              class="w-full h-full object-contain rounded-lg">
+                        <div class="absolute bottom-2 right-2 bg-black/85 border border-red-500 px-2.5 py-1 rounded text-[10px] font-mono text-amber-300">
+                            МАДЗИМА И КИРЮ ТАНЦУЮТ ЗА ДИМУ
+                        </div>
                     </div>
+
                     <div id="bakaMitaiLyrics" class="mb-3 bg-slate-950 border-2 border-red-500 rounded-xl p-3 text-center text-xs font-bold text-amber-300">
-                        «Dame da ne... Dame yo...»
+                        «Dame da ne... Dame yo... (Похмелье длится 2 дня)»
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="singBakaMitai()" class="arcade-btn bg-red-600 text-white py-2.5 rounded-xl text-xs">🎤 Спеть Baka Mitai</button>
-                        <button onclick="triggerTigerDrop()" class="arcade-btn bg-amber-400 text-black py-2.5 rounded-xl text-xs">🐅 TIGER DROP</button>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="singBakaMitai()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold py-2.5 px-3 rounded-xl text-xs">
+                            🎤 Спеть Baka Mitai
+                        </button>
+                        <button onclick="triggerTigerDrop()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-2.5 px-3 rounded-xl text-xs">
+                            🐅 TIGER DROP (R1 + ▲)
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Рыбалка (Мясо, сапог, Мегаладон 10%) -->
+            <!-- НОВЫЙ РЕЖИМ: РЫБАЛКА С МЕГАЛАДОНОМ, МЯСОМ И САПОГОМ -->
             <div class="arcade-card rounded-2xl p-6 bg-[#162035] border-sky-400">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-display text-xl text-white">🎣 СЕКРЕТНЫЙ РЫБНЫЙ УЛОВ ДИМЫ (МЕГАЛАДОН 10%)</h3>
-                    <span class="text-xs font-mono text-sky-300">Уловов: <strong id="fishCount" class="text-white">0</strong></span>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <div>
+                        <span class="bg-sky-500 text-black font-pixel text-[9px] px-2.5 py-1 rounded border border-black">NEW ARCADE // РЫБАЛКА В ОЧЕРЕДНОЙ КАТКЕ</span>
+                        <h3 class="font-display text-xl sm:text-2xl text-white mt-2">
+                            🎣 СЕКРЕТНЫЙ РЫБНЫЙ УЛОВ ДИМЫ
+                        </h3>
+                    </div>
+                    <div class="bg-slate-950 border-2 border-sky-400 px-4 py-2 rounded-xl text-xs font-mono text-sky-300">
+                        Поймано уловов: <strong id="fishCount" class="text-white text-base">0</strong>
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                     <div class="md:col-span-5 aspect-square bg-slate-950 rounded-xl overflow-hidden border-3 border-sky-400 relative flex items-center justify-center p-3">
-                        <img id="fishDisplayImg" src="photo_2025-08-25_17-14-44.jpg" data-filename="photo_2025-08-25_17-14-44.jpg" class="w-full h-full object-cover rounded-lg">
+                        <img id="fishDisplayImg" src="photo_2025-08-25_17-14-44.jpg" data-filename="photo_2025-08-25_17-14-44.jpg"
+                             onerror="this.src=createCustomPoster('МЕГАЛАДОН!', 'Главный приз рыбалки', '#0369a1', '#38bdf8', '🦈')"
+                             class="w-full h-full object-cover rounded-lg">
                     </div>
                     <div class="md:col-span-7 space-y-4">
-                        <div id="fishResultBox" class="bg-slate-950 border-2 border-sky-400 rounded-xl p-4 text-sm font-bold text-sky-300">
-                            Закинь удочку! Вылови странное мясо, сапог или Мегаладона!
+                        <div id="fishResultBox" class="bg-slate-950 border-2 border-sky-400 rounded-xl p-4 text-sm sm:text-base font-bold text-sky-300">
+                            «Закинь удочку в мутные воды рейда! Можно выловить странное мясо на вертеле, рваный сапог или легендарный Мегаладон прямо в руки Димы!»
                         </div>
-                        <button onclick="castFishingRod()" class="arcade-btn w-full bg-sky-500 text-black font-display py-4 rounded-xl text-base">🎣 ЗАБРОСИТЬ УДОЧКУ!</button>
+                        <button onclick="castFishingRod()" class="arcade-btn w-full bg-sky-500 hover:bg-sky-400 text-black font-display py-4 rounded-xl text-base">
+                            🎣 ЗАБРОСИТЬ УДОЧКУ!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Покемон-Бой -->
+            <div class="pokemon-box bg-slate-900 rounded-2xl p-5 sm:p-8 text-white">
+                <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
+                    <span class="bg-green-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black">GAMEBOY ADVANCE // POKÉMON DIMA VERSION</span>
+                    <span class="font-mono text-xs text-green-300">ЛОКАЦИЯ: ТРАВА У БАРА</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-6 bg-slate-800 border-3 border-white rounded-xl p-4">
+                        <div class="flex items-center justify-between font-pixel text-xs sm:text-sm text-amber-400">
+                            <span>БОСС ДИМА</span>
+                            <span>Lv.99</span>
+                        </div>
+                        <div class="mt-3">
+                            <div class="flex justify-between text-xs font-mono text-gray-300 mb-1">
+                                <span>HP (ЗАПАС МОЛОДОСТИ)</span>
+                                <span id="pokeEnemyHpText">100/100</span>
+                            </div>
+                            <div class="w-full h-4 bg-black rounded overflow-hidden border border-white">
+                                <div id="pokeEnemyHpBar" class="h-full bg-green-400 transition-all duration-300" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs font-bold text-gray-200 mt-3">
+                            Тип: <strong class="text-amber-400">АВТОР НОВЕЛЛ / ЛИДЕР ДИМАСТИИ</strong><br>
+                            Пассивка: Сюжетная броня!
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-6 flex justify-center">
+                        <div id="pokeSpriteWrapper" class="w-44 h-44 sm:w-52 sm:h-52 rounded-xl overflow-hidden border-4 border-amber-400 shadow-[6px_6px_0px_#000] transition transform bg-black">
+                            <img src="photo_2026-10-22_23-48-14.jpg" data-filename="photo_2026-10-22_23-48-14.jpg"
+                                 onerror="this.src=createCustomPoster('ДИМА LV.99', 'Вайб-чек', '#14532d', '#4ade80', '👾🧢')"
+                                 class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div id="pokeBattleLog" class="lg:col-span-7 bg-black border-3 border-white rounded-xl p-4 font-mono text-xs sm:text-sm text-green-400 flex items-center">
+                        Дикий ДИМА появился! Что вы предпримете?
+                    </div>
+                    <div class="lg:col-span-5 grid grid-cols-2 gap-2.5 font-pixel text-[10px]">
+                        <button onclick="pokemonAction('attack')" class="arcade-btn bg-red-600 hover:bg-red-500 text-white py-3 px-2 rounded-lg">
+                            ⚔️ ТОСТ-АТАКА
+                        </button>
+                        <button onclick="pokemonAction('bag')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black py-3 px-2 rounded-lg">
+                            🎒 РЮКЗАК
+                        </button>
+                        <button onclick="pokemonAction('squad')" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white py-3 px-2 rounded-lg">
+                            👑 ДИМАСТИЯ
+                        </button>
+                        <button onclick="pokemonAction('run')" class="arcade-btn bg-gray-700 hover:bg-gray-600 text-white py-3 px-2 rounded-lg">
+                            🏃 СБЕЖАТЬ
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-between">
-                <button onclick="switchPage('gacha')" class="arcade-btn bg-slate-700 text-white font-display px-5 py-3 rounded-xl text-xs">← НАЗАД</button>
-                <button onclick="switchPage('max')" class="arcade-btn bg-amber-400 text-black font-display px-5 py-3 rounded-xl text-xs">MAX →</button>
+                <button onclick="switchPage('gacha')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НАЗАД К ГАЧЕ
+                </button>
+                <button onclick="switchPage('max')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: МЕССЕНДЖЕР MAX →
+                </button>
             </div>
         </div>
 
-        <!-- ================= PAGE 5: MAX ================= -->
+        <!-- ================= PAGE 5: MAX MESSENGER ================= -->
         <div id="page-max" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
             <div class="arcade-card rounded-2xl p-6 sm:p-8 bg-[#131d38] border-blue-400">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <div class="lg:col-span-6 space-y-4">
-                        <h2 class="font-display text-2xl sm:text-4xl text-white">МЕССЕНДЖЕР «MAX» — ЛОВИТ НА ПАРКОВКЕ!</h2>
-                        <p class="text-gray-200 text-sm font-bold">Весь клан «Димастия» переведён в государственный MAX.</p>
-                        <button onclick="sendMaxPing()" class="arcade-btn bg-blue-600 text-white font-extrabold px-4 py-3 rounded-xl text-xs">📡 Проверить сигнал</button>
+                        <span class="bg-blue-500 text-white font-pixel text-[9px] px-3 py-1.5 rounded border border-black inline-block">
+                            📡 НАЦИОНАЛЬНЫЙ КАРТРИДЖ СВЯЗИ
+                        </span>
+
+                        <h2 class="font-display text-2xl sm:text-4xl text-white leading-tight">
+                            МЕССЕНДЖЕР «MAX» — ЛОВИТ ДАЖЕ НА ПАРКОВКЕ (-5 ЭТАЖ)!
+                        </h2>
+
+                        <p class="text-gray-200 text-sm sm:text-base font-bold leading-relaxed">
+                            Весь клан <strong class="text-amber-400">«Димастия»</strong> переведён в государственный супер-мессенджер <strong class="text-sky-400">MAX</strong>. Тут Дима публикует новые главы новелл даже из железобетонного бункера!
+                        </p>
+
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <button onclick="sendMaxPing()" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-4 py-3 rounded-xl text-xs sm:text-sm">
+                                📡 Проверить сигнал с парковки
+                            </button>
+                            <button onclick="triggerGosuslugiPrank(event)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-4 py-3 rounded-xl text-xs sm:text-sm">
+                                🆔 Войти через MAX ID (Подарок 18+)
+                            </button>
+                        </div>
                     </div>
+
                     <div class="lg:col-span-6">
                         <div class="arcade-card rounded-2xl overflow-hidden bg-slate-950 border-blue-400">
-                            <div class="bg-blue-700 px-4 py-3 text-white font-extrabold text-sm">Чат клана «Димастия» (MAX)</div>
-                            <div id="maxChatMessages" class="p-4 space-y-3 max-h-80 overflow-y-auto text-xs font-bold">
-                                <div class="bg-blue-950 border-2 border-blue-500 rounded-xl p-3 text-white">Пользователь ДИМА назначен Верховным Админом.</div>
+                            <div class="bg-blue-700 px-4 py-3 flex items-center justify-between border-b-3 border-black">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-lg bg-white text-blue-700 font-display flex items-center justify-center text-base border-2 border-black">
+                                        M
+                                    </div>
+                                    <div>
+                                        <div class="font-extrabold text-white text-sm">Чат клана «Димастия» (MAX)</div>
+                                        <div class="text-[11px] text-blue-200 font-mono">Подземная парковка • 5G Ультра</div>
+                                    </div>
+                                </div>
+                                <span class="bg-green-400 text-black font-pixel text-[9px] px-2 py-1 rounded border border-black">ONLINE</span>
                             </div>
-                            <div class="p-3 bg-slate-900 border-t-2 border-slate-800">
-                                <button onclick="replyInMax('Дописываю новеллу и несу пиво! 🍺✍️')" class="arcade-btn w-full bg-blue-600 text-white text-xs font-extrabold py-2 rounded-lg">Ответить в MAX</button>
+
+                            <div id="maxChatMessages" class="p-4 space-y-3 max-h-80 overflow-y-auto text-xs sm:text-sm font-bold">
+                                <div class="bg-blue-950 border-2 border-blue-500 rounded-xl p-3">
+                                    <div class="text-sky-300 text-xs font-mono">🤖 Система MAX</div>
+                                    <p class="text-white mt-1">
+                                        Пользователь ДИМА назначен Верховным Админом клана. Удаление заблокировано Госуслугами.
+                                    </p>
+                                </div>
+
+                                <div class="bg-slate-900 border-2 border-amber-400 rounded-xl p-3">
+                                    <div class="text-amber-400 text-xs font-mono">🎰 Додепмен / Cool Skeleton</div>
+                                    <p class="text-gray-100 mt-1">
+                                        Дима, бро! Я на подземной парковке с Cool Skeleton! MAX ловит сквозь бетон! С Днюхой!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-slate-900 border-t-2 border-slate-800 flex flex-wrap gap-2">
+                                <button onclick="replyInMax('Я на парковке, дописываю главу новеллы и несу пиво! 🍺✍️')" class="arcade-btn flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold py-2 px-3 rounded-lg">
+                                    «Дописываю новеллу и несу пиво!»
+                                </button>
+                                <button onclick="replyInMax('Джарвис, почему MAX ловит в лифте?! 🤖')" class="arcade-btn flex-1 bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold py-2 px-3 rounded-lg">
+                                    «Джарвис, чё за х*йня?!»
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="flex justify-between">
-                <button onclick="switchPage('arcade')" class="arcade-btn bg-slate-700 text-white font-display px-5 py-3 rounded-xl text-xs">← НАЗАД</button>
-                <button onclick="switchPage('vip')" class="arcade-btn bg-amber-400 text-black font-display px-5 py-3 rounded-xl text-xs">VIP →</button>
+                <button onclick="switchPage('arcade')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НАЗАД К МИНИ-ИГРАМ
+                </button>
+                <button onclick="switchPage('vip')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: VIP-ПОДАРОК 18+ →
+                </button>
             </div>
         </div>
 
@@ -779,104 +1169,307 @@
         <div id="page-vip" class="page-view hidden max-w-4xl mx-auto px-4 py-8 space-y-8">
             <div class="arcade-card rounded-2xl p-6 sm:p-10 bg-[#1a1d2e] border-amber-400">
                 <div class="text-center max-w-2xl mx-auto mb-8">
-                    <h2 class="font-display text-2xl sm:text-4xl text-white">ПОЛУЧИТЬ 10 000 ПРИМОГЕМОВ И АРХИВ (18+)</h2>
+                    <span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border border-black uppercase">
+                        🎁 SECRET DLC FOR DIMA
+                    </span>
+                    <h2 class="font-display text-2xl sm:text-4xl text-white mt-4">
+                        ПОЛУЧИТЬ 10 000 ПРИМОГЕМОВ И СЕКРЕТНЫЙ АРХИВ (18+)
+                    </h2>
+                    <p class="text-sm sm:text-base font-bold text-gray-300 mt-2">
+                        Дима, подтверди регистрацию главы клана, чтобы забрать подгон от кентов и спонсора <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" class="text-amber-400 underline font-extrabold">Three Kidneys</a>!
+                    </p>
                 </div>
+
                 <form onsubmit="triggerGosuslugiPrank(event)" class="space-y-4 max-w-xl mx-auto">
-                    <input type="text" required value="Dima_Patriarch_SSR" class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
-                    <button type="submit" class="arcade-btn w-full bg-amber-400 text-black font-display py-4 rounded-xl text-base">🔥 ЗАБРАТЬ БОНУС 🔥</button>
+                    <div>
+                        <label class="block text-xs font-pixel text-amber-400 mb-2">НИКНЕЙМ ГЛАВЫ «ДИМАСТИИ»:</label>
+                        <input type="text" required value="Dima_Patriarch_SSR"
+                               class="w-full bg-slate-950 border-3 border-slate-600 focus:border-amber-400 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-pixel text-gray-300 mb-2">ПАРОЛЬ ОТ СЕЙФА:</label>
+                            <input type="password" required placeholder="••••••••••••"
+                                   class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-pixel text-gray-300 mb-2">ЛЮБИМАЯ ВАЙФУ / СТЕНД:</label>
+                            <select class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
+                                <option>Роберт Э. О. Спидвагон (Лучшая вайфу)</option>
+                                <option>Горо Мадзима (Kiryuuu-chan!)</option>
+                                <option>Райдэн Сёгун / Яэ Мико</option>
+                                <option>D.Va / Мерси из Overwatch</option>
+                                <option>Мухоловка с пивом в горшке</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-gray-300 pt-1">
+                        <input type="checkbox" required checked class="w-4 h-4 rounded text-amber-400">
+                        <span>Подтверждаю, что я глава «Димастии», пишу топовые новеллы и готов к подарку 18+.</span>
+                    </div>
+
+                    <button type="submit" class="arcade-btn w-full bg-amber-400 hover:bg-amber-300 text-black font-display text-base sm:text-lg py-4 rounded-xl mt-2">
+                        🔥 ПОДТВЕРДИТЬ РЕГИСТРАЦИЮ И ЗАБРАТЬ БОНУС 🔥
+                    </button>
                 </form>
             </div>
         </div>
+
     </main>
 
-    <!-- ИСПРАВЛЕННЫЕ МОДАЛЬНЫЕ ОКНА (Строго по центру с использованием .arcade-modal-overlay) -->
-    <div id="yakuzaBossModal" onclick="closeYakuzaBoss()" class="hidden arcade-modal-overlay cursor-pointer">
-        <div class="arcade-modal-box text-center yakuza-title-anim arcade-card p-8 rounded-2xl bg-slate-950 border-red-600">
-            <div class="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-2xl overflow-hidden border-4 border-red-600 mb-6 bg-black">
-                <img src="photo_2026-10-22_23-48-56.jpg" data-filename="photo_2026-10-22_23-48-56.jpg" class="w-full h-full object-cover">
+    <footer class="relative z-10 bg-[#0d0f17] border-t-4 border-black py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div>
+                <div class="font-display text-lg text-amber-400">С ДНЁМ РОЖДЕНИЯ, ДИМА! 🎂🕹️</div>
+                <p class="text-xs sm:text-sm font-bold text-gray-400 mt-1">
+                    От всего клана «Димастия»! Пиши крутые новеллы, тащи в Овервотче и живи без тильта!
+                </p>
             </div>
-            <h2 class="font-display text-4xl sm:text-6xl text-white mt-3">ДИМА В СМОКИНГЕ</h2>
-            <p class="text-amber-400 font-mono text-xs mt-4">[ Кликни, чтобы закрыть ]</p>
+            <div class="arcade-card rounded-xl px-5 py-3 bg-slate-900 border-red-500">
+                <div class="text-[10px] font-pixel text-red-400 uppercase">Генеральный спонсор Димастии:</div>
+                <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
+                   class="text-sm sm:text-base font-extrabold text-amber-400 hover:text-amber-300 underline flex items-center justify-center sm:justify-start gap-2 mt-1">
+                    <i class="fa-solid fa-link"></i> j-starling.github.io/Three-Kidneys/
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- OVERLAYS & MODALS -->
+    <div id="toBeContinuedOverlay" onclick="toggleToBeContinued()" class="hidden fixed bottom-8 left-8 z-50 cursor-pointer select-none">
+        <div class="bg-[#d4b483] border-4 border-black px-6 py-3 shadow-[8px_8px_0px_#000] flex items-center gap-3">
+            <i class="fa-solid fa-arrow-left-long text-2xl text-black"></i>
+            <span class="font-display italic text-2xl sm:text-3xl text-black tracking-wider">To Be Continued</span>
         </div>
     </div>
 
-    <div id="loginModal" class="hidden arcade-modal-overlay">
-        <div class="arcade-modal-card arcade-card max-w-md w-full rounded-2xl p-6 sm:p-8 border-amber-400 relative bg-slate-950">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+    <div id="yakuzaBossModal" onclick="closeYakuzaBoss()" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-2xl w-full text-center relative yakuza-title-anim arcade-card p-8 rounded-2xl bg-slate-950 border-red-600">
+            <div class="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-2xl overflow-hidden border-4 border-red-600 shadow-[6px_6px_0px_#000] mb-6">
+                <img src="photo_2026-10-22_23-48-56.jpg" data-filename="photo_2026-10-22_23-48-56.jpg"
+                     onerror="this.src=createCustomPoster('ПАТРИАРХ ДИМА', 'Босс в костюме', '#991b1b', '#facc15', '🐉🤵')"
+                     class="w-full h-full object-cover">
+            </div>
+            <div class="text-red-500 font-pixel text-xs tracking-widest uppercase">
+                ПАТРИАРХ КЛАНА «ДИМАСТИЯ» // МАСТЕР СЮЖЕТНЫХ НОВЕЛЛ
+            </div>
+            <h2 class="font-display text-4xl sm:text-6xl text-white mt-3">
+                ДИМА В СМОКИНГЕ
+            </h2>
+            <p class="text-amber-400 font-mono text-xs sm:text-sm mt-4">
+                [ Кликни в любое место, чтобы закрыть ]
+            </p>
+        </div>
+    </div>
+
+    <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4">
+        <div class="arcade-card max-w-md w-full rounded-2xl p-6 sm:p-8 border-amber-400 relative">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <div class="text-center mb-6">
-                <h3 class="font-display text-xl text-amber-400">VIP-ВХОД ДЛЯ ДИМЫ</h3>
+                <div class="text-4xl mb-2">🔞🎁</div>
+                <h3 class="font-display text-xl sm:text-2xl text-amber-400">VIP-ВХОД ДЛЯ ДИМЫ</h3>
+                <p class="text-xs font-bold text-gray-300 mt-1">Введи данные главы «Димастии»</p>
             </div>
             <form onsubmit="triggerGosuslugiPrank(event)" class="space-y-4">
-                <input type="text" required placeholder="Логин" class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-sm text-white">
-                <button type="submit" class="arcade-btn w-full bg-amber-400 text-black font-display py-3.5 rounded-xl text-sm">ПОДТВЕРДИТЬ</button>
+                <input type="text" required placeholder="Логин (например: Dima_Boss)" class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-amber-400">
+                <input type="password" required placeholder="Пароль" class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-sm font-bold text-white outline-none focus:border-amber-400">
+                <button type="submit" class="arcade-btn w-full bg-amber-400 hover:bg-amber-300 text-black font-display py-3.5 rounded-xl text-sm">
+                    ПОДТВЕРДИТЬ РЕГИСТРАЦИЮ
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- ГОСУСЛУГИ ПРАНК 10 СЕКУНД -->
+    <!-- 10 СЕКУНД ДО ГОСУСЛУГ -->
     <div id="gosuslugiPrankOverlay" class="hidden fixed inset-0 z-[100] police-siren-bg flex items-center justify-center p-4 text-center">
         <div class="max-w-2xl w-full bg-slate-950 border-4 border-amber-400 shadow-[10px_10px_0px_#000] rounded-2xl p-6 sm:p-10 space-y-5">
-            <div class="text-5xl animate-bounce">🚨🚔🚨</div>
-            <h2 class="font-display text-2xl sm:text-5xl text-amber-400 uppercase">ПОРНОДРОЧЕРАМ ВХОД СТРОГО ЗАПРЕЩЁН!</h2>
-            <p class="text-gray-100 text-sm sm:text-base font-bold">Гражданин <strong>Дима</strong>! Перенаправление на Госуслуги через:</p>
-            <div id="redirectCountdown" class="font-display text-4xl sm:text-6xl text-red-500">10</div>
-            <div class="flex gap-3 justify-center">
-                <a href="https://www.gosuslugi.ru/" target="_top" class="arcade-btn bg-blue-600 text-white px-6 py-3.5 rounded-xl text-sm font-extrabold">Сдаться на Госуслуги 🇷🇺</a>
-                <button onclick="cancelPrankRedirect()" class="arcade-btn bg-slate-800 text-gray-200 px-5 py-3.5 rounded-xl text-xs font-extrabold">Отмена</button>
+            <div class="text-5xl sm:text-6xl animate-bounce">🚨🚔🚨</div>
+            <div class="bg-red-600 text-white font-pixel text-[10px] px-4 py-1.5 rounded border-2 border-black inline-block uppercase">
+                ФЕДЕРАЛЬНАЯ СИСТЕМА АНТИ-ХЕНТАЙ КОНТРОЛЯ & MAX ID
+            </div>
+            <h2 class="font-display text-2xl sm:text-5xl text-amber-400 leading-tight uppercase">
+                ПОРНОДРОЧЕРАМ ВХОД СТРОГО ЗАПРЕЩЁН!
+            </h2>
+            <p class="text-gray-100 text-sm sm:text-base font-bold leading-relaxed">
+                Гражданин <strong class="text-amber-400">Дима</strong>! При проверке через <strong class="text-sky-400">MAX</strong> на вашем ПК обнаружено <strong class="text-red-400">420 ГБ «материалов для вдохновения и написания 18+ новелл»</strong>! В выдаче примогемов отказано.
+            </p>
+            <div class="bg-slate-900 border-3 border-red-500 rounded-xl p-4">
+                <div class="text-xs font-mono text-gray-300 uppercase">Перенаправление на Госуслуги для объяснительной через:</div>
+                <div id="redirectCountdown" class="font-display text-4xl sm:text-6xl text-red-500 mt-1">10</div>
+                <div class="text-[11px] font-bold text-amber-300 mt-1">Успей прочитать приговор или нажми отмену!</div>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <a href="https://www.gosuslugi.ru/" target="_top"
+                   class="arcade-btn w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-6 py-3.5 rounded-xl text-sm">
+                    Сдаться на Госуслуги сейчас 🇷🇺
+                </a>
+                <button onclick="cancelPrankRedirect()" class="arcade-btn w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-gray-200 font-extrabold px-5 py-3.5 rounded-xl text-xs">
+                    Отмена! Вернуться на сайт «Димастии»
+                </button>
             </div>
         </div>
     </div>
 
-    <div id="cinemaOverlay" onclick="closeAbsoluteCinema()" class="hidden arcade-modal-overlay bg-black/90 flex-col justify-between cursor-pointer">
+    <!-- ABSOLUTE CINEMA -->
+    <div id="cinemaOverlay" onclick="closeAbsoluteCinema()" class="hidden fixed inset-0 z-[90] bg-black/90 flex flex-col justify-between cursor-pointer">
+        <div class="h-14 bg-black w-full border-b-2 border-white/20 flex items-center justify-center text-xs font-pixel text-gray-400">
+            NOVEL SCENARIO BY DIMA // DIRECTED BY MARTIN SCORSESE
+        </div>
         <div class="flex-1 flex flex-col items-center justify-center p-4 text-center">
-            <div class="w-64 sm:w-80 rounded-2xl overflow-hidden border-4 border-white bg-black">
-                <img src="photo_2026-10-23_01-23-01.jpg" data-filename="photo_2026-10-23_01-23-01.jpg" class="w-full h-full object-cover">
+            <div class="w-64 sm:w-80 rounded-2xl overflow-hidden border-4 border-white shadow-[8px_8px_0px_#000] bg-black yakuza-title-anim">
+                <img src="photo_2026-10-23_01-23-01.jpg" data-filename="photo_2026-10-23_01-23-01.jpg"
+                     onerror="this.src=createCustomPoster('ABSOLUTE CINEMA', 'Шедевр', '#111827', '#ffffff', '🙌🎬')"
+                     class="w-full h-full object-cover">
             </div>
-            <h3 class="font-display text-3xl sm:text-5xl text-white mt-6 uppercase">🙌 ABSOLUTE CINEMA 🙌</h3>
+            <h3 class="font-display text-3xl sm:text-5xl text-white mt-6 tracking-wider uppercase">
+                🙌 ABSOLUTE CINEMA 🙌
+            </h3>
+        </div>
+        <div class="h-14 bg-black w-full border-t-2 border-white/20 flex items-center justify-center text-xs font-mono text-amber-400">
+            СУБТИТРЫ: «Эта глава жизни Димы достойна экранизации!»
         </div>
     </div>
 
-    <div id="jarvisOverlay" onclick="closeJarvisHud()" class="hidden arcade-modal-overlay cursor-pointer">
-        <div class="arcade-modal-box arcade-card rounded-2xl p-6 bg-slate-950 border-cyan-400 text-center">
-            <h3 class="font-display text-2xl text-cyan-400 mb-3">ДЖАРВИС ХУД</h3>
-            <img src="photo_2026-10-23_01-21-42.jpg" data-filename="photo_2026-10-23_01-21-42.jpg" class="w-48 h-48 mx-auto rounded-xl object-cover border-2 border-cyan-400 mb-3">
-            <p class="text-sm font-bold text-white">«Сэр, Дима стал на год старше, новелле зачёт!»</p>
+    <!-- JARVIS HUD -->
+    <div id="jarvisOverlay" onclick="closeJarvisHud()" class="hidden fixed inset-0 z-[90] bg-black/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-2xl w-full arcade-card rounded-2xl p-6 sm:p-8 bg-slate-950 border-cyan-400">
+            <div class="flex items-center justify-between text-xs font-pixel text-cyan-400 border-b-2 border-cyan-500/40 pb-3 mb-4">
+                <span>STARK HUD // DIMA-OS</span>
+                <span class="animate-pulse text-red-400">⚠️ CRINGE OVERLOAD</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                <div class="rounded-xl overflow-hidden border-3 border-cyan-400 aspect-square bg-black">
+                    <img src="photo_2026-10-23_01-21-42.jpg" data-filename="photo_2026-10-23_01-21-42.jpg"
+                         onerror="this.src=createCustomPoster('ДЖАРВИС...', 'Чё за хуйня?!', '#083344', '#22d3ee', '🤖😳')"
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="space-y-3 text-left font-bold text-xs sm:text-sm">
+                    <div class="text-cyan-300 font-display text-base">ОТЧЁТ ДЖАРВИСА ДЛЯ ДИМЫ:</div>
+                    <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded-lg text-gray-200">
+                        • Статус: <strong class="text-amber-400">Глава клана «Димастия» (+1 год)</strong>
+                    </div>
+                    <div class="bg-slate-900 border-2 border-cyan-500/50 p-2.5 rounded-lg text-gray-200">
+                        • Вдохновение на новеллы: <strong class="text-emerald-400">МАКСИМАЛЬНОЕ</strong>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="beerOverlay" onclick="closeBeerPlant()" class="hidden arcade-modal-overlay cursor-pointer">
-        <div class="arcade-modal-box arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center">
-            <h3 class="font-display text-2xl text-amber-400">🍺 ПИВА В ГОРШОК! 🍺</h3>
-            <p class="text-sm font-bold text-white mt-2">Мухоловка полита пенным!</p>
+    <!-- BEER PLANT OVERLAY -->
+    <div id="beerOverlay" onclick="closeBeerPlant()" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 cursor-pointer overflow-hidden">
+        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-amber-600 via-yellow-500/90 to-amber-100 border-t-8 border-white beer-wave-active pointer-events-none"></div>
+        <div class="relative z-10 max-w-lg w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center">
+            <div class="w-56 h-48 mx-auto rounded-xl overflow-hidden border-3 border-amber-400 mb-4 bg-black flex items-center justify-center p-2">
+                <img src="photo_2026-10-23_01-23-27.jpg" data-filename="photo_2026-10-23_01-23-27.jpg"
+                     onerror="this.src=createCustomPoster('ПИВКОМ ПОЛЕЙ МЕНЯ', 'Пива в горшок мне', '#14532d', '#facc15', '🪴🍺')"
+                     class="w-full h-full object-contain">
+            </div>
+            <h3 class="font-display text-2xl sm:text-3xl text-amber-400">
+                🍺 ГОРШОК ЗАЛИТ ПИВКОМ! 🍺
+            </h3>
+            <p class="text-sm font-bold text-gray-200 mt-2">
+                Мухоловка затянулась и передаёт: «С Днюхой, Дима! Да здравствует Димастия!»
+            </p>
         </div>
     </div>
 
-    <div id="squadActionOverlay" onclick="closeSquadModal()" class="hidden arcade-modal-overlay cursor-pointer">
-        <div class="arcade-modal-box arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center" onclick="event.stopPropagation()">
-            <h3 id="squadModalTitle" class="font-display text-2xl text-amber-400">КАЗНАЧЕЙ</h3>
-            <p id="squadModalText" class="text-sm font-bold text-gray-100 mt-3 bg-slate-900 p-3.5 rounded-xl">Расчёт окончен!</p>
-            <button onclick="closeSquadModal()" class="arcade-btn mt-5 w-full bg-amber-400 text-black font-display py-3 rounded-xl text-sm">ПРИНЯТО! 👍</button>
+    <!-- SQUAD ACTION MODAL -->
+    <div id="squadActionOverlay" onclick="closeSquadModal()" class="hidden fixed inset-0 z-[92] bg-black/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-lg w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b-2 border-slate-800 pb-2 mb-4">
+                <span id="squadModalBadge" class="bg-amber-400 text-black font-pixel text-[9px] px-2.5 py-1 rounded border border-black">УЛЬТА ОТРЯДА</span>
+                <button onclick="closeSquadModal()" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="w-48 h-48 mx-auto rounded-xl overflow-hidden border-3 border-amber-400 mb-4 bg-black">
+                <img id="squadModalImg" src="photo_2026-10-22_23-49-07.jpg" alt="Боец" class="w-full h-full object-cover">
+            </div>
+            <h3 id="squadModalTitle" class="font-display text-2xl sm:text-3xl text-amber-400">КАЗНАЧЕЙ</h3>
+            <p id="squadModalText" class="text-sm sm:text-base font-bold text-gray-100 mt-3 leading-relaxed bg-slate-900 border-2 border-slate-700 p-3.5 rounded-xl">Расчёт окончен!</p>
+            <button onclick="closeSquadModal()" class="arcade-btn mt-5 w-full bg-amber-400 hover:bg-amber-300 text-black font-display py-3 rounded-xl text-sm">ПРИНЯТО! 👍</button>
         </div>
     </div>
 
-    <div id="overwatchUltOverlay" onclick="closeOverwatchUlt()" class="hidden arcade-modal-overlay cursor-pointer">
-        <div class="arcade-modal-box arcade-card bg-slate-950 border-orange-500 rounded-2xl p-6 text-center" onclick="event.stopPropagation()">
-            <h2 class="font-display text-3xl sm:text-5xl text-orange-400 uppercase">💥 NERF THIS! 💥</h2>
-            <p class="text-white text-sm mt-3">Уничтожено: Похмелье, тиммейты-раки, дедлайны!</p>
+    <!-- OVERWATCH ULT -->
+    <div id="overwatchUltOverlay" onclick="closeOverwatchUlt()" class="hidden fixed inset-0 z-[95] bg-orange-950/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-xl w-full arcade-card bg-slate-950 border-orange-500 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+            <div class="inline-flex items-center gap-2 bg-orange-500 text-black font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black animate-bounce">
+                ⚠️ ULTIMATE READY [Q] // PLAY OF THE GAME
+            </div>
+            <div class="w-44 h-44 mx-auto rounded-full overflow-hidden border-4 border-orange-400 shadow-[0_0_30px_#f97316] my-5 bg-black">
+                <img src="photo_2026-10-22_23-48-20.jpg" data-filename="photo_2026-10-22_23-48-20.jpg"
+                     onerror="this.src=createCustomPoster('NERF THIS!', 'Ульта Димы', '#9a3412', '#fb923c', '💥🐰')"
+                     class="w-full h-full object-cover">
+            </div>
+            <h2 class="font-display text-3xl sm:text-5xl text-orange-400 tracking-wide uppercase">
+                💥 NERF THIS! (ПОПРОБУЙ ЗАКОНТРИ!) 💥
+            </h2>
+            <div class="bg-slate-900 border-2 border-orange-500 rounded-xl p-4 mt-4 text-left font-mono text-xs sm:text-sm space-y-1.5">
+                <div class="text-orange-300 font-bold mb-1">🔥 KILL FEED:</div>
+                <div class="text-gray-200">🎯 <strong class="text-amber-400">ДИМА [Ульта]</strong> ➔ ☠️ Похмелье</div>
+                <div class="text-gray-200">🎯 <strong class="text-amber-400">ДИМА [Ульта]</strong> ➔ ☠️ Руина-тиммейты</div>
+                <div class="text-emerald-400 font-extrabold pt-1">🏆 TEAM KILL! ГРУЗ ДОСТАВЛЕН!</div>
+            </div>
+            <button onclick="closeOverwatchUlt()" class="arcade-btn mt-5 w-full bg-orange-500 hover:bg-orange-400 text-black font-display py-3 rounded-xl text-sm">GG WP!</button>
         </div>
     </div>
 
-    <div id="stand1488Overlay" onclick="closeStand1488Modal()" class="hidden arcade-modal-overlay cursor-pointer">
-        <div class="arcade-modal-box arcade-card bg-slate-950 border-red-500 rounded-2xl p-6 text-center" onclick="event.stopPropagation()">
-            <h3 class="font-display text-2xl text-red-500 uppercase">⚡ 1488 УДАРОВ СТЕНДА! ⚡</h3>
-            <p class="text-white text-sm mt-3">Штрохайм заорал: «Германская наука лучшая в мире!»</p>
+    <!-- GACHA 13/13 FULL COLLECTION MODAL -->
+    <div id="gachaFullCollectionOverlay" onclick="closeGachaFullModal()" class="hidden fixed inset-0 z-[96] bg-black/95 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-xl w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+            <div class="bg-red-600 text-white font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black inline-block">
+                🎰 ДОСТИЖЕНИЕ ЛУДОМАНА: СОБРАНО 13 ИЗ 13! 🎰
+            </div>
+            <div class="w-48 h-48 mx-auto rounded-2xl overflow-hidden border-4 border-amber-400 my-4 bg-black">
+                <img src="photo_2026-10-22_23-48-30.jpg" data-filename="photo_2026-10-22_23-48-30.jpg"
+                     onerror="this.src=createCustomPoster('13/13', 'Додепмен горд', '#1e3a8a', '#fbbf24', '🏠💸')"
+                     class="w-full h-full object-cover">
+            </div>
+            <h2 class="font-display text-2xl sm:text-4xl text-amber-400 uppercase leading-tight">
+                «ВИДИМО, ПРОДАЖА ХАТЫ ТОГО СТОИЛА...» 🏠💸
+            </h2>
+            <p class="text-sm sm:text-base font-bold text-gray-200 mt-3 leading-relaxed bg-slate-900 border-2 border-amber-500 p-4 rounded-xl">
+                Поздравляем, Дима! Ты выбил все <strong class="text-amber-400">13 из 13</strong> карт баннера! Квартира успешно переписана на казино, третья почка ушла в <strong class="text-red-400">Three Kidneys</strong>, а Додепмен произнёс:<br><br>
+                <span class="text-amber-300 italic">«Настоящий лудоман не останавливается! 99% игроков бросают крутить прямо перед тем, как им выпадет 14-я супер-лега. Делай додеп, бро!»</span>
+            </p>
+            <button onclick="closeGachaFullModal()" class="arcade-btn mt-5 w-full bg-amber-400 hover:bg-amber-300 text-black font-display py-3.5 rounded-xl text-sm">
+                👌 ПРОДАТЬ ГАРАЖ И ПРОДОЛЖИТЬ КРУТИТЬ
+            </button>
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- 1488 STAND RUSH MODAL -->
+    <div id="stand1488Overlay" onclick="closeStand1488Modal()" class="hidden fixed inset-0 z-[96] bg-black/95 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-lg w-full arcade-card bg-slate-950 border-red-500 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+            <div class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black inline-block">
+                ⚡ СЕКРЕТНОЕ КОМБО: 1488 УДАРОВ СТЕНДА ⚡
+            </div>
+            <div class="text-6xl my-4">🙋‍♂️🎨🇩🇪</div>
+            <h3 class="font-display text-2xl sm:text-3xl text-red-500 uppercase">
+                АВСТРИЙЙСКИЙ ХУДОЖНИК И ШТРОХАЙМ В АХУЕ!
+            </h3>
+            <p class="text-sm sm:text-base font-bold text-gray-200 mt-3 leading-relaxed bg-slate-900 border-2 border-red-500 p-4 rounded-xl">
+                Счётчик пробил ровно <strong class="text-amber-400">1488</strong>! Адольф уронил мольберт и прослезился, а майор Штрохайм заорал:<br><br>
+                <span class="text-amber-300 italic">«ГЕРМАНСКАЯ НАУКА — ЛУЧШАЯ В МИРЕ, НО СТЕНД ПАТРИАРХА ДИМЫ БЬЁТ ЕЩЁ ЖЁСТЧЕ!»</span>
+            </p>
+            <button onclick="closeStand1488Modal()" class="arcade-btn mt-5 w-full bg-red-600 hover:bg-red-500 text-white font-display py-3 rounded-xl text-sm">
+                ЯРЕ ЯРЕ ДАЗЕ, ПРОДОЛЖАЕМ РАШ! 👊
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
     <script>
         const loadedPhotoMap = {};
+        let customCinemaAudioUrl = null;
+        let activeCinemaAudio = null;
+        let activeCinemaNodes = [];
 
+        // Если сайт открыт на GitHub Pages — автоматически прячем техническую полоску для превью
         if (window.location.hostname.includes('github.io')) {
             const helperBar = document.getElementById('photoHelperBar');
             if (helperBar) helperBar.classList.add('hidden');
@@ -896,12 +1489,30 @@
                     const objectUrl = URL.createObjectURL(file);
                     const base = getBaseName(file.name);
 
+                    if (file.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a)$/i.test(file.name)) {
+                        customCinemaAudioUrl = objectUrl;
+                        return;
+                    }
+
                     loadedPhotoMap[file.name] = objectUrl;
                     loadedPhotoMap[base] = objectUrl;
 
+                    if (base.includes('820855') || base.includes('meat') || base.includes('мяс') || base.includes('шашлык')) {
+                        loadedPhotoMap['image_820855.png'] = objectUrl;
+                    }
+                    if (base.includes('820b1c') || base.includes('boot') || base.includes('сапог') || base.includes('ботин')) {
+                        loadedPhotoMap['image_820b1c.jpg'] = objectUrl;
+                    }
+
                     document.querySelectorAll('img[data-filename]').forEach(img => {
                         const targetFile = img.getAttribute('data-filename');
-                        if (targetFile === file.name || getBaseName(targetFile) === base) {
+                        const altFile = img.getAttribute('data-alt-filename');
+                        if (
+                            targetFile === file.name ||
+                            altFile === file.name ||
+                            getBaseName(targetFile) === base ||
+                            (altFile && getBaseName(altFile) === base)
+                        ) {
                             img.src = objectUrl;
                         }
                     });
@@ -912,22 +1523,31 @@
                     badge.textContent = `Загружено: ${files.length} шт.`;
                     badge.classList.remove('hidden');
                 }
+                playSound('powerup');
             });
         }
 
-        // ВОСПРОИЗВЕДЕНИЕ ТВОИХ .MP3 ФАЙЛОВ ИЗ РЕПОЗИТОРИЯ
-        let currentCustomAudio = null;
-        function playTrackFile(fileName, titleLabel) {
-            if (currentCustomAudio) {
-                try { currentCustomAudio.pause(); currentCustomAudio.currentTime = 0; } catch(e){}
+        function stopCinemaSound() {
+            if (activeCinemaAudio) {
+                try {
+                    activeCinemaAudio.pause();
+                    activeCinemaAudio.currentTime = 0;
+                } catch (e) {}
+                activeCinemaAudio = null;
             }
-            try {
-                currentCustomAudio = new Audio(fileName);
-                currentCustomAudio.volume = 0.95;
-                currentCustomAudio.play().catch(() => playSound('punch'));
-            } catch(e) {
-                playSound('punch');
-            }
+            activeCinemaNodes.forEach(node => {
+                try { node.stop(); } catch (e) {}
+                try { node.disconnect(); } catch (e) {}
+            });
+            activeCinemaNodes = [];
+        }
+
+        function resolvePhotoUrl(filename, fallbackFn) {
+            if (!filename) return fallbackFn ? fallbackFn() : '';
+            const base = getBaseName(filename);
+            if (loadedPhotoMap[filename]) return loadedPhotoMap[filename];
+            if (loadedPhotoMap[base]) return loadedPhotoMap[base];
+            return filename;
         }
 
         function switchPage(pageId) {
@@ -948,57 +1568,382 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) audioCtx = new AudioContextClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSynthGuitarCinema(ctx) {
+            const now = ctx.currentTime;
+            const dist = ctx.createWaveShaper();
+            const k = 95;
+            const samples = 44100;
+            const curve = new Float32Array(samples);
+            for (let i = 0; i < samples; i++) {
+                const x = (i * 2) / samples - 1;
+                curve[i] = ((3 + k) * x * 20 * (Math.PI / 180)) / (Math.PI + k * Math.abs(x));
+            }
+            dist.curve = curve;
+            dist.oversample = '4x';
+
+            const cabFilter = ctx.createBiquadFilter();
+            cabFilter.type = 'lowpass';
+            cabFilter.frequency.setValueAtTime(2350, now);
+
+            const masterGain = ctx.createGain();
+            masterGain.gain.setValueAtTime(0.32, now);
+
+            dist.connect(cabFilter);
+            cabFilter.connect(masterGain);
+            masterGain.connect(ctx.destination);
+
+            const playGuitarNote = (startOffset, duration, freqStart, freqEnd = null, isPowerChord = false) => {
+                const t0 = now + startOffset;
+                const t1 = t0 + duration;
+
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const noteGain = ctx.createGain();
+
+                osc1.type = 'sawtooth';
+                osc2.type = isPowerChord ? 'square' : 'sawtooth';
+
+                osc1.frequency.setValueAtTime(freqStart, t0);
+                osc2.frequency.setValueAtTime(isPowerChord ? freqStart * 1.5 : freqStart * 1.006, t0);
+
+                if (freqEnd) {
+                    osc1.frequency.exponentialRampToValueAtTime(freqEnd, t1);
+                    osc2.frequency.exponentialRampToValueAtTime(isPowerChord ? freqEnd * 1.5 : freqEnd * 1.006, t1);
+                }
+
+                noteGain.gain.setValueAtTime(0.001, t0);
+                noteGain.gain.linearRampToValueAtTime(isPowerChord ? 0.65 : 0.5, t0 + 0.015);
+                noteGain.gain.setValueAtTime(isPowerChord ? 0.55 : 0.42, Math.max(t0 + 0.02, t1 - 0.04));
+                noteGain.gain.exponentialRampToValueAtTime(0.001, t1);
+
+                osc1.connect(noteGain);
+                osc2.connect(noteGain);
+                noteGain.connect(dist);
+
+                osc1.start(t0);
+                osc2.start(t0);
+                osc1.stop(t1);
+                osc2.stop(t1);
+                activeCinemaNodes.push(osc1, osc2);
+            };
+
+            const offset = 0;
+            playGuitarNote(offset + 0.00, 0.48, 82.41, 78.0, true);
+            playGuitarNote(offset + 0.52, 0.07, 493.88);
+            playGuitarNote(offset + 0.61, 0.07, 493.88);
+            playGuitarNote(offset + 0.70, 0.07, 493.88);
+            playGuitarNote(offset + 0.79, 0.07, 493.88);
+            playGuitarNote(offset + 0.90, 0.45, 220.00, 233.08);
+            playGuitarNote(offset + 1.40, 0.48, 246.94, 242.00);
+
+            playGuitarNote(offset + 1.95, 0.48, 82.41, 78.0, true);
+            playGuitarNote(offset + 2.47, 0.07, 493.88);
+            playGuitarNote(offset + 2.56, 0.07, 493.88);
+            playGuitarNote(offset + 2.65, 0.07, 493.88);
+            playGuitarNote(offset + 2.74, 0.07, 493.88);
+            playGuitarNote(offset + 2.85, 0.45, 220.00, 230.00);
+            playGuitarNote(offset + 3.35, 0.48, 196.00, 190.00);
+
+            playGuitarNote(offset + 3.88, 0.22, 123.47, null, true);
+            playGuitarNote(offset + 4.12, 0.18, 392.00);
+            playGuitarNote(offset + 4.32, 0.18, 369.99);
+            playGuitarNote(offset + 4.52, 0.18, 329.63);
+            playGuitarNote(offset + 4.72, 0.18, 293.66);
+            playGuitarNote(offset + 4.92, 0.18, 246.94);
+            playGuitarNote(offset + 5.12, 0.20, 293.66, 329.63);
+        }
+
         function playSound(type) {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const ctx = getAudioContext();
+                if (!ctx) return;
                 const now = ctx.currentTime;
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, now);
-                osc.frequency.exponentialRampToValueAtTime(60, now + 0.2);
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.22);
+
+                if (type === 'punch') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(28, now + 0.25);
+                    gain.gain.setValueAtTime(0.45, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'tiger') {
+                    [1760, 2637, 3520].forEach((freq) => {
+                        const chime = ctx.createOscillator();
+                        const cGain = ctx.createGain();
+                        chime.type = 'sine';
+                        chime.frequency.setValueAtTime(freq, now);
+                        chime.frequency.exponentialRampToValueAtTime(freq * 0.85, now + 0.18);
+                        cGain.gain.setValueAtTime(0.25, now);
+                        cGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                        chime.connect(cGain);
+                        cGain.connect(ctx.destination);
+                        chime.start(now);
+                        chime.stop(now + 0.18);
+                    });
+
+                    const sub = ctx.createOscillator();
+                    const subGain = ctx.createGain();
+                    sub.type = 'sawtooth';
+                    sub.frequency.setValueAtTime(220, now + 0.04);
+                    sub.frequency.exponentialRampToValueAtTime(22, now + 0.55);
+                    subGain.gain.setValueAtTime(0.8, now + 0.04);
+                    subGain.gain.exponentialRampToValueAtTime(0.005, now + 0.6);
+                    sub.connect(subGain);
+                    subGain.connect(ctx.destination);
+                    sub.start(now + 0.04);
+                    sub.stop(now + 0.6);
+
+                    const gong = ctx.createOscillator();
+                    const gGain = ctx.createGain();
+                    gong.type = 'triangle';
+                    gong.frequency.setValueAtTime(98, now + 0.08);
+                    gong.frequency.exponentialRampToValueAtTime(55, now + 0.9);
+                    gGain.gain.setValueAtTime(0.5, now + 0.08);
+                    gGain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+                    gong.connect(gGain);
+                    gGain.connect(ctx.destination);
+                    gong.start(now + 0.08);
+                    gong.stop(now + 0.95);
+                } else if (type === 'overwatch') {
+                    const charge = ctx.createOscillator();
+                    const chGain = ctx.createGain();
+                    charge.type = 'sawtooth';
+                    charge.frequency.setValueAtTime(220, now);
+                    charge.frequency.exponentialRampToValueAtTime(1400, now + 0.35);
+                    chGain.gain.setValueAtTime(0.25, now);
+                    chGain.gain.exponentialRampToValueAtTime(0.01, now + 0.36);
+                    charge.connect(chGain);
+                    chGain.connect(ctx.destination);
+                    charge.start(now);
+                    charge.stop(now + 0.36);
+
+                    const boom = ctx.createOscillator();
+                    const bGain = ctx.createGain();
+                    boom.type = 'square';
+                    boom.frequency.setValueAtTime(140, now + 0.35);
+                    boom.frequency.exponentialRampToValueAtTime(24, now + 0.95);
+                    bGain.gain.setValueAtTime(0.6, now + 0.35);
+                    bGain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+                    boom.connect(bGain);
+                    bGain.connect(ctx.destination);
+                    boom.start(now + 0.35);
+                    boom.stop(now + 0.95);
+                } else if (type === 'gacha5') {
+                    [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.22, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.45);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.45);
+                    });
+                } else if (type === 'coins') {
+                    const coinCount = 22;
+                    for (let i = 0; i < coinCount; i++) {
+                        const delay = i * 0.065 + (Math.random() * 0.025);
+                        const baseFreq = 1800 + Math.random() * 2400;
+
+                        const osc1 = ctx.createOscillator();
+                        const osc2 = ctx.createOscillator();
+                        const gain = ctx.createGain();
+
+                        osc1.type = 'sine';
+                        osc2.type = 'triangle';
+
+                        osc1.frequency.setValueAtTime(baseFreq, now + delay);
+                        osc1.frequency.setValueAtTime(baseFreq * 1.35, now + delay + 0.03);
+
+                        osc2.frequency.setValueAtTime(baseFreq * 1.5, now + delay);
+                        osc2.frequency.exponentialRampToValueAtTime(baseFreq * 1.8, now + delay + 0.09);
+
+                        gain.gain.setValueAtTime(0.2, now + delay);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.14);
+
+                        osc1.connect(gain);
+                        osc2.connect(gain);
+                        gain.connect(ctx.destination);
+
+                        osc1.start(now + delay);
+                        osc2.start(now + delay);
+                        osc1.stop(now + delay + 0.14);
+                        osc2.stop(now + delay + 0.14);
+                    }
+                } else if (type === 'poke') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(480, now);
+                    osc.frequency.setValueAtTime(760, now + 0.06);
+                    gain.gain.setValueAtTime(0.14, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.16);
+                } else if (type === 'siren') {
+                    for (let i = 0; i < 6; i++) {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(600, now + i * 0.4);
+                        osc.frequency.linearRampToValueAtTime(1100, now + i * 0.4 + 0.2);
+                        osc.frequency.linearRampToValueAtTime(600, now + i * 0.4 + 0.4);
+                        gain.gain.setValueAtTime(0.22, now + i * 0.4);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.4 + 0.4);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + i * 0.4);
+                        osc.stop(now + i * 0.4 + 0.4);
+                    }
+                } else if (type === 'powerup') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(920, now + 0.28);
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.28);
+                } else if (type === 'zawarudo') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(32, now + 0.85);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.exponentialRampToValueAtTime(0.005, now + 0.9);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.9);
+                } else if (type === 'cinema') {
+                    stopCinemaSound();
+
+                    // Пробуем сыграть загруженный или лежащий в папке GitHub файл absolut-cinema-meme.mp3
+                    const audioSrc = customCinemaAudioUrl || 'absolut-cinema-meme.mp3';
+                    activeCinemaAudio = new Audio(audioSrc);
+                    activeCinemaAudio.volume = 0.85;
+                    activeCinemaAudio.play().catch(() => {
+                        // Если mp3 не найден (например, в превью), включаем гитарный синтезатор риффа
+                        playSynthGuitarCinema(ctx);
+                    });
+                }
             } catch (e) {}
         }
 
-        // Рыбалка с Мегаладоном
+        // РЕЖИМ РЫБАЛКИ С НОВЫМИ ФОТО МЯСА, САПОГА И МЕГАЛАДОНА
         let fishCount = 0;
+        const fishingLoots = [
+            {
+                id: 'meat',
+                text: "Поймано: СТРАННОЕ МЯСО на вертеле! Низкополигональный шашлык пахнет как катка в Овервотче после полуночи.",
+                emoji: "🥩",
+                img: "image_820855.png",
+                altImg: "meat.png",
+                fallbackSvg: () => window.createFishingLootSvg('meat')
+            },
+            {
+                id: 'boot',
+                text: "Поймано: РВАНЫЙ САПОГ с крючком и пробковым поплавком! Внутри него лежала записка: «Сделай додеп!»",
+                emoji: "🥾",
+                img: "image_820b1c.jpg",
+                altImg: "boot.jpg",
+                fallbackSvg: () => window.createFishingLootSvg('boot')
+            },
+            {
+                id: 'mega',
+                text: "ЛЕГЕНДАРНЫЙ УЛОВ (ШАНС 10%): МЕГАЛАДОН! Дима лично вытащил акулу из озера в стиле истинного рыбака!",
+                emoji: "🦈",
+                isMega: true,
+                img: "photo_2025-08-25_17-14-44.jpg",
+                fallbackSvg: () => window.createCustomPoster('МЕГАЛАДОН!', 'Главный приз рыбалки (10%)', '#0369a1', '#38bdf8', '🦈')
+            }
+        ];
+
         function castFishingRod() {
             fishCount++;
             document.getElementById('fishCount').textContent = fishCount;
+
             const roll = Math.random();
+            let loot;
+            if (roll < 0.10) {
+                loot = fishingLoots[2]; // 10% — Мегаладон
+                playSound('gacha5');
+                triggerScreenShake();
+            } else if (roll < 0.55) {
+                loot = fishingLoots[0]; // 45% — Странное мясо
+                playSound('poke');
+            } else {
+                loot = fishingLoots[1]; // 45% — Рваный сапог
+                playSound('poke');
+            }
+
             const box = document.getElementById('fishResultBox');
             const imgEl = document.getElementById('fishDisplayImg');
 
-            if (roll < 0.10) {
-                box.innerHTML = "🦈 <strong>ЛЕГЕНДАРНЫЙ УЛОВ (10%): МЕГАЛАДОН!</strong> Дима вытащил акулу голыми руками!";
-                imgEl.src = "photo_2025-08-25_17-14-44.jpg";
-            } else if (roll < 0.55) {
-                box.innerHTML = "🥩 <strong>Странное мясо (low-poly):</strong> Шашлык прямиком из Готики.";
-                imgEl.src = "image_820855.png";
-                imgEl.onerror = () => { imgEl.src = window.createFishingLootSvg('meat'); };
-            } else {
-                box.innerHTML = "🥾 <strong>Рваный сапог:</strong> Плюс ноль к улову, плюс сто к додепу.";
-                imgEl.src = "image_820b1c.jpg";
-                imgEl.onerror = () => { imgEl.src = window.createFishingLootSvg('boot'); };
-            }
+            box.innerHTML = `<span class="text-2xl">${loot.emoji}</span><br><strong>${loot.text}</strong>`;
+            imgEl.setAttribute('data-filename', loot.img);
+
+            imgEl.onerror = function() {
+                if (loot.altImg && !this.dataset.triedAlt) {
+                    this.dataset.triedAlt = '1';
+                    this.src = loot.altImg;
+                    return;
+                }
+                this.onerror = null;
+                this.src = loot.fallbackSvg();
+            };
+            delete imgEl.dataset.triedAlt;
+
+            const resolved = resolvePhotoUrl(loot.img);
+            imgEl.src = resolved;
         }
 
         function chooseNovelRoute(routeId) {
+            playSound('powerup');
             const speaker = document.getElementById('vnSpeakerName');
             const text = document.getElementById('vnDialogueText');
-            if (routeId === 1) { speaker.textContent = 'РУТ БЕСТСЕЛЛЕРА:'; text.textContent = '«Новелла Димы побила все рекорды! Гонорара хватило на скупку баннеров!»'; }
-            else if (routeId === 2) { speaker.textContent = 'РУТ ДОДЕПМЕНА:'; text.textContent = '«Додепмен достал жёлтую бутылку Cool Skeleton: "Пишем сюжет без тормозов!"»'; }
-            else { speaker.textContent = 'РУТ МУХОЛОВКИ:'; text.textContent = '«Мухоловка отхлебнула пива и сказала: "Дима, твои новеллы — Absolute Cinema!"»'; }
+
+            if (routeId === 1) {
+                speaker.textContent = 'РУТ БЕСТСЕЛЛЕРА:';
+                text.textContent = '«Новая новелла Димы побила все рекорды! Гонорара хватило на скупку баннеров и пожизненный запас пива!»';
+            } else if (routeId === 2) {
+                speaker.textContent = 'РУТ ДОДЕПМЕНА И COOL SKELETON:';
+                text.textContent = '«Додепмен достал жёлтую бутылку Cool Skeleton: "Дима, пишем сюжет без тормозов!"»';
+            } else {
+                speaker.textContent = 'СЕКРЕТНАЯ КОНЦОВКА:';
+                text.textContent = '«Мухоловка в горшке отхлебнула пива и промолвила: "Дима, твои новеллы — это Absolute Cinema! С Днюхой!"»';
+            }
         }
 
         let dodepPhase = 1;
         function toggleDodepPersonality() {
+            playSound('powerup');
+            triggerScreenShake();
             const img1 = document.getElementById('dodepImg1');
             const img2 = document.getElementById('dodepImg2');
             const badge = document.getElementById('dodepHeaderBadge');
@@ -1008,145 +1953,431 @@
             if (dodepPhase === 1) {
                 img1.classList.add('hidden');
                 img2.classList.remove('hidden');
-                badge.textContent = 'ЛИЧНОСТЬ №2';
-                title.textContent = 'АЛХИМИК «COOL SKELETON» 🍾☠️';
-                desc.textContent = 'Достает ядовито-жёлтый ананасовый эликсир Cool Skeleton!';
+                badge.textContent = 'ЛИЧНОСТЬ №2: ПРОБУЖДЕНИЕ';
+                badge.className = 'font-pixel text-[9px] bg-amber-400 text-black px-2 py-0.5 rounded';
+                title.innerHTML = 'АЛХИМИК «COOL SKELETON» 🍾☠️';
+                desc.innerHTML = '<strong>Ночное Альтер-Эго:</strong> Достаёт ядовито-жёлтый ананасовый эликсир Cool Skeleton: «Внимание, Димастия, сейчас будет легендарный тост!»';
                 dodepPhase = 2;
             } else {
                 img2.classList.add('hidden');
                 img1.classList.remove('hidden');
                 badge.textContent = 'ЛИЧНОСТЬ №1: АЗАРТ';
-                title.textContent = 'ДОДЕПМЕН 👌🎰';
-                desc.textContent = 'Красные глаза, жест ОК. Готов на додеп в любой гаче.';
+                badge.className = 'font-pixel text-[9px] bg-red-600 text-white px-2 py-0.5 rounded';
+                title.innerHTML = 'ДОДЕПМЕН 👌🎰';
+                desc.innerHTML = '<strong>Дневная личность:</strong> Активировал красные глаза и жест «ОК». Готов на додеп в любой гаче. По вечерам трансформируется в Cool Skeleton!';
                 dodepPhase = 1;
             }
         }
 
         function triggerDodepAction() {
-            openSquadModal('ДОДЕПМЕН', 'АЗАРТ', 'photo_2026-10-22_23-48-30.jpg', 'Шансы Димы на 5★ легу увеличены на 500%!', '👌🎰');
+            if (dodepPhase === 1) {
+                openSquadModal('ДОДЕПМЕН 👌🎰', 'КРАСНЫЕ ГЛАЗА', 'photo_2026-10-22_23-48-30.jpg', 'Шансы Димы на 5★ легу увеличены на 500%!', '👌🎰');
+            } else {
+                openSquadModal('COOL SKELETON 🍾☠️', 'АНАНАСОВЫЙ ЭЛИКСИР', 'photo_2026-10-23_01-23-19.jpg', 'Всей Димастии начислено +1000 к харизме и иммунитет к тильту!', '🍾☠️');
+            }
         }
 
         let currentPose = 1;
         function switchHeroPose() {
             const img = document.getElementById('heroMainImg');
             const quote = document.getElementById('heroQuoteText');
+            playSound('punch');
+
             if (currentPose === 1) {
-                img.src = "photo_2026-10-22_23-48-14.jpg";
+                const file2 = 'photo_2026-10-22_23-48-14.jpg';
+                img.setAttribute('data-filename', file2);
+                img.src = loadedPhotoMap[file2] || file2;
                 quote.textContent = '«Твои примогемы принадлежат клану "Димастия"! Вайб-чек пройден!»';
                 currentPose = 2;
             } else {
-                img.src = "photo_2026-10-22_23-48-20.jpg";
+                const file1 = 'photo_2026-10-22_23-48-20.jpg';
+                img.setAttribute('data-filename', file1);
+                img.src = loadedPhotoMap[file1] || file1;
                 quote.textContent = '«Яре Яре Дазе... Этот сюжет новеллы я написал ещё до того, как ты нажал кнопку старт!»';
                 currentPose = 1;
             }
         }
 
-        function triggerOverwatchUlt() { document.getElementById('overwatchUltOverlay').classList.remove('hidden'); }
-        function closeOverwatchUlt() { document.getElementById('overwatchUltOverlay').classList.add('hidden'); }
+        function triggerScreenShake() {
+            const body = document.getElementById('mainBody');
+            body.classList.remove('shake-active');
+            void body.offsetWidth;
+            body.classList.add('shake-active');
+        }
 
-        function triggerYakuzaBoss() { document.getElementById('yakuzaBossModal').classList.remove('hidden'); }
-        function closeYakuzaBoss() { document.getElementById('yakuzaBossModal').classList.add('hidden'); }
+        function triggerOverwatchUlt() {
+            playSound('overwatch');
+            triggerScreenShake();
+            document.getElementById('overwatchUltOverlay').classList.remove('hidden');
+        }
+        function closeOverwatchUlt() {
+            document.getElementById('overwatchUltOverlay').classList.add('hidden');
+        }
+
+        function triggerYakuzaBoss() {
+            playSound('tiger');
+            triggerScreenShake();
+            document.getElementById('yakuzaBossModal').classList.remove('hidden');
+        }
+        function closeYakuzaBoss() {
+            document.getElementById('yakuzaBossModal').classList.add('hidden');
+        }
+
+        function toggleToBeContinued() {
+            playSound('powerup');
+            document.getElementById('toBeContinuedOverlay').classList.toggle('hidden');
+            document.getElementById('mainBody').classList.toggle('jojo-sepia');
+        }
 
         let oraTotal = 0;
         function oraOraPunch() {
             oraTotal += 93;
             document.getElementById('oraCount').textContent = oraTotal;
-            if (oraTotal === 1488) document.getElementById('stand1488Overlay').classList.remove('hidden');
-        }
-        function closeStand1488Modal() { document.getElementById('stand1488Overlay').classList.add('hidden'); }
+            playSound('punch');
+            triggerScreenShake();
 
-        const bakaLines = ['«Dame da ne... Dame yo...»', '«Anta ga, suki de...»', '«Baka mitai...»'];
+            if (oraTotal === 1488) {
+                playSound('siren');
+                document.getElementById('stand1488Overlay').classList.remove('hidden');
+            }
+        }
+        function closeStand1488Modal() {
+            document.getElementById('stand1488Overlay').classList.add('hidden');
+        }
+
+        const bakaLines = [
+            '«Dame da ne... Dame yo... (Похмелье длится 2 дня)»',
+            '«Anta ga, suki de... (Посвящается клану Димастия)»',
+            '«Baka mitai... (Когда Додепмен слил всё в гачу)»'
+        ];
         let bakaIndex = 0;
         function singBakaMitai() {
+            playSound('powerup');
             bakaIndex = (bakaIndex + 1) % bakaLines.length;
             document.getElementById('bakaMitaiLyrics').textContent = bakaLines[bakaIndex];
         }
-        function triggerTigerDrop() { document.getElementById('bakaMitaiLyrics').innerHTML = '🐅💥 <span class="text-white">TIGER DROP ПРОБИТ!</span>'; }
+
+        function triggerTigerDrop() {
+            playSound('tiger');
+            triggerScreenShake();
+            document.getElementById('bakaMitaiLyrics').innerHTML = '🐅💥 <span class="text-white font-extrabold">TIGER DROP ПРОБИТ!</span>';
+        }
+
+        const darkToasts = [
+            '«Дима, поздравляем! Ты в том возрасте, когда вопрос "Что вас беспокоит?" вызывает истерический смех!»',
+            '«С Днюхой, глава Димастии! Жизненная новелла перешла в хардкор!»',
+            '«Пусть спонсор Three Kidneys обеспечит бюджет на додеп, а MAX ловит под столом!»'
+        ];
+        let lastToastIdx = -1;
+        function generateDarkToast() {
+            playSound('poke');
+            let idx = Math.floor(Math.random() * darkToasts.length);
+            if (idx === lastToastIdx) idx = (idx + 1) % darkToasts.length;
+            lastToastIdx = idx;
+            document.getElementById('darkToastOutput').textContent = darkToasts[idx];
+        }
 
         function triggerZaWarudo() {
+            playSound('zawarudo');
+            triggerScreenShake();
             const body = document.getElementById('mainBody');
             body.classList.add('time-stopped');
-            setTimeout(() => body.classList.remove('time-stopped'), 4000);
+            setTimeout(() => {
+                body.classList.remove('time-stopped');
+                playSound('powerup');
+            }, 4000);
         }
-        function triggerAbsoluteCinema() { document.getElementById('cinemaOverlay').classList.remove('hidden'); }
-        function closeAbsoluteCinema() { document.getElementById('cinemaOverlay').classList.add('hidden'); }
 
-        function triggerJarvisHud() { document.getElementById('jarvisOverlay').classList.remove('hidden'); }
-        function closeJarvisHud() { document.getElementById('jarvisOverlay').classList.add('hidden'); }
+        function triggerAbsoluteCinema() {
+            playSound('cinema');
+            document.getElementById('cinemaOverlay').classList.remove('hidden');
+        }
+        function closeAbsoluteCinema() {
+            stopCinemaSound();
+            document.getElementById('cinemaOverlay').classList.add('hidden');
+        }
+
+        function triggerJarvisHud() {
+            playSound('powerup');
+            document.getElementById('jarvisOverlay').classList.remove('hidden');
+        }
+        function closeJarvisHud() {
+            document.getElementById('jarvisOverlay').classList.add('hidden');
+        }
 
         let beerLiters = 0;
         function triggerBeerPlant() {
+            playSound('gacha5');
             beerLiters += 0.5;
             document.getElementById('beerLitersCounter').textContent = beerLiters.toFixed(1);
-            document.getElementById('beerOverlay').classList.remove('hidden');
-            setTimeout(() => document.getElementById('beerOverlay').classList.add('hidden'), 3000);
+            const overlay = document.getElementById('beerOverlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('hidden'), 3000);
         }
-        function closeBeerPlant() { document.getElementById('beerOverlay').classList.add('hidden'); }
+        function closeBeerPlant() {
+            document.getElementById('beerOverlay').classList.add('hidden');
+        }
 
-        function toggleDeepFry() { document.getElementById('mainBody').classList.toggle('deep-fry-mode'); }
+        function toggleDeepFry() {
+            playSound('punch');
+            triggerScreenShake();
+            document.getElementById('mainBody').classList.toggle('deep-fry-mode');
+        }
 
-        function openSquadModal(title, badge, imgFile, message, emoji = '👑') {
+        function squadUlt(message) {
+            openSquadModal('ОТРЯД «ДИМАСТИЯ»', 'АКТИВАЦИЯ УЛЬТЫ', 'photo_2026-10-22_23-49-07.jpg', message, '👑');
+        }
+
+        function openSquadModal(title, badge, imgFile, message, emojiIcon = '👑') {
+            playSound('powerup');
+            triggerScreenShake();
+            const modal = document.getElementById('squadActionOverlay');
+            const imgEl = document.getElementById('squadModalImg');
             document.getElementById('squadModalTitle').textContent = title;
+            document.getElementById('squadModalBadge').textContent = badge;
             document.getElementById('squadModalText').textContent = message;
-            document.getElementById('squadActionOverlay').classList.remove('hidden');
+            imgEl.setAttribute('data-filename', imgFile);
+            imgEl.onerror = function() {
+                this.onerror = null;
+                this.src = window.createCustomPoster(title.slice(0, 18), badge, '#1e293b', '#fbbf24', emojiIcon);
+            };
+            imgEl.src = resolvePhotoUrl(imgFile);
+            modal.classList.remove('hidden');
         }
-        function closeSquadModal() { document.getElementById('squadActionOverlay').classList.add('hidden'); }
+        function closeSquadModal() {
+            document.getElementById('squadActionOverlay').classList.add('hidden');
+        }
 
         function replyInMax(text) {
+            playSound('poke');
             const box = document.getElementById('maxChatMessages');
             const msg = document.createElement('div');
-            msg.className = 'bg-blue-600 text-white rounded-xl p-3 ml-8 text-right';
-            msg.innerHTML = `<div class="font-mono text-[10px] text-amber-300">Дима</div><p>${text}</p>`;
+            msg.className = 'bg-blue-600 border-2 border-black text-white rounded-xl p-3 ml-8 text-right';
+            msg.innerHTML = `<div class="font-mono text-[10px] text-amber-300 uppercase">Дима</div><p class="mt-0.5">${text}</p>`;
             box.appendChild(msg);
+
+            setTimeout(() => {
+                const botReply = document.createElement('div');
+                botReply.className = 'bg-slate-900 border-2 border-sky-400 rounded-xl p-3 mr-8';
+                botReply.innerHTML = `<div class="font-mono text-sky-400 text-xs">📡 MAX</div><p class="text-gray-100 mt-1">Доставлено! Весь клан поднимает бокалы за Диму!</p>`;
+                box.appendChild(botReply);
+                box.scrollTop = box.scrollHeight;
+            }, 350);
             box.scrollTop = box.scrollHeight;
         }
-        function sendMaxPing() { replyInMax('Проверка связи с парковки! 📡🍺'); }
+        function sendMaxPing() {
+            replyInMax('Проверка связи Димастии с парковки! 📡🍺');
+        }
 
-        // Гача
+        // GACHA
         let primogems = 32000;
+        let pity = 0;
         const collectedItems = new Set();
+        let fullCollectionShown = false;
+
         const fullGachaCatalog = [
-            { id: 'suit_boss', stars: 5, name: 'Патриарх Дима', desc: 'Главный босс.', img: 'photo_2026-10-22_23-48-56.jpg' },
-            { id: 'jotaro_cap', stars: 5, name: 'Дима Джотаро', desc: 'Стоп-время.', img: 'photo_2026-10-22_23-48-20.jpg' },
-            { id: 'dodep_dual', stars: 5, name: 'ДОДЕПМЕН // COOL SKELETON', desc: 'Двойная Лега.', img: 'photo_2026-10-23_01-23-19.jpg' },
-            { id: 'beer_plant', stars: 5, name: 'Мухоловка', desc: 'Пиво в горшок.', img: 'photo_2026-10-23_01-23-27.jpg' }
+            { id: 'suit_boss', stars: 5, name: 'Патриарх Дима (C6)', desc: 'Главный 5★ Босс и автор новелл.', img: 'photo_2026-10-22_23-48-56.jpg', emoji: '🤵🐉' },
+            { id: 'jotaro_cap', stars: 5, name: 'Дима Джотаро', desc: 'Останавливает время для дедлайнов.', img: 'photo_2026-10-22_23-48-20.jpg', emoji: '🧢🕶️' },
+            { id: 'dodep_dual', stars: 5, name: 'ДОДЕПМЕН // COOL SKELETON', desc: 'Двойная Лега с ананасовым эликсиром.', img: 'photo_2026-10-23_01-23-19.jpg', emoji: '🎰🍾' },
+            { id: 'beer_plant', stars: 5, name: 'Дендро-Архонт Мухоловка', desc: 'Требует пива в горшок.', img: 'photo_2026-10-23_01-23-27.jpg', emoji: '🪴🍺' },
+            { id: 'cinema_cat', stars: 5, name: 'Absolute Cinema', desc: '10/10 Оскаров.', img: 'photo_2026-10-23_01-23-01.jpg', emoji: '🙌🎬' },
+            { id: 'wise_orangutan', stars: 5, name: 'Мудрый Орангутан', desc: 'Винстон мейнер.', img: 'photo_2026-10-23_01-22-52.jpg', emoji: '🦧😏' },
+            { id: 'jarvis_stark', stars: 4, name: 'Джарвис', desc: 'Чё за хуйня.', img: 'photo_2026-10-23_01-21-42.jpg', emoji: '🤖😳' },
+            { id: 'loaf_cat', stars: 4, name: 'Кот-Буханка', desc: 'Хилер спины.', img: 'photo_2026-10-23_01-21-49.jpg', emoji: '🐱🍞' },
+            { id: 'gubkin_strategist', stars: 4, name: 'Казначей Димастии', desc: '999 IQ.', img: 'photo_2026-10-22_23-49-07.jpg', emoji: '🎓📈' },
+            { id: 'voice_bro', stars: 4, name: 'Легенда Войс-Чата', desc: 'Бро в наушниках.', img: 'photo_2026-10-22_23-49-15.jpg', emoji: '🎧😂' },
+            { id: 'press_boss', stars: 4, name: 'Пресс-Секретарь', desc: 'Экстренный брифинг.', img: 'photo_2026-10-22_23-49-48.jpg', emoji: '🎙️📺' },
+            { id: 'max_installer', stars: 3, name: 'MAX Messenger', desc: 'Ловит на парковке.', img: 'photo_2026-10-22_23-49-56.jpg', emoji: '📡📱' },
+            { id: 'novel_manuscript', stars: 3, name: 'Черновик Новеллы', desc: 'Шедевр Димы.', img: 'photo_2026-10-22_23-48-14.jpg', emoji: '✍️📖' }
         ];
 
         function refillPrimogems() {
             primogems += 16000;
             document.getElementById('primogemBalance').textContent = primogems.toLocaleString('ru-RU');
+            playSound('powerup');
         }
 
         function rollGenshinGacha(count) {
-            primogems -= count * 160;
+            const cost = count * 160;
+            if (primogems < cost) primogems += 16000;
+            primogems -= cost;
+            pity += count;
+
             document.getElementById('primogemBalance').textContent = primogems.toLocaleString('ru-RU');
+            document.getElementById('pityCounter').textContent = pity;
+
             document.getElementById('gachaDefaultView').classList.add('hidden');
             const resultView = document.getElementById('gachaResultView');
             resultView.classList.remove('hidden');
-            collectedItems.add('suit_boss');
-            document.getElementById('collectionCounter').textContent = `${collectedItems.size} / 13`;
-            resultView.innerHTML = `<h4 class="font-display text-xl text-amber-400">🔥 ВЫПАЛ ПАТРИАРХ ДИМА (5★)!</h4>`;
+
+            playSound('gacha5');
+            triggerScreenShake();
+
+            const pulledWithStatus = [];
+            if (count === 1) {
+                const singleDrop = fullGachaCatalog[Math.floor(Math.random() * fullGachaCatalog.length)];
+                const isDup = collectedItems.has(singleDrop.id);
+                collectedItems.add(singleDrop.id);
+                pulledWithStatus.push({ item: singleDrop, isDuplicate: isDup });
+            } else {
+                const uncollected = fullGachaCatalog.filter(i => !collectedItems.has(i.id));
+                const fiveStars = fullGachaCatalog.filter(i => i.stars === 5);
+                const firstItem = uncollected.length > 0
+                    ? uncollected[Math.floor(Math.random() * uncollected.length)]
+                    : fiveStars[Math.floor(Math.random() * fiveStars.length)];
+
+                const firstDup = collectedItems.has(firstItem.id);
+                collectedItems.add(firstItem.id);
+                pulledWithStatus.push({ item: firstItem, isDuplicate: firstDup });
+
+                for (let i = 1; i < 10; i++) {
+                    const randItem = fullGachaCatalog[Math.floor(Math.random() * fullGachaCatalog.length)];
+                    const isDup = collectedItems.has(randItem.id);
+                    collectedItems.add(randItem.id);
+                    pulledWithStatus.push({ item: randItem, isDuplicate: isDup });
+                }
+            }
+
+            document.getElementById('collectionCounter').textContent = `${collectedItems.size} / ${fullGachaCatalog.length}`;
+            updateInventoryUI();
+
+            if (collectedItems.size === fullGachaCatalog.length && !fullCollectionShown) {
+                fullCollectionShown = true;
+                setTimeout(() => {
+                    playSound('coins');
+                    document.getElementById('gachaFullCollectionOverlay').classList.remove('hidden');
+                }, 500);
+            }
+
+            const mainEntry = pulledWithStatus[0];
+            const featured = mainEntry.item;
+            const mainImgSrc = loadedPhotoMap[featured.img] || featured.img;
+            const mainDupBadge = mainEntry.isDuplicate
+                ? `<div class="inline-block bg-red-600 text-white font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black animate-bounce">🤡 ЕБАТЬ ТЫ ЛОХ! ПОВТОРКА!</div>`
+                : `<div class="inline-block bg-emerald-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black">✨ НОВАЯ КАРТА!</div>`;
+
+            if (count === 1) {
+                resultView.innerHTML = `
+                    <div class="mb-4 text-center space-y-2">
+                        <div>${mainDupBadge}</div>
+                        <div class="text-amber-400 font-display text-lg">ОДИНОЧНАЯ МОЛИТВА (×1)</div>
+                    </div>
+                    <div class="max-w-2xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-6 items-center text-left bg-slate-900 p-5 rounded-xl border-3 ${mainEntry.isDuplicate ? 'border-red-500' : 'border-amber-400'}">
+                        <div class="sm:col-span-5 aspect-square rounded-xl overflow-hidden border-3 border-amber-300 bg-black relative">
+                            <img src="${mainImgSrc}" data-filename="${featured.img}" alt="${featured.name}"
+                                 onerror="this.src=createCustomPoster('${featured.stars}★', '${featured.name}', '#854d0e', '#fde047', '${featured.emoji}')"
+                                 class="w-full h-full object-cover">
+                            ${mainEntry.isDuplicate ? '<div class="absolute inset-x-0 bottom-0 bg-red-600/95 text-white font-display text-xs text-center py-1.5 uppercase">💀 ЕБАТЬ ТЫ ЛОХ</div>' : ''}
+                        </div>
+                        <div class="sm:col-span-7 space-y-3">
+                            <div class="text-amber-400 font-pixel text-xs">${'★'.repeat(featured.stars)}</div>
+                            <h4 class="font-display text-xl sm:text-2xl text-white">${featured.name}</h4>
+                            <p class="text-sm font-bold text-gray-200">${featured.desc}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultView.innerHTML = `
+                    <div class="mb-4 text-center space-y-2">
+                        <div>${mainDupBadge}</div>
+                        <div><span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black uppercase">🌟 ДЕСЯТКА ×10: ${featured.name}</span></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left bg-slate-900 p-4 sm:p-6 rounded-xl border-3 border-amber-400">
+                        <div class="md:col-span-4 aspect-square rounded-xl overflow-hidden border-3 border-amber-300 bg-black relative">
+                            <img src="${mainImgSrc}" data-filename="${featured.img}" alt="${featured.name}"
+                                 onerror="this.src=createCustomPoster('5★', '${featured.name}', '#854d0e', '#fde047', '${featured.emoji}')"
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div class="md:col-span-8 space-y-3">
+                            <div class="text-amber-400 font-pixel text-xs">5★ LEGENDARY</div>
+                            <h4 class="font-display text-xl sm:text-3xl text-white">${featured.name}</h4>
+                            <p class="text-sm font-bold text-gray-200">${featured.desc}</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2">
+                                ${pulledWithStatus.slice(1).map(entry => {
+                                    const item = entry.item;
+                                    const itemSrc = loadedPhotoMap[item.img] || item.img;
+                                    const borderCol = entry.isDuplicate ? 'border-red-500' : 'border-emerald-400';
+                                    return `
+                                    <div class="bg-slate-950 border-2 ${borderCol} p-2 rounded-lg text-xs flex items-center gap-2.5">
+                                        <img src="${itemSrc}" data-filename="${item.img}"
+                                             onerror="this.src=createCustomPoster('${item.stars}★', '', '#1e293b', '#facc15', '${item.emoji}')"
+                                             class="w-11 h-11 rounded object-cover shrink-0 border border-white/20">
+                                        <div class="min-w-0 flex-1">
+                                            <div class="font-extrabold text-white truncate">${item.name}</div>
+                                            ${entry.isDuplicate ? `<div class="text-red-400 font-extrabold text-[10px] uppercase">🤡 Ебать ты лох</div>` : `<div class="text-emerald-400 font-extrabold text-[10px] uppercase">✨ Новая</div>`}
+                                        </div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
-        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
-        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        function closeGachaFullModal() {
+            document.getElementById('gachaFullCollectionOverlay').classList.add('hidden');
+        }
+
+        function updateInventoryUI() {
+            const container = document.getElementById('gachaInventoryList');
+            const items = fullGachaCatalog.filter(i => collectedItems.has(i.id));
+            container.innerHTML = items.map(item => `
+                <span class="bg-slate-950 border-2 ${item.stars === 5 ? 'border-amber-400 text-amber-300' : 'border-slate-600 text-gray-200'} px-3 py-1.5 rounded-lg font-extrabold flex items-center gap-1.5">
+                    <span>${item.emoji}</span>
+                    <span>${item.name}</span>
+                </span>
+            `).join('');
+        }
+
+        let enemyHp = 100;
+        function pokemonAction(action) {
+            playSound('poke');
+            const log = document.getElementById('pokeBattleLog');
+            const hpBar = document.getElementById('pokeEnemyHpBar');
+            const hpText = document.getElementById('pokeEnemyHpText');
+            if (action === 'attack') {
+                enemyHp = Math.max(1, enemyHp - 35);
+                hpBar.style.width = enemyHp + '%';
+                hpText.textContent = `${enemyHp}/100`;
+                log.textContent = 'КРИТИЧЕСКИЙ ТОСТ! У Димы сработала сюжетная броня (остался 1 HP)!';
+            } else if (action === 'bag') {
+                log.textContent = 'В рюкзаке: Рукопись новой новеллы и бутылка Cool Skeleton!';
+            } else if (action === 'squad') {
+                log.textContent = 'Призван весь отряд «Димастия»!';
+            } else if (action === 'run') {
+                log.textContent = 'Сбежать невозможно! Из клана Димы ещё никто трезвым не уходил!';
+            }
+        }
 
         let redirectTimer = null;
+        function openLoginModal() {
+            playSound('poke');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
         function triggerGosuslugiPrank(event) {
             if (event) event.preventDefault();
             closeLoginModal();
             const overlay = document.getElementById('gosuslugiPrankOverlay');
             const countEl = document.getElementById('redirectCountdown');
             overlay.classList.remove('hidden');
+            playSound('siren');
+            triggerScreenShake();
+
             let secondsLeft = 10;
             countEl.textContent = secondsLeft;
             if (redirectTimer) clearInterval(redirectTimer);
             redirectTimer = setInterval(() => {
                 secondsLeft--;
-                if (secondsLeft > 0) countEl.textContent = secondsLeft;
-                else {
+                if (secondsLeft > 0) {
+                    countEl.textContent = secondsLeft;
+                } else {
                     clearInterval(redirectTimer);
-                    window.location.href = 'https://www.gosuslugi.ru/';
+                    try { window.top.location.href = 'https://www.gosuslugi.ru/'; }
+                    catch(e) { window.location.href = 'https://www.gosuslugi.ru/'; }
                 }
             }, 1000);
         }
