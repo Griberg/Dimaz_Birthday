@@ -231,1022 +231,1013 @@
         }
     </style>
 </head>
-<body class="crt-lines selection:bg-amber-400 selection:text-black bg-[#11131c]">
+<body id="mainBody" class="crt-lines selection:bg-amber-400 selection:text-black relative min-h-screen flex flex-col">
 
-    <!-- ВЕСЬ КОНТЕНТ ОБЁРНУТ В CONTENT WRAPPER -->
-    <!-- Это решает проблему со всплывающими окнами: теперь эффекты вешаются на wrapper, а окна лежат снаружи -->
-    <div id="contentWrapper" class="flex flex-col min-h-screen relative w-full overflow-x-hidden">
+    <!-- Фоновые символы ДжоДжо -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <span class="menacing-symbol absolute top-24 left-6 text-4xl md:text-6xl font-display text-purple-500">ゴゴゴ</span>
+        <span class="menacing-symbol absolute top-1/3 right-8 text-5xl md:text-7xl font-display text-amber-500" style="animation-delay: 1s;">ゴゴ</span>
+        <span class="menacing-symbol absolute bottom-20 left-12 text-4xl md:text-6xl font-display text-red-500" style="animation-delay: 2s;">ドドド</span>
+    </div>
 
-        <!-- Фоновые символы ДжоДжо -->
-        <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-            <span class="menacing-symbol absolute top-24 left-6 text-4xl md:text-6xl font-display text-purple-500">ゴゴゴ</span>
-            <span class="menacing-symbol absolute top-1/3 right-8 text-5xl md:text-7xl font-display text-amber-500" style="animation-delay: 1s;">ゴゴ</span>
-            <span class="menacing-symbol absolute bottom-20 left-12 text-4xl md:text-6xl font-display text-red-500" style="animation-delay: 2s;">ドドド</span>
-        </div>
-
-        <!-- ВЕРХНЯЯ ПАНЕЛЬ ЗАГРУЗКИ ФОТО (автоматически скрывается на GitHub Pages) -->
-        <div id="photoHelperBar" class="relative z-40 bg-slate-900 border-b-2 border-amber-400 px-4 py-2 text-xs">
-            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                    <span class="bg-amber-400 text-black font-pixel text-[10px] px-2 py-1 rounded">SLOT-1 (ФАЙЛЫ)</span>
-                    <span class="text-gray-200 font-bold">
-                        Выдели все фото, гифки и звук (.mp3) для мгновенной проверки в превью:
-                    </span>
-                    <span id="loadedFilesCountBadge" class="hidden bg-emerald-400 text-black font-extrabold px-2 py-0.5 rounded border border-black">
-                        Загружено: 0
-                    </span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <label class="cursor-pointer bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3 py-1 rounded border-2 border-black shadow-[2px_2px_0px_#000] transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-floppy-disk"></i> Вставить файлы
-                        <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*,.mp3,.wav,.ogg" class="hidden">
-                    </label>
-                    <button onclick="document.getElementById('photoHelperBar').classList.add('hidden')" class="text-gray-400 hover:text-white px-1">
-                        <i class="fa-solid fa-xmark text-base"></i>
-                    </button>
-                </div>
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ ЗАГРУЗКИ ФОТО (автоматически скрывается на GitHub Pages) -->
+    <div id="photoHelperBar" class="relative z-40 bg-slate-900 border-b-2 border-amber-400 px-4 py-2 text-xs">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-amber-400 text-black font-pixel text-[10px] px-2 py-1 rounded">SLOT-1 (ФАЙЛЫ)</span>
+                <span class="text-gray-200 font-bold">
+                    Выдели все фото, гифки и звук для мгновенной проверки в превью:
+                </span>
+                <span id="loadedFilesCountBadge" class="hidden bg-emerald-400 text-black font-extrabold px-2 py-0.5 rounded border border-black">
+                    Загружено: 0
+                </span>
+            </div>
+            <div class="flex items-center gap-3">
+                <label class="cursor-pointer bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3 py-1 rounded border-2 border-black shadow-[2px_2px_0px_#000] transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-floppy-disk"></i> Вставить файлы
+                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*" class="hidden">
+                </label>
+                <button onclick="document.getElementById('photoHelperBar').classList.add('hidden')" class="text-gray-400 hover:text-white px-1">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
             </div>
         </div>
+    </div>
 
-        <!-- ШАПКА И НАВИГАЦИЯ ПО КАРТРИДЖАМ -->
-        <header class="sticky top-0 z-40 bg-[#161929] border-b-4 border-[#090a10] shadow-xl">
-            <div class="max-w-7xl mx-auto px-4 pt-3 pb-2">
-                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-slate-800">
-                    <div onclick="switchPage('home')" class="flex items-center gap-3 cursor-pointer group">
-                        <div class="w-11 h-11 rounded-lg bg-amber-400 border-3 border-black shadow-[3px_3px_0px_#000] flex items-center justify-center text-xl text-black font-display group-hover:bg-yellow-300 transition">
-                            🕹️
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="font-pixel text-[10px] bg-red-600 text-white px-2 py-0.5 rounded">1UP</span>
-                                <span class="font-display text-base md:text-lg tracking-wide text-white">
-                                    DIMA-STATION 64
-                                </span>
-                            </div>
-                            <div class="text-xs font-mono text-amber-400">
-                                ИГРОК 1: ДИМА // КЛАН «ДИМАСТИЯ» [★ PERSONA VIBES]
-                            </div>
-                        </div>
+    <!-- ШАПКА И НАВИГАЦИЯ ПО КАРТРИДЖАМ -->
+    <header class="sticky top-0 z-40 bg-[#161929] border-b-4 border-[#090a10] shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 pt-3 pb-2">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-slate-800">
+                <div onclick="switchPage('home')" class="flex items-center gap-3 cursor-pointer group">
+                    <div class="w-11 h-11 rounded-lg bg-amber-400 border-3 border-black shadow-[3px_3px_0px_#000] flex items-center justify-center text-xl text-black font-display group-hover:bg-yellow-300 transition">
+                        🕹️
                     </div>
-
-                    <div class="flex flex-wrap items-center gap-2">
-                        <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
-                           class="hidden md:inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 border-2 border-red-500 text-red-300 px-3 py-1.5 rounded-lg text-xs font-extrabold shadow-[3px_3px_0px_#000] transition">
-                            <i class="fa-solid fa-heart-pulse text-red-400"></i> Спонсор: Three Kidneys
-                        </a>
-
-                        <button onclick="switchPage('max')" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5">
-                            <i class="fa-solid fa-satellite-dish"></i> MAX <span class="bg-amber-400 text-black font-pixel text-[9px] px-1.5 py-0.5 rounded">5G</span>
-                        </button>
-
-                        <button onclick="openLoginModal()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3.5 py-1.5 rounded-lg text-xs md:text-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-gift"></i> ВОЙТИ (18+)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Вкладки-картриджи -->
-                <nav class="flex items-center gap-2 overflow-x-auto py-2.5 no-scrollbar">
-                    <button onclick="switchPage('home')" data-page-btn="home" class="nav-cartridge active-page px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2">
-                        <i class="fa-solid fa-house"></i> 1. Главная & Новелла
-                    </button>
-                    <button onclick="switchPage('dimasty')" data-page-btn="dimasty" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-gray-200">
-                        <i class="fa-solid fa-users"></i> 2. Отряд «Димастия»
-                    </button>
-                    <button onclick="switchPage('gacha')" data-page-btn="gacha" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-gray-200">
-                        <i class="fa-solid fa-dice"></i> 3. Гача Додепа (×10)
-                    </button>
-                    <button onclick="switchPage('arcade')" data-page-btn="arcade" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-gray-200">
-                        <i class="fa-solid fa-gamepad"></i> 4. Мини-Игры & Рыбалка
-                    </button>
-                    <button onclick="switchPage('max')" data-page-btn="max" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-sky-300">
-                        <i class="fa-solid fa-satellite-dish"></i> 5. Мессенджер MAX
-                    </button>
-                    <button onclick="switchPage('vip')" data-page-btn="vip" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-amber-300">
-                        <i class="fa-solid fa-crown"></i> 6. VIP-Подарок 18+
-                    </button>
-                </nav>
-            </div>
-        </header>
-
-        <!-- ОСНОВНОЙ КОНТЕНТ -->
-        <main class="flex-1 relative z-10">
-
-            <!-- ================= PAGE 1: HOME ================= -->
-            <div id="page-home" class="page-view max-w-7xl mx-auto px-4 py-8 space-y-10">
-                
-                <div class="arcade-card rounded-xl p-3.5 bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 text-center sm:text-left">
-                        <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1.5 rounded border border-black shrink-0">SPONSOR</span>
-                        <p class="text-xs sm:text-sm font-bold text-gray-200">
-                            Не хватает на ипотеку, додеп и мазь для поясницы? Официальный партнёр Димы —
-                            <strong class="text-amber-400">Three Kidneys</strong> (когда двух почек уже мало)!
-                        </p>
-                    </div>
-                    <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
-                       class="arcade-btn shrink-0 bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5">
-                        Продать третью почку <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-7 space-y-6">
-                        <div class="inline-flex items-center gap-2 bg-amber-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black shadow-[3px_3px_0px_#000]">
-                            <i class="fa-solid fa-trophy"></i> PLAY OF THE GAME // ДИМА (ПАТРИАРХ ДИМАСТИИ)
-                        </div>
-
-                        <h1 class="font-display text-3xl sm:text-5xl leading-tight text-white uppercase">
-                            С ДНЁМ РОЖДЕНИЯ, <span class="text-amber-400">ДИМА!</span> <br>
-                            <span class="text-2xl sm:text-3xl text-sky-400">ГЛАВА КЛАНА «ДИМАСТИЯ»</span>
-                        </h1>
-
-                        <div class="arcade-card rounded-xl p-4 bg-[#161928] border-l-8 border-l-amber-400">
-                            <p class="text-gray-200 text-base sm:text-lg font-bold leading-relaxed">
-                                Поздравляем, легенда! Сегодня ты официально стал на <span class="text-amber-400 underline">один шаг ближе к смерти</span>, очереди в поликлинике в 6 утра и пенсионному удостоверению. Но пока спина держится — пиши свои шедевральные новеллы, тащи катки в Овервотче, вызывай Стенд и веди за собой великую <strong class="text-amber-400">«Димастию»</strong>!
-                            </p>
-                        </div>
-
-                        <!-- Persona-inspired HUD badge -->
-                        <div class="arcade-card p-3 rounded-xl bg-gradient-to-r from-red-950 via-slate-900 to-black border-red-500 flex items-center gap-3">
-                            <span class="text-2xl">🎭✨</span>
-                            <div>
-                                <div class="text-[10px] font-pixel text-red-400">METAVERSE NAVIGATOR [PERSONA VIBES]</div>
-                                <div class="text-xs font-bold text-white">«Твои когнитивные искажения успешно переписаны в новый том новеллы!»</div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <div class="arcade-card p-3 rounded-xl text-center">
-                                <div class="text-[10px] font-pixel text-gray-400">УРОВЕНЬ</div>
-                                <div class="font-display text-lg text-amber-400 mt-1">LVL UP! 💀</div>
-                                <div class="text-xs font-bold text-red-400 mt-0.5">+1 шаг к пенсии</div>
-                            </div>
-                            <div class="arcade-card p-3 rounded-xl text-center">
-                                <div class="text-[10px] font-pixel text-gray-400">АВТОР НОВЕЛЛ</div>
-                                <div class="font-display text-lg text-emerald-400 mt-1">100/10 ✍️</div>
-                                <div class="text-xs font-bold text-gray-300 mt-0.5">Гений сюжетов</div>
-                            </div>
-                            <div class="arcade-card p-3 rounded-xl text-center">
-                                <div class="text-[10px] font-pixel text-gray-400">OVERWATCH</div>
-                                <div class="font-display text-lg text-orange-400 mt-1">ТИЛЬТ 500</div>
-                                <div class="text-xs font-bold text-gray-300 mt-0.5">Тиммейты раки</div>
-                            </div>
-                            <div class="arcade-card p-3 rounded-xl text-center">
-                                <div class="text-[10px] font-pixel text-gray-400">КЛАН ЯКУДЗА</div>
-                                <div class="font-display text-lg text-sky-400 mt-1">ДИМАСТИЯ</div>
-                                <div class="text-xs font-bold text-amber-300 mt-0.5">Дракон Додзимы</div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-wrap gap-3 pt-1">
-                            <button onclick="triggerOverwatchUlt()" class="arcade-btn bg-orange-500 hover:bg-orange-400 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
-                                <span class="bg-black text-orange-400 font-pixel px-2 py-1 rounded text-[10px]">Q</span>
-                                УЛЬТАНУТЬ (NERF THIS!)
-                            </button>
-
-                            <button onclick="triggerYakuzaBoss()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
-                                <i class="fa-solid fa-dragon text-amber-300"></i> БОСС-ТИТР ДИМЫ
-                            </button>
-
-                            <button onclick="switchPage('dimasty')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
-                                <i class="fa-solid fa-users"></i> ОТРЯД «ДИМАСТИЯ» →
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-5">
-                        <div class="arcade-card rounded-2xl overflow-hidden max-w-md mx-auto">
-                            <div class="bg-slate-900 px-4 py-2.5 flex items-center justify-between border-b-3 border-slate-700">
-                                <span class="font-pixel text-[10px] text-amber-400">★ P1: ДИМА (STAND MASTER)</span>
-                                <div class="flex items-center gap-1.5">
-                                    <span class="w-3 h-3 rounded-full bg-green-400 border border-black"></span>
-                                    <span class="w-3 h-3 rounded-full bg-amber-400 border border-black"></span>
-                                    <span class="w-3 h-3 rounded-full bg-red-500 border border-black"></span>
-                                </div>
-                            </div>
-
-                            <div class="relative aspect-[3/4] bg-slate-950 overflow-hidden group">
-                                <img id="heroMainImg"
-                                     src="photo_2026-10-22_23-48-20.jpg"
-                                     data-filename="photo_2026-10-22_23-48-20.jpg"
-                                     alt="Дима в фуражке Джотаро"
-                                     onerror="this.src=createCustomPoster('ЯРЕ ЯРЕ ДАЗЕ...', 'Дима в фуражке и очках', '#312e81', '#fbbf24', '🧢🕶️')"
-                                     class="w-full h-full object-cover object-center">
-
-                                <div class="absolute top-3 right-3 font-display text-2xl text-amber-400 bg-black/80 px-2.5 py-1 rounded border-2 border-black">
-                                    ゴゴゴ
-                                </div>
-
-                                <button onclick="switchHeroPose()" class="arcade-btn absolute bottom-3 right-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5">
-                                    <i class="fa-solid fa-bolt"></i> Сменить позу Стенда
-                                </button>
-                            </div>
-
-                            <div class="p-4 bg-slate-900 border-t-3 border-slate-700">
-                                <div class="flex items-center justify-between text-xs font-mono text-gray-400 mb-1">
-                                    <span>СТЕНД: <strong class="text-amber-400">«ПИВНОЙ ПЛАТИНУМ»</strong></span>
-                                    <span class="text-emerald-400">РАНГ: S+</span>
-                                </div>
-                                <p id="heroQuoteText" class="text-sm font-bold text-white">
-                                    «Яре Яре Дазе... Этот сюжет новеллы я написал ещё до того, как ты нажал кнопку старт!»
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ИНТЕРАКТИВНАЯ МИНИ-НОВЕЛЛА ДИМЫ -->
-                <div class="arcade-card rounded-2xl p-6 bg-[#181c2e]">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b-2 border-slate-700">
-                        <div class="flex items-center gap-2.5">
-                            <span class="bg-emerald-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">VISUAL NOVEL ENGINE</span>
-                            <h2 class="font-display text-lg sm:text-2xl text-white">
-                                📖 РЕЖИМ АВТОРА НОВЕЛЛ: ВЫБЕРИ РУТ ДЛЯ ДИМЫ
-                            </h2>
-                        </div>
-                        <span class="text-xs font-mono text-emerald-300">Сценарист: Дима</span>
-                    </div>
-
-                    <div class="bg-slate-950 border-3 border-slate-600 rounded-xl p-5 space-y-4">
-                        <div class="flex items-center gap-2 text-xs font-mono text-amber-400">
-                            <i class="fa-solid fa-pen-nib"></i>
-                            <span id="vnSpeakerName">РАССКАЗЧИК (ИЗ НОВЕЛЛЫ ДИМЫ):</span>
-                        </div>
-                        <p id="vnDialogueText" class="text-base sm:text-lg font-bold text-gray-100 leading-relaxed min-h-[3.5rem]">
-                            «Глава 2026. Именинник Дима открыл глаза. Позади — десятки написанных глав, выбитых легарок и выпитых напитков. Какой сюжетный рут он выберет сегодня?»
-                        </p>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                            <button onclick="chooseNovelRoute(1)" class="arcade-btn bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
-                                ▶ Рут А: «Бестселлер и Миллионы» ✍️💰
-                            </button>
-                            <button onclick="chooseNovelRoute(2)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
-                                ▶ Рут Б: «Алхимия с Додепменом» 🍾🎰
-                            </button>
-                            <button onclick="chooseNovelRoute(3)" class="arcade-btn bg-sky-400 hover:bg-sky-300 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
-                                ▶ Рут В: «Полить мухоловку пивом» 🪴🍺
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ПУЛЬТ СПЕЦЭФФЕКТОВ (ТЕПЕРЬ С АУДИО ИЗ РЕПОЗИТОРИЯ) -->
-                <div class="arcade-card rounded-2xl p-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
-                        <div>
-                            <span class="bg-amber-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">SOUND & FX DECK</span>
-                            <h2 class="font-display text-xl sm:text-2xl text-white mt-2">
-                                🎛️ КОНСОЛЬНЫЙ ПУЛЬТ СПЕЦЭФФЕКТОВ
-                            </h2>
-                        </div>
-                        <div class="bg-slate-900 border-2 border-amber-400 px-4 py-2 rounded-xl text-xs font-mono text-amber-300">
-                            🍺 Пиво в горшок выпито: <strong id="beerLitersCounter" class="text-white text-base">0.0</strong> л
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                        <button onclick="triggerZaWarudo()" class="arcade-btn bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
-                            <span class="text-2xl">⏱️🧛</span>
-                            <span class="font-display text-xs text-amber-300">ZA WARUDO!</span>
-                            <span class="text-[11px] font-bold text-purple-100">Стоп-время 4с</span>
-                        </button>
-
-                        <button onclick="triggerAbsoluteCinema()" class="arcade-btn bg-slate-200 hover:bg-white text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
-                            <span class="text-2xl">🐱🎬</span>
-                            <span class="font-display text-xs">CINEMA</span>
-                            <span class="text-[11px] font-bold text-gray-700">Режим Скорсезе</span>
-                        </button>
-
-                        <button onclick="triggerJarvisHud()" class="arcade-btn bg-cyan-500 hover:bg-cyan-400 text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
-                            <span class="text-2xl">🤖🥃</span>
-                            <span class="font-display text-xs">ДЖАРВИС</span>
-                            <span class="text-[11px] font-bold text-slate-900">Сканер Старка</span>
-                        </button>
-
-                        <button onclick="triggerBeerPlant()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
-                            <span class="text-2xl">🪴🍺</span>
-                            <span class="font-display text-xs">ПИВА В ГОРШОК</span>
-                            <span class="text-[11px] font-bold text-slate-900">Полить мухоловку</span>
-                        </button>
-
-                        <button onclick="toggleDeepFry()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
-                            <span class="text-2xl">⚡🐺</span>
-                            <span class="font-display text-xs text-amber-300">ШАКАЛ 144p</span>
-                            <span class="text-[11px] font-bold text-red-100">Пережарить</span>
-                        </button>
-
-                        <button onclick="toggleToBeContinued()" class="arcade-btn bg-amber-700 hover:bg-amber-600 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
-                            <span class="text-2xl">🎸⬅️</span>
-                            <span class="font-display text-xs text-amber-200">ROUNDABOUT</span>
-                            <span class="text-[11px] font-bold text-amber-100">To Be Continued</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ШКАЛА ВЫЖИВАНИЯ -->
-                <div id="mortality" class="arcade-card rounded-2xl p-6 bg-[#1b1626] border-red-500">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
-                        <div>
-                            <span class="bg-red-600 text-white font-pixel text-[10px] px-2.5 py-1 rounded border border-black">HP & AGE MONITOR</span>
-                            <h2 class="font-display text-xl sm:text-2xl text-white mt-2">
-                                ⚰️ ШКАЛА ВЫЖИВАНИЯ ДИМЫ: ЕЩЁ НА 1 ШАГ БЛИЖЕ К ПЕНСИИ
-                            </h2>
-                        </div>
-                        <button onclick="generateDarkToast()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm">
-                            🎲 Сгенерировать жёсткий тост
-                        </button>
-                    </div>
-
-                    <div class="mb-5">
-                        <div class="flex justify-between text-xs font-mono text-gray-300 mb-2">
-                            <span>👶 Старт игры (0 пинга)</span>
-                            <span class="text-amber-400 font-extrabold">📍 ДИМА ЗДЕСЬ (Пишет новеллы, MAX активен)</span>
-                            <span>⚰️ Финальный титр (Пенсия)</span>
-                        </div>
-                        <div class="w-full h-6 bg-slate-950 rounded-lg overflow-hidden border-2 border-black p-1">
-                            <div class="h-full w-[69%] bg-gradient-to-r from-green-400 via-amber-400 to-red-600 rounded"></div>
-                        </div>
-                    </div>
-
-                    <div id="darkToastOutput" class="bg-slate-950 border-2 border-amber-400 rounded-xl p-4 text-sm sm:text-base text-amber-300 font-bold text-center">
-                        «Дима, поздравляем! Ты в том прекрасном возрасте, когда на приёме у врача вопрос "Что вас беспокоит?" вызывает истерический смех на полчаса!»
-                    </div>
-                </div>
-
-                <div class="flex justify-end">
-                    <button onclick="switchPage('dimasty')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-6 py-3.5 rounded-xl text-sm flex items-center gap-2">
-                        СЛЕДУЮЩИЙ КАРТРИДЖ: ОТРЯД «ДИМАСТИЯ» <i class="fa-solid fa-forward"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- ================= PAGE 2: DIMASTY SQUAD ================= -->
-            <div id="page-dimasty" class="page-view hidden max-w-7xl mx-auto px-4 py-8 space-y-8">
-                <div class="arcade-card rounded-2xl p-6 text-center bg-[#181d30]">
-                    <span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black uppercase">SELECT YOUR FIGHTER // ROSTER</span>
-                    <h2 class="font-display text-2xl sm:text-4xl text-white mt-3">
-                        👑 ОТРЯД «ДИМАСТИЯ» 👑
-                    </h2>
-                    <p class="text-gray-300 text-sm sm:text-base font-bold max-w-3xl mx-auto mt-2">
-                        Патриарх клана — <strong class="text-amber-400">Дима</strong>, а вот его верная гвардия! У каждой карточки снизу есть интерактивная кнопка ульты (включая переключение двух личностей Додепмена).
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <!-- Карточка 1: Додепмен & Cool Skeleton (2 личности в 1) -->
-                    <div id="dodepCardContainer" class="arcade-card rounded-2xl overflow-hidden flex flex-col border-amber-400 sm:col-span-2 lg:col-span-1">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span id="dodepHeaderBadge" class="font-pixel text-[9px] bg-red-600 text-white px-2 py-0.5 rounded">ЛИЧНОСТЬ №1: АЗАРТ</span>
-                            <span class="text-xs font-mono text-amber-400">2-В-1 ПЕРСОНАЖ</span>
-                        </div>
-
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img id="dodepImg1"
-                                 src="photo_2026-10-22_23-48-30.jpg"
-                                 data-filename="photo_2026-10-22_23-48-30.jpg"
-                                 alt="Додепмен"
-                                 onerror="this.src=createCustomPoster('ДОДЕПМЕН', 'Красные глаза + жест ОК', '#1e3a8a', '#ef4444', '👌🎰')"
-                                 class="w-full h-full object-cover transition duration-300">
-
-                            <img id="dodepImg2"
-                                 src="photo_2026-10-23_01-23-19.jpg"
-                                 data-filename="photo_2026-10-23_01-23-19.jpg"
-                                 alt="Алхимик Cool Skeleton"
-                                 onerror="this.src=createCustomPoster('COOL SKELETON', 'Алхимик с жёлтой бутылкой', '#78350f', '#fbbf24', '🍾☠️')"
-                                 class="hidden w-full h-full object-cover transition duration-300">
-
-                            <button onclick="toggleDodepPersonality()" class="arcade-btn absolute bottom-3 right-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5">
-                                <i class="fa-solid fa-masks-theater"></i> Сменить личность (Фаза 2)
-                            </button>
-                        </div>
-
-                        <div class="p-4 flex-1 flex flex-col justify-between bg-[#161a2b]">
-                            <div>
-                                <h3 id="dodepTitle" class="font-display text-xl text-amber-400">
-                                    ДОДЕПМЕН 👌🎰
-                                </h3>
-                                <p id="dodepDesc" class="text-xs sm:text-sm font-bold text-gray-200 mt-1.5 leading-relaxed">
-                                    <strong>Дневная личность:</strong> Активировал красные глаза и жест «ОК». Готов на додеп в любой гаче. По вечерам трансформируется в Cool Skeleton!
-                                </p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2 mt-4">
-                                <button onclick="toggleDodepPersonality()" class="arcade-btn bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold py-2.5 px-2 rounded-lg">
-                                    🔄 Альтер-Эго
-                                </button>
-                                <button onclick="triggerDodepAction()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold py-2.5 px-2 rounded-lg">
-                                    ⚡ Ультануть!
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 2: Казначей -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-purple-600 text-white px-2 py-0.5 rounded">999 IQ СОВЕТНИК</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-22_23-49-07.jpg" data-filename="photo_2026-10-22_23-49-07.jpg"
-                                 onerror="this.src=createCustomPoster('ТАКТИЧЕСКИЙ ГЕНИЙ', 'Ухмылка в аудитории', '#312e81', '#38bdf8', '🤓📈')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-sky-400">КАЗНАЧЕЙ «ДИМАСТИИ» 🎓</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Просчитал все сюжетные дыры в новеллах и переписал третью почку на баланс клана.
-                                </p>
-                            </div>
-                            <button onclick="openSquadModal('КАЗНАЧЕЙ «ДИМАСТИИ» 🎓', '999 IQ СОВЕТНИК', 'photo_2026-10-22_23-49-07.jpg', 'Казначей Димастии рассчитал: вероятность легендарного застолья сегодня составляет ровно 146%!', '🤓📈')" class="arcade-btn mt-4 w-full bg-sky-500 hover:bg-sky-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                📐 Просчитать тактику
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 3: Легенда Войс-Чата -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-amber-400 text-black px-2 py-0.5 rounded">VOICE SUPPORT</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-22_23-49-15.jpg" data-filename="photo_2026-10-22_23-49-15.jpg"
-                                 onerror="this.src=createCustomPoster('ГОЛОСОВОЙ ЧАТ', 'Улыбка в наушниках', '#854d0e', '#facc15', '🎧😂')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-amber-400">ЛЕГЕНДА ВОЙС-ЧАТА 🎧</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Тот самый бро в наушниках, с которым слитая катка в Overwatch превращается в стендап.
-                                </p>
-                            </div>
-                            <button onclick="openSquadModal('ЛЕГЕНДА ВОЙС-ЧАТА 🎧', 'VOICE SUPPORT', 'photo_2026-10-22_23-49-15.jpg', 'В войс-чате Димастии раздался дикий ор! Мораль Димы повышена до максимума!', '🎧😂')" class="arcade-btn mt-4 w-full bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                🎙️ Ворваться в голосовой
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 4: Пресс-секретарь -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-emerald-500 text-black px-2 py-0.5 rounded">ПРЯМОЙ ЭФИР</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
-                                 onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-emerald-400">ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Заявляет федеральным каналам: «Глава Димастии постарел на год, но его Стенд безупречен».
-                                </p>
-                            </div>
-                            <button onclick="openSquadModal('ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️', 'ПРЯМОЙ ЭФИР', 'photo_2026-10-22_23-49-48.jpg', 'СРОЧНО В НОМЕР: День Рождения Димы официально объявлен государственным праздником!', '🎙️📺')" class="arcade-btn mt-4 w-full bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                📺 Заявление прессе
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 5: Мухоловка -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-amber-500 text-black px-2 py-0.5 rounded">ДЕНДРО-АРХОНТ</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden flex items-center justify-center p-2">
-                            <img src="photo_2026-10-23_01-23-27.jpg" data-filename="photo_2026-10-23_01-23-27.jpg"
-                                 onerror="this.src=createCustomPoster('ПИВКОМ ПОЛЕЙ МЕНЯ', 'Пива в горшок мне', '#14532d', '#facc15', '🪴🚬')"
-                                 class="w-full h-full object-contain rounded-lg">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-amber-400">МУХОЛОВКА ДИМАСТИИ 🪴</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    «ПИВКОМ ПОЛЕЙ МЕНЯ! ПИВА БЛЯДЬ В ГОРШОК МНЕ!»
-                                </p>
-                            </div>
-                            <button onclick="triggerBeerPlant()" class="arcade-btn mt-4 w-full bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                🍺 Налить пива в горшок!
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 6: Джарвис -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-cyan-400 text-black px-2 py-0.5 rounded">AI СКАНЕР</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-23_01-21-42.jpg" data-filename="photo_2026-10-23_01-21-42.jpg"
-                                 onerror="this.src=createCustomPoster('ДЖАРВИС...', 'Чё за хуйня?!', '#083344', '#22d3ee', '🤖😳')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-cyan-400">ДЖАРВИС, ЧЁ ЗА Х*ЙНЯ 🤖</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Лицо Димы при виде рандомов на поинте в Overwatch.
-                                </p>
-                            </div>
-                            <button onclick="triggerJarvisHud()" class="arcade-btn mt-4 w-full bg-cyan-400 hover:bg-cyan-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                🔍 Запустить сканер
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 7: Мудрый Орангутан -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-orange-500 text-black px-2 py-0.5 rounded">WINSTON MAIN</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-23_01-22-52.jpg" data-filename="photo_2026-10-23_01-22-52.jpg"
-                                 onerror="this.src=createCustomPoster('БОСС КАЧКИ', 'Ухмылка примата', '#7c2d12', '#fb923c', '🦧😏')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-orange-400">МУДРЫЙ PRIMAL RAGE 🦧</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Знает, чем закончится сегодняшняя тусовка.
-                                </p>
-                            </div>
-                            <button onclick="openSquadModal('МУДРЫЙ PRIMAL RAGE 🦧', 'WINSTON MAIN', 'photo_2026-10-23_01-22-52.jpg', 'У-У-А-А! Мудрый Орангутан благословил Диму на винстрик и мощный сюжетный поворот!', '🦧😏')" class="arcade-btn mt-4 w-full bg-orange-500 hover:bg-orange-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                🍌 Банановая мудрость
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 8: Кото-Батон -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-amber-300 text-black px-2 py-0.5 rounded">ХИЛЕР СПИНЫ</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-23_01-21-49.jpg" data-filename="photo_2026-10-23_01-21-49.jpg"
-                                 onerror="this.src=createCustomPoster('КОТ-БУХАНКА', 'Вежливый батон', '#9a3412', '#fdba74', '🐱🍞')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-amber-300">ВЕЖЛИВЫЙ КОТО-БАТОН 🐱🍞</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Сидит буханкой и вдохновляет Диму на уютные главы новеллы.
-                                </p>
-                            </div>
-                            <button onclick="openSquadModal('ВЕЖЛИВЫЙ КОТО-БАТОН 🐱🍞', 'ХИЛЕР СПИНЫ', 'photo_2026-10-23_01-21-49.jpg', 'МЯУ! Рыжий Кото-Батон помурчал — боль в спине снижена на 100%, уют повышен до максимума!', '🐱🍞')" class="arcade-btn mt-4 w-full bg-amber-300 hover:bg-amber-200 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                🐾 Погладить буханку
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Карточка 9: Absolute Cinema -->
-                    <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
-                        <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
-                            <span class="font-pixel text-[9px] bg-white text-black px-2 py-0.5 rounded">10/10 ОСКАРОВ</span>
-                            <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
-                        </div>
-                        <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                            <img src="photo_2026-10-23_01-23-01.jpg" data-filename="photo_2026-10-23_01-23-01.jpg"
-                                 onerror="this.src=createCustomPoster('ABSOLUTE CINEMA', 'Шедевр', '#1f2937', '#ffffff', '🙌🎥')"
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-display text-lg text-white">ABSOLUTE CINEMA 🙌</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
-                                    Реакция читателей на финалы новелл Димы.
-                                </p>
-                            </div>
-                            <button onclick="triggerAbsoluteCinema()" class="arcade-btn mt-4 w-full bg-white hover:bg-gray-200 text-black text-xs font-extrabold py-2.5 rounded-lg">
-                                🎬 Включить Cinema
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="flex justify-between">
-                    <button onclick="switchPage('home')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ← НА ГЛАВНУЮ
-                    </button>
-                    <button onclick="switchPage('gacha')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ДАЛЕЕ: ГАЧА ДОДЕПА →
-                    </button>
-                </div>
-            </div>
-
-            <!-- ================= PAGE 3: GACHA ================= -->
-            <div id="page-gacha" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
-                <div class="arcade-card rounded-2xl p-6 bg-[#181d30] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
-                        <span class="bg-sky-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">GACHA MACHINE // ДОДЕП EDITION</span>
-                        <h2 class="font-display text-2xl sm:text-4xl text-white mt-2">
-                            🎰 МОЛИТВА «ДИМАСТИИ»: БАННЕР СТАРОСТИ И МЕМАСОВ
-                        </h2>
-                        <p class="text-sm font-bold text-gray-300 mt-1">
-                            Крути слот-машину! В пуле Патриарх Дима, Двойная Лега Додепмен/Cool Skeleton, Мухоловка и другие легенды.
-                        </p>
-                    </div>
-
-                    <div class="flex items-center gap-3 bg-slate-950 border-3 border-amber-400 px-4 py-2.5 rounded-xl shrink-0">
-                        <span class="text-2xl">💎</span>
-                        <div>
-                            <div class="text-[10px] font-pixel text-amber-300">ПРИМОГЕМЫ:</div>
-                            <div id="primogemBalance" class="font-mono font-extrabold text-lg text-white">32 000</div>
-                        </div>
-                        <button onclick="refillPrimogems()" class="arcade-btn ml-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold px-2.5 py-1.5 rounded-lg">
-                            + Додеп
-                        </button>
-                    </div>
-                </div>
-
-                <div class="arcade-card rounded-2xl p-6 bg-[#141828]">
-                    <div id="gachaStage" class="min-h-[320px] flex flex-col items-center justify-center text-center p-5 rounded-xl border-3 border-slate-700 bg-slate-950">
-                        <div id="gachaDefaultView" class="space-y-4 max-w-lg">
-                            <div class="text-5xl">🌠</div>
-                            <h3 class="font-display text-xl sm:text-2xl text-amber-400">
-                                АВТОМАТ ЗАРЯЖЕН НА 5★ ЛЕГЕНДУ!
-                            </h3>
-                            <p class="text-sm font-bold text-gray-300">
-                                Жми «Крутка ×1» или «ДЕСЯТКА ×10»! (Собери все 13/13).
-                            </p>
-                        </div>
-                        <div id="gachaResultView" class="hidden w-full"></div>
-                    </div>
-
-                    <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
-                        <div class="text-xs font-mono text-gray-300">
-                            Сделано круток: <strong id="pityCounter" class="text-amber-400">0</strong> | Коллекция: <strong id="collectionCounter" class="text-sky-400">0 / 13</strong>
-                        </div>
-                        <div class="flex flex-wrap gap-3">
-                            <button onclick="rollGenshinGacha(1)" class="arcade-btn bg-amber-200 hover:bg-white text-black font-extrabold px-5 py-3 rounded-xl flex items-center gap-2 text-sm">
-                                <span>✨ Крутка ×1</span>
-                                <span class="bg-black text-amber-300 px-2 py-0.5 rounded text-xs font-mono">💎 160</span>
-                            </button>
-                            <button onclick="rollGenshinGacha(10)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-6 py-3 rounded-xl flex items-center gap-2 text-sm">
-                                <span>🌟 ДЕСЯТКА ×10</span>
-                                <span class="bg-black text-amber-400 px-2 py-0.5 rounded text-xs font-mono">💎 1600</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 pt-5 border-t-2 border-slate-800">
-                        <div class="text-xs font-pixel text-gray-400 uppercase mb-3">
-                            🎒 ИНВЕНТАРЬ ДИМЫ:
-                        </div>
-                        <div id="gachaInventoryList" class="flex flex-wrap gap-2 text-xs text-gray-400 font-bold">
-                            Пока пусто — крути барабан!
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between">
-                    <button onclick="switchPage('dimasty')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ← НАЗАД К ОТРЯДУ
-                    </button>
-                    <button onclick="switchPage('arcade')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ДАЛЕЕ: МИНИ-ИГРЫ & РЫБАЛКА →
-                    </button>
-                </div>
-            </div>
-
-            <!-- ================= PAGE 4: ARCADE & FISHING ================= -->
-            <div id="page-arcade" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- JoJo Stand Rush -->
-                    <div class="arcade-card rounded-2xl p-6 flex flex-col justify-between">
-                        <div>
-                            <span class="bg-purple-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">ARCADE SLOT #1 // JOJO</span>
-                            <h3 class="font-display text-2xl text-white mt-3">СТЕНД-РАШ: «ORA ORA ORA!» 👊</h3>
-                            <p class="text-sm font-bold text-gray-300 mt-1">
-                                Набей комбо за здоровье Димы! Каждые +93 удара приближают легендарную пасхалку.
-                            </p>
-                        </div>
-                        <div class="my-5 text-center py-4 bg-slate-950 rounded-xl border-2 border-purple-500">
-                            <div class="text-[10px] font-pixel text-purple-300">КОМБО УДАРОВ СТЕНДА:</div>
-                            <div id="oraCount" class="font-display text-5xl text-amber-400 mt-2">0</div>
-                        </div>
-                        <button onclick="oraOraPunch()" class="arcade-btn w-full bg-purple-600 hover:bg-purple-500 text-white font-display text-base py-3.5 rounded-xl">
-                            👊 УДАРИТЬ СТЕНДОМ (ORA! +93)
-                        </button>
-                    </div>
-
-                    <!-- Yakuza Караоке + GIFS -->
-                    <div class="arcade-card rounded-2xl p-6 flex flex-col justify-between">
-                        <div class="flex items-center gap-4">
-                            <!-- GIF Фрейм 1 -->
-                            <div class="w-28 h-24 rounded-xl overflow-hidden border-3 border-red-500 shrink-0 bg-black relative flex items-center justify-center">
-                                <img id="yakuzaGif1"
-                                     src="friday-night-yakuza0.gif"
-                                     data-filename="friday-night-yakuza0.gif"
-                                     data-alt-filename="friday-night-yakuza0.jpg"
-                                     alt="Friday Night Yakuza"
-                                     onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='friday-night-yakuza0.jpg';}else if(!this.dataset.triedWeb){this.dataset.triedWeb='1';this.src='https://media.tenor.com/images/c4c12113049c3d46d7a03c1b027b1775/tenor.gif';}else{this.src=createCustomPoster('YAKUZA DANCE', 'Friday Night', '#991b1b', '#facc15', '🕺');}"
-                                     class="w-full h-full object-contain">
-                            </div>
-                            <div>
-                                <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">ARCADE SLOT #2 // YAKUZA</span>
-                                <h3 class="font-display text-xl sm:text-2xl text-white mt-2">КАРАОКЕ И ТАНЦЫ ДИМЫ 🎤</h3>
-                                <p class="text-xs sm:text-sm font-bold text-gray-300 mt-1">Спеть Baka Mitai или пробить Tiger Drop!</p>
-                            </div>
-                        </div>
-
-                        <!-- GIF Фрейм 2 (Goro Majima Hustle — подогнан под полный размер без обрезки) -->
-                        <div class="my-4 w-full h-72 sm:h-80 rounded-xl overflow-hidden border-3 border-red-600 bg-slate-950 relative flex items-center justify-center p-1">
-                            <img id="yakuzaGif2"
-                                 src="goro-majima-hustle.gif"
-                                 data-filename="goro-majima-hustle.gif"
-                                 data-alt-filename="goro-majima-hustle.jpg"
-                                 alt="Goro Majima Hustle"
-                                 onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='goro-majima-hustle.jpg';}else if(!this.dataset.triedWeb){this.dataset.triedWeb='1';this.src='https://media1.tenor.com/m/D5_t6n_8y4kAAAAC/goro-majima-hustle.gif';}else{this.src=createCustomPoster('MAJIMA HUSTLE', 'Let\'s Dance!', '#7f1d1d', '#f87171', '💃');}"
-                                 class="w-full h-full object-contain rounded-lg">
-                            <div class="absolute bottom-2 right-2 bg-black/85 border border-red-500 px-2.5 py-1 rounded text-[10px] font-mono text-amber-300">
-                                МАДЗИМА И КИРЮ ТАНЦУЮТ ЗА ДИМУ
-                            </div>
-                        </div>
-
-                        <div id="bakaMitaiLyrics" class="mb-3 bg-slate-950 border-2 border-red-500 rounded-xl p-3 text-center text-xs font-bold text-amber-300">
-                            «Dame da ne... Dame yo... (Похмелье длится 2 дня)»
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <button onclick="singBakaMitai()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold py-2.5 px-3 rounded-xl text-xs">
-                                🎤 Спеть Baka Mitai
-                            </button>
-                            <button onclick="triggerTigerDrop()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-2.5 px-3 rounded-xl text-xs">
-                                🐅 TIGER DROP (R1 + ▲)
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- НОВЫЙ РЕЖИМ: РЫБАЛКА С МЕГАЛАДОНОМ, МЯСОМ И САПОГОМ -->
-                <div class="arcade-card rounded-2xl p-6 bg-[#162035] border-sky-400">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                        <div>
-                            <span class="bg-sky-500 text-black font-pixel text-[9px] px-2.5 py-1 rounded border border-black">NEW ARCADE // РЫБАЛКА В ОЧЕРЕДНОЙ КАТКЕ</span>
-                            <h3 class="font-display text-xl sm:text-2xl text-white mt-2">
-                                🎣 СЕКРЕТНЫЙ РЫБНЫЙ УЛОВ ДИМЫ
-                            </h3>
-                        </div>
-                        <div class="bg-slate-950 border-2 border-sky-400 px-4 py-2 rounded-xl text-xs font-mono text-sky-300">
-                            Поймано уловов: <strong id="fishCount" class="text-white text-base">0</strong>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                        <div class="md:col-span-5 aspect-square bg-slate-950 rounded-xl overflow-hidden border-3 border-sky-400 relative flex items-center justify-center p-3">
-                            <img id="fishDisplayImg" src="photo_2025-08-25_17-14-44.jpg" data-filename="photo_2025-08-25_17-14-44.jpg"
-                                 onerror="this.src=createCustomPoster('МЕГАЛАДОН!', 'Главный приз рыбалки', '#0369a1', '#38bdf8', '🦈')"
-                                 class="w-full h-full object-cover rounded-lg">
-                        </div>
-                        <div class="md:col-span-7 space-y-4">
-                            <div id="fishResultBox" class="bg-slate-950 border-2 border-sky-400 rounded-xl p-4 text-sm sm:text-base font-bold text-sky-300">
-                                «Закинь удочку в мутные воды рейда! Можно выловить странное мясо на вертеле, рваный сапог или легендарный Мегаладон прямо в руки Димы!»
-                            </div>
-                            <button onclick="castFishingRod()" class="arcade-btn w-full bg-sky-500 hover:bg-sky-400 text-black font-display py-4 rounded-xl text-base">
-                                🎣 ЗАБРОСИТЬ УДОЧКУ!
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Покемон-Бой -->
-                <div class="pokemon-box bg-slate-900 rounded-2xl p-5 sm:p-8 text-white">
-                    <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
-                        <span class="bg-green-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black">GAMEBOY ADVANCE // POKÉMON DIMA VERSION</span>
-                        <span class="font-mono text-xs text-green-300">ЛОКАЦИЯ: ТРАВА У БАРА</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                        <div class="md:col-span-6 bg-slate-800 border-3 border-white rounded-xl p-4">
-                            <div class="flex items-center justify-between font-pixel text-xs sm:text-sm text-amber-400">
-                                <span>БОСС ДИМА</span>
-                                <span>Lv.99</span>
-                            </div>
-                            <div class="mt-3">
-                                <div class="flex justify-between text-xs font-mono text-gray-300 mb-1">
-                                    <span>HP (ЗАПАС МОЛОДОСТИ)</span>
-                                    <span id="pokeEnemyHpText">100/100</span>
-                                </div>
-                                <div class="w-full h-4 bg-black rounded overflow-hidden border border-white">
-                                    <div id="pokeEnemyHpBar" class="h-full bg-green-400 transition-all duration-300" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                            <p class="text-xs font-bold text-gray-200 mt-3">
-                                Тип: <strong class="text-amber-400">АВТОР НОВЕЛЛ / ЛИДЕР ДИМАСТИИ</strong><br>
-                                Пассивка: Сюжетная броня!
-                            </p>
-                        </div>
-
-                        <div class="md:col-span-6 flex justify-center">
-                            <div id="pokeSpriteWrapper" class="w-44 h-44 sm:w-52 sm:h-52 rounded-xl overflow-hidden border-4 border-amber-400 shadow-[6px_6px_0px_#000] transition transform bg-black">
-                                <img src="photo_2026-10-22_23-48-14.jpg" data-filename="photo_2026-10-22_23-48-14.jpg"
-                                     onerror="this.src=createCustomPoster('ДИМА LV.99', 'Вайб-чек', '#14532d', '#4ade80', '👾🧢')"
-                                     class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4">
-                        <div id="pokeBattleLog" class="lg:col-span-7 bg-black border-3 border-white rounded-xl p-4 font-mono text-xs sm:text-sm text-green-400 flex items-center">
-                            Дикий ДИМА появился! Что вы предпримете?
-                        </div>
-                        <div class="lg:col-span-5 grid grid-cols-2 gap-2.5 font-pixel text-[10px]">
-                            <button onclick="pokemonAction('attack')" class="arcade-btn bg-red-600 hover:bg-red-500 text-white py-3 px-2 rounded-lg">
-                                ⚔️ ТОСТ-АТАКА
-                            </button>
-                            <button onclick="pokemonAction('bag')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black py-3 px-2 rounded-lg">
-                                🎒 РЮКЗАК
-                            </button>
-                            <button onclick="pokemonAction('squad')" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white py-3 px-2 rounded-lg">
-                                👑 ДИМАСТИЯ
-                            </button>
-                            <button onclick="pokemonAction('run')" class="arcade-btn bg-gray-700 hover:bg-gray-600 text-white py-3 px-2 rounded-lg">
-                                🏃 СБЕЖАТЬ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between">
-                    <button onclick="switchPage('gacha')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ← НАЗАД К ГАЧЕ
-                    </button>
-                    <button onclick="switchPage('max')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ДАЛЕЕ: МЕССЕНДЖЕР MAX →
-                    </button>
-                </div>
-            </div>
-
-            <!-- ================= PAGE 5: MAX MESSENGER ================= -->
-            <div id="page-max" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
-                <div class="arcade-card rounded-2xl p-6 sm:p-8 bg-[#131d38] border-blue-400">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div class="lg:col-span-6 space-y-4">
-                            <span class="bg-blue-500 text-white font-pixel text-[9px] px-3 py-1.5 rounded border border-black inline-block">
-                                📡 НАЦИОНАЛЬНЫЙ КАРТРИДЖ СВЯЗИ
+                        <div class="flex items-center gap-2">
+                            <span class="font-pixel text-[10px] bg-red-600 text-white px-2 py-0.5 rounded">1UP</span>
+                            <span class="font-display text-base md:text-lg tracking-wide text-white">
+                                DIMA-STATION 64
                             </span>
-
-                            <h2 class="font-display text-2xl sm:text-4xl text-white leading-tight">
-                                МЕССЕНДЖЕР «MAX» — ЛОВИТ ДАЖЕ НА ПАРКОВКЕ (-5 ЭТАЖ)!
-                            </h2>
-
-                            <p class="text-gray-200 text-sm sm:text-base font-bold leading-relaxed">
-                                Весь клан <strong class="text-amber-400">«Димастия»</strong> переведён в государственный супер-мессенджер <strong class="text-sky-400">MAX</strong>. Тут Дима публикует новые главы новелл даже из железобетонного бункера!
-                            </p>
-
-                            <div class="flex flex-wrap gap-3 pt-2">
-                                <button onclick="sendMaxPing()" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-4 py-3 rounded-xl text-xs sm:text-sm">
-                                    📡 Проверить сигнал с парковки
-                                </button>
-                                <button onclick="triggerGosuslugiPrank(event)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-4 py-3 rounded-xl text-xs sm:text-sm">
-                                    🆔 Войти через MAX ID (Подарок 18+)
-                                </button>
-                            </div>
                         </div>
-
-                        <div class="lg:col-span-6">
-                            <div class="arcade-card rounded-2xl overflow-hidden bg-slate-950 border-blue-400">
-                                <div class="bg-blue-700 px-4 py-3 flex items-center justify-between border-b-3 border-black">
-                                    <div class="flex items-center gap-2.5">
-                                        <div class="w-8 h-8 rounded-lg bg-white text-blue-700 font-display flex items-center justify-center text-base border-2 border-black">
-                                            M
-                                        </div>
-                                        <div>
-                                            <div class="font-extrabold text-white text-sm">Чат клана «Димастия» (MAX)</div>
-                                            <div class="text-[11px] text-blue-200 font-mono">Подземная парковка • 5G Ультра</div>
-                                        </div>
-                                    </div>
-                                    <span class="bg-green-400 text-black font-pixel text-[9px] px-2 py-1 rounded border border-black">ONLINE</span>
-                                </div>
-
-                                <div id="maxChatMessages" class="p-4 space-y-3 max-h-80 overflow-y-auto text-xs sm:text-sm font-bold">
-                                    <div class="bg-blue-950 border-2 border-blue-500 rounded-xl p-3">
-                                        <div class="text-sky-300 text-xs font-mono">🤖 Система MAX</div>
-                                        <p class="text-white mt-1">
-                                            Пользователь ДИМА назначен Верховным Админом клана. Удаление заблокировано Госуслугами.
-                                        </p>
-                                    </div>
-
-                                    <div class="bg-slate-900 border-2 border-amber-400 rounded-xl p-3">
-                                        <div class="text-amber-400 text-xs font-mono">🎰 Додепмен / Cool Skeleton</div>
-                                        <p class="text-gray-100 mt-1">
-                                            Дима, бро! Я на подземной парковке с Cool Skeleton! MAX ловит сквозь бетон! С Днюхой!
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-slate-900 border-t-2 border-slate-800 flex flex-wrap gap-2">
-                                    <button onclick="replyInMax('Я на парковке, дописываю главу новеллы и несу пиво! 🍺✍️')" class="arcade-btn flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold py-2 px-3 rounded-lg">
-                                        «Дописываю новеллу и несу пиво!»
-                                    </button>
-                                    <button onclick="replyInMax('Джарвис, почему MAX ловит в лифте?! 🤖')" class="arcade-btn flex-1 bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold py-2 px-3 rounded-lg">
-                                        «Джарвис, чё за х*йня?!»
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="text-xs font-mono text-amber-400">
+                            ИГРОК 1: ДИМА // КЛАН «ДИМАСТИЯ» [★ PERSONA VIBES]
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-between">
-                    <button onclick="switchPage('arcade')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ← НАЗАД К МИНИ-ИГРАМ
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
+                       class="hidden md:inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 border-2 border-red-500 text-red-300 px-3 py-1.5 rounded-lg text-xs font-extrabold shadow-[3px_3px_0px_#000] transition">
+                        <i class="fa-solid fa-heart-pulse text-red-400"></i> Спонсор: Three Kidneys
+                    </a>
+
+                    <button onclick="switchPage('max')" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-satellite-dish"></i> MAX <span class="bg-amber-400 text-black font-pixel text-[9px] px-1.5 py-0.5 rounded">5G</span>
                     </button>
-                    <button onclick="switchPage('vip')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
-                        ДАЛЕЕ: VIP-ПОДАРОК 18+ →
+
+                    <button onclick="openLoginModal()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3.5 py-1.5 rounded-lg text-xs md:text-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-gift"></i> ВОЙТИ (18+)
                     </button>
                 </div>
             </div>
 
-            <!-- ================= PAGE 6: VIP GIFT ================= -->
-            <div id="page-vip" class="page-view hidden max-w-4xl mx-auto px-4 py-8 space-y-8">
-                <div class="arcade-card rounded-2xl p-6 sm:p-10 bg-[#1a1d2e] border-amber-400">
-                    <div class="text-center max-w-2xl mx-auto mb-8">
-                        <span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border border-black uppercase">
-                            🎁 SECRET DLC FOR DIMA
-                        </span>
-                        <h2 class="font-display text-2xl sm:text-4xl text-white mt-4">
-                            ПОЛУЧИТЬ 10 000 ПРИМОГЕМОВ И СЕКРЕТНЫЙ АРХИВ (18+)
-                        </h2>
-                        <p class="text-sm sm:text-base font-bold text-gray-300 mt-2">
-                            Дима, подтверди регистрацию главы клана, чтобы забрать подгон от кентов и спонсора <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" class="text-amber-400 underline font-extrabold">Three Kidneys</a>!
-                        </p>
-                    </div>
+            <!-- Вкладки-картриджи -->
+            <nav class="flex items-center gap-2 overflow-x-auto py-2.5 no-scrollbar">
+                <button onclick="switchPage('home')" data-page-btn="home" class="nav-cartridge active-page px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2">
+                    <i class="fa-solid fa-house"></i> 1. Главная & Новелла
+                </button>
+                <button onclick="switchPage('dimasty')" data-page-btn="dimasty" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-gray-200">
+                    <i class="fa-solid fa-users"></i> 2. Отряд «Димастия»
+                </button>
+                <button onclick="switchPage('gacha')" data-page-btn="gacha" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-gray-200">
+                    <i class="fa-solid fa-dice"></i> 3. Гача Додепа (×10)
+                </button>
+                <button onclick="switchPage('arcade')" data-page-btn="arcade" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-gray-200">
+                    <i class="fa-solid fa-gamepad"></i> 4. Мини-Игры & Рыбалка
+                </button>
+                <button onclick="switchPage('max')" data-page-btn="max" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-sky-300">
+                    <i class="fa-solid fa-satellite-dish"></i> 5. Мессенджер MAX
+                </button>
+                <button onclick="switchPage('vip')" data-page-btn="vip" class="nav-cartridge px-3.5 py-2 rounded-lg text-xs sm:text-sm font-extrabold shrink-0 flex items-center gap-2 text-amber-300">
+                    <i class="fa-solid fa-crown"></i> 6. VIP-Подарок 18+
+                </button>
+            </nav>
+        </div>
+    </header>
 
-                    <form onsubmit="triggerGosuslugiPrank(event)" class="space-y-4 max-w-xl mx-auto">
-                        <div>
-                            <label class="block text-xs font-pixel text-amber-400 mb-2">НИКНЕЙМ ГЛАВЫ «ДИМАСТИИ»:</label>
-                            <input type="text" required value="Dima_Patriarch_SSR"
-                                   class="w-full bg-slate-950 border-3 border-slate-600 focus:border-amber-400 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
-                        </div>
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="flex-1 relative z-10">
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-pixel text-gray-300 mb-2">ПАРОЛЬ ОТ СЕЙФА:</label>
-                                <input type="password" required placeholder="••••••••••••"
-                                       class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-pixel text-gray-300 mb-2">ЛЮБИМАЯ ВАЙФУ / СТЕНД:</label>
-                                <select class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
-                                    <option>Роберт Э. О. Спидвагон (Лучшая вайфу)</option>
-                                    <option>Горо Мадзима (Kiryuuu-chan!)</option>
-                                    <option>Райдэн Сёгун / Яэ Мико</option>
-                                    <option>D.Va / Мерси из Overwatch</option>
-                                    <option>Мухоловка с пивом в горшке</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-gray-300 pt-1">
-                            <input type="checkbox" required checked class="w-4 h-4 rounded text-amber-400">
-                            <span>Подтверждаю, что я глава «Димастии», пишу топовые новеллы и готов к подарку 18+.</span>
-                        </div>
-
-                        <button type="submit" class="arcade-btn w-full bg-amber-400 hover:bg-amber-300 text-black font-display text-base sm:text-lg py-4 rounded-xl mt-2">
-                            🔥 ПОДТВЕРДИТЬ РЕГИСТРАЦИЮ И ЗАБРАТЬ БОНУС 🔥
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-        </main>
-
-        <footer class="relative z-10 bg-[#0d0f17] border-t-4 border-black py-8 mt-12">
-            <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-                <div>
-                    <div class="font-display text-lg text-amber-400">С ДНЁМ РОЖДЕНИЯ, ДИМА! 🎂🕹️</div>
-                    <p class="text-xs sm:text-sm font-bold text-gray-400 mt-1">
-                        От всего клана «Димастия»! Пиши крутые новеллы, тащи в Овервотче и живи без тильта!
+        <!-- ================= PAGE 1: HOME ================= -->
+        <div id="page-home" class="page-view max-w-7xl mx-auto px-4 py-8 space-y-10">
+            
+            <div class="arcade-card rounded-xl p-3.5 bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3 text-center sm:text-left">
+                    <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1.5 rounded border border-black shrink-0">SPONSOR</span>
+                    <p class="text-xs sm:text-sm font-bold text-gray-200">
+                        Не хватает на ипотеку, додеп и мазь для поясницы? Официальный партнёр Димы —
+                        <strong class="text-amber-400">Three Kidneys</strong> (когда двух почек уже мало)!
                     </p>
                 </div>
-                <div class="arcade-card rounded-xl px-5 py-3 bg-slate-900 border-red-500">
-                    <div class="text-[10px] font-pixel text-red-400 uppercase">Генеральный спонсор Димастии:</div>
-                    <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
-                       class="text-sm sm:text-base font-extrabold text-amber-400 hover:text-amber-300 underline flex items-center justify-center sm:justify-start gap-2 mt-1">
-                        <i class="fa-solid fa-link"></i> j-starling.github.io/Three-Kidneys/
-                    </a>
+                <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
+                   class="arcade-btn shrink-0 bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs px-4 py-2 rounded-lg flex items-center gap-1.5">
+                    Продать третью почку <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-amber-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black shadow-[3px_3px_0px_#000]">
+                        <i class="fa-solid fa-trophy"></i> PLAY OF THE GAME // ДИМА (ПАТРИАРХ ДИМАСТИИ)
+                    </div>
+
+                    <h1 class="font-display text-3xl sm:text-5xl leading-tight text-white uppercase">
+                        С ДНЁМ РОЖДЕНИЯ, <span class="text-amber-400">ДИМА!</span> <br>
+                        <span class="text-2xl sm:text-3xl text-sky-400">ГЛАВА КЛАНА «ДИМАСТИЯ»</span>
+                    </h1>
+
+                    <div class="arcade-card rounded-xl p-4 bg-[#161928] border-l-8 border-l-amber-400">
+                        <p class="text-gray-200 text-base sm:text-lg font-bold leading-relaxed">
+                            Поздравляем, легенда! Сегодня ты официально стал на <span class="text-amber-400 underline">один шаг ближе к смерти</span>, очереди в поликлинике в 6 утра и пенсионному удостоверению. Но пока спина держится — пиши свои шедевральные новеллы, тащи катки в Овервотче, вызывай Стенд и веди за собой великую <strong class="text-amber-400">«Димастию»</strong>!
+                        </p>
+                    </div>
+
+                    <!-- Persona-inspired HUD badge -->
+                    <div class="arcade-card p-3 rounded-xl bg-gradient-to-r from-red-950 via-slate-900 to-black border-red-500 flex items-center gap-3">
+                        <span class="text-2xl">🎭✨</span>
+                        <div>
+                            <div class="text-[10px] font-pixel text-red-400">METAVERSE NAVIGATOR [PERSONA VIBES]</div>
+                            <div class="text-xs font-bold text-white">«Твои когнитивные искажения успешно переписаны в новый том новеллы!»</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">УРОВЕНЬ</div>
+                            <div class="font-display text-lg text-amber-400 mt-1">LVL UP! 💀</div>
+                            <div class="text-xs font-bold text-red-400 mt-0.5">+1 шаг к пенсии</div>
+                        </div>
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">АВТОР НОВЕЛЛ</div>
+                            <div class="font-display text-lg text-emerald-400 mt-1">100/10 ✍️</div>
+                            <div class="text-xs font-bold text-gray-300 mt-0.5">Гений сюжетов</div>
+                        </div>
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">OVERWATCH</div>
+                            <div class="font-display text-lg text-orange-400 mt-1">ТИЛЬТ 500</div>
+                            <div class="text-xs font-bold text-gray-300 mt-0.5">Тиммейты раки</div>
+                        </div>
+                        <div class="arcade-card p-3 rounded-xl text-center">
+                            <div class="text-[10px] font-pixel text-gray-400">КЛАН ЯКУДЗА</div>
+                            <div class="font-display text-lg text-sky-400 mt-1">ДИМАСТИЯ</div>
+                            <div class="text-xs font-bold text-amber-300 mt-0.5">Дракон Додзимы</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 pt-1">
+                        <button onclick="triggerOverwatchUlt()" class="arcade-btn bg-orange-500 hover:bg-orange-400 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <span class="bg-black text-orange-400 font-pixel px-2 py-1 rounded text-[10px]">Q</span>
+                            УЛЬТАНУТЬ (NERF THIS!)
+                        </button>
+
+                        <button onclick="triggerYakuzaBoss()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-dragon text-amber-300"></i> БОСС-ТИТР ДИМЫ
+                        </button>
+
+                        <button onclick="switchPage('dimasty')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-4 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-users"></i> ОТРЯД «ДИМАСТИЯ» →
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="arcade-card rounded-2xl overflow-hidden max-w-md mx-auto">
+                        <div class="bg-slate-900 px-4 py-2.5 flex items-center justify-between border-b-3 border-slate-700">
+                            <span class="font-pixel text-[10px] text-amber-400">★ P1: ДИМА (STAND MASTER)</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-green-400 border border-black"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-400 border border-black"></span>
+                                <span class="w-3 h-3 rounded-full bg-red-500 border border-black"></span>
+                            </div>
+                        </div>
+
+                        <div class="relative aspect-[3/4] bg-slate-950 overflow-hidden group">
+                            <img id="heroMainImg"
+                                 src="photo_2026-10-22_23-48-20.jpg"
+                                 data-filename="photo_2026-10-22_23-48-20.jpg"
+                                 alt="Дима в фуражке Джотаро"
+                                 onerror="this.src=createCustomPoster('ЯРЕ ЯРЕ ДАЗЕ...', 'Дима в фуражке и очках', '#312e81', '#fbbf24', '🧢🕶️')"
+                                 class="w-full h-full object-cover object-center">
+
+                            <div class="absolute top-3 right-3 font-display text-2xl text-amber-400 bg-black/80 px-2.5 py-1 rounded border-2 border-black">
+                                ゴゴゴ
+                            </div>
+
+                            <button onclick="switchHeroPose()" class="arcade-btn absolute bottom-3 right-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5">
+                                <i class="fa-solid fa-bolt"></i> Сменить позу Стенда
+                            </button>
+                        </div>
+
+                        <div class="p-4 bg-slate-900 border-t-3 border-slate-700">
+                            <div class="flex items-center justify-between text-xs font-mono text-gray-400 mb-1">
+                                <span>СТЕНД: <strong class="text-amber-400">«ПИВНОЙ ПЛАТИНУМ»</strong></span>
+                                <span class="text-emerald-400">РАНГ: S+</span>
+                            </div>
+                            <p id="heroQuoteText" class="text-sm font-bold text-white">
+                                «Яре Яре Дазе... Этот сюжет новеллы я написал ещё до того, как ты нажал кнопку старт!»
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </footer>
 
-    </div><!-- /#contentWrapper -->
+            <!-- ИНТЕРАКТИВНАЯ МИНИ-НОВЕЛЛА ДИМЫ -->
+            <div class="arcade-card rounded-2xl p-6 bg-[#181c2e]">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b-2 border-slate-700">
+                    <div class="flex items-center gap-2.5">
+                        <span class="bg-emerald-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">VISUAL NOVEL ENGINE</span>
+                        <h2 class="font-display text-lg sm:text-2xl text-white">
+                            📖 РЕЖИМ АВТОРА НОВЕЛЛ: ВЫБЕРИ РУТ ДЛЯ ДИМЫ
+                        </h2>
+                    </div>
+                    <span class="text-xs font-mono text-emerald-300">Сценарист: Дима</span>
+                </div>
 
-    <!-- =========================================================================================
-         OVERLAYS & MODALS (Лежат снаружи #contentWrapper — гарантированно по центру без багов!)
-         ========================================================================================= -->
-    
+                <div class="bg-slate-950 border-3 border-slate-600 rounded-xl p-5 space-y-4">
+                    <div class="flex items-center gap-2 text-xs font-mono text-amber-400">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span id="vnSpeakerName">РАССКАЗЧИК (ИЗ НОВЕЛЛЫ ДИМЫ):</span>
+                    </div>
+                    <p id="vnDialogueText" class="text-base sm:text-lg font-bold text-gray-100 leading-relaxed min-h-[3.5rem]">
+                        «Глава 2026. Именинник Дима открыл глаза. Позади — десятки написанных глав, выбитых легарок и выпитых напитков. Какой сюжетный рут он выберет сегодня?»
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                        <button onclick="chooseNovelRoute(1)" class="arcade-btn bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
+                            ▶ Рут А: «Бестселлер и Миллионы» ✍️💰
+                        </button>
+                        <button onclick="chooseNovelRoute(2)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
+                            ▶ Рут Б: «Алхимия с Додепменом» 🍾🎰
+                        </button>
+                        <button onclick="chooseNovelRoute(3)" class="arcade-btn bg-sky-400 hover:bg-sky-300 text-black font-extrabold py-2.5 px-4 rounded-lg text-xs sm:text-sm text-left">
+                            ▶ Рут В: «Полить мухоловку пивом» 🪴🍺
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПУЛЬТ СПЕЦЭФФЕКТОВ -->
+            <div class="arcade-card rounded-2xl p-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <span class="bg-amber-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">SOUND & FX DECK</span>
+                        <h2 class="font-display text-xl sm:text-2xl text-white mt-2">
+                            🎛️ КОНСОЛЬНЫЙ ПУЛЬТ СПЕЦЭФФЕКТОВ
+                        </h2>
+                    </div>
+                    <div class="bg-slate-900 border-2 border-amber-400 px-4 py-2 rounded-xl text-xs font-mono text-amber-300">
+                        🍺 Пиво в горшок выпито: <strong id="beerLitersCounter" class="text-white text-base">0.0</strong> л
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <button onclick="triggerZaWarudo()" class="arcade-btn bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">⏱️🧛</span>
+                        <span class="font-display text-xs text-amber-300">ZA WARUDO!</span>
+                        <span class="text-[11px] font-bold text-purple-100">Стоп-время 4с</span>
+                    </button>
+
+                    <button onclick="triggerAbsoluteCinema()" class="arcade-btn bg-slate-200 hover:bg-white text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🐱🎬</span>
+                        <span class="font-display text-xs">CINEMA</span>
+                        <span class="text-[11px] font-bold text-gray-700">Режим Скорсезе</span>
+                    </button>
+
+                    <button onclick="triggerJarvisHud()" class="arcade-btn bg-cyan-500 hover:bg-cyan-400 text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🤖🥃</span>
+                        <span class="font-display text-xs">ДЖАРВИС</span>
+                        <span class="text-[11px] font-bold text-slate-900">Сканер Старка</span>
+                    </button>
+
+                    <button onclick="triggerBeerPlant()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🪴🍺</span>
+                        <span class="font-display text-xs">ПИВА В ГОРШОК</span>
+                        <span class="text-[11px] font-bold text-slate-900">Полить мухоловку</span>
+                    </button>
+
+                    <button onclick="toggleDeepFry()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">⚡🐺</span>
+                        <span class="font-display text-xs text-amber-300">ШАКАЛ 144p</span>
+                        <span class="text-[11px] font-bold text-red-100">Пережарить</span>
+                    </button>
+
+                    <button onclick="toggleToBeContinued()" class="arcade-btn bg-amber-700 hover:bg-amber-600 text-white p-3.5 rounded-xl text-center flex flex-col items-center gap-1.5">
+                        <span class="text-2xl">🎸⬅️</span>
+                        <span class="font-display text-xs text-amber-200">ROUNDABOUT</span>
+                        <span class="text-[11px] font-bold text-amber-100">To Be Continued</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ШКАЛА ВЫЖИВАНИЯ -->
+            <div id="mortality" class="arcade-card rounded-2xl p-6 bg-[#1b1626] border-red-500">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <span class="bg-red-600 text-white font-pixel text-[10px] px-2.5 py-1 rounded border border-black">HP & AGE MONITOR</span>
+                        <h2 class="font-display text-xl sm:text-2xl text-white mt-2">
+                            ⚰️ ШКАЛА ВЫЖИВАНИЯ ДИМЫ: ЕЩЁ НА 1 ШАГ БЛИЖЕ К ПЕНСИИ
+                        </h2>
+                    </div>
+                    <button onclick="generateDarkToast()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm">
+                        🎲 Сгенерировать жёсткий тост
+                    </button>
+                </div>
+
+                <div class="mb-5">
+                    <div class="flex justify-between text-xs font-mono text-gray-300 mb-2">
+                        <span>👶 Старт игры (0 пинга)</span>
+                        <span class="text-amber-400 font-extrabold">📍 ДИМА ЗДЕСЬ (Пишет новеллы, MAX активен)</span>
+                        <span>⚰️ Финальный титр (Пенсия)</span>
+                    </div>
+                    <div class="w-full h-6 bg-slate-950 rounded-lg overflow-hidden border-2 border-black p-1">
+                        <div class="h-full w-[69%] bg-gradient-to-r from-green-400 via-amber-400 to-red-600 rounded"></div>
+                    </div>
+                </div>
+
+                <div id="darkToastOutput" class="bg-slate-950 border-2 border-amber-400 rounded-xl p-4 text-sm sm:text-base text-amber-300 font-bold text-center">
+                    «Дима, поздравляем! Ты в том прекрасном возрасте, когда на приёме у врача вопрос "Что вас беспокоит?" вызывает истерический смех на полчаса!»
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="switchPage('dimasty')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-6 py-3.5 rounded-xl text-sm flex items-center gap-2">
+                    СЛЕДУЮЩИЙ КАРТРИДЖ: ОТРЯД «ДИМАСТИЯ» <i class="fa-solid fa-forward"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 2: DIMASTY SQUAD ================= -->
+        <div id="page-dimasty" class="page-view hidden max-w-7xl mx-auto px-4 py-8 space-y-8">
+            <div class="arcade-card rounded-2xl p-6 text-center bg-[#181d30]">
+                <span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black uppercase">SELECT YOUR FIGHTER // ROSTER</span>
+                <h2 class="font-display text-2xl sm:text-4xl text-white mt-3">
+                    👑 ОТРЯД «ДИМАСТИЯ» 👑
+                </h2>
+                <p class="text-gray-300 text-sm sm:text-base font-bold max-w-3xl mx-auto mt-2">
+                    Патриарх клана — <strong class="text-amber-400">Дима</strong>, а вот его верная гвардия! У каждой карточки снизу есть интерактивная кнопка ульты (включая переключение двух личностей Додепмена).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Карточка 1: Додепмен & Cool Skeleton (2 личности в 1) -->
+                <div id="dodepCardContainer" class="arcade-card rounded-2xl overflow-hidden flex flex-col border-amber-400 sm:col-span-2 lg:col-span-1">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span id="dodepHeaderBadge" class="font-pixel text-[9px] bg-red-600 text-white px-2 py-0.5 rounded">ЛИЧНОСТЬ №1: АЗАРТ</span>
+                        <span class="text-xs font-mono text-amber-400">2-В-1 ПЕРСОНАЖ</span>
+                    </div>
+
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img id="dodepImg1"
+                             src="photo_2026-10-22_23-48-30.jpg"
+                             data-filename="photo_2026-10-22_23-48-30.jpg"
+                             alt="Додепмен"
+                             onerror="this.src=createCustomPoster('ДОДЕПМЕН', 'Красные глаза + жест ОК', '#1e3a8a', '#ef4444', '👌🎰')"
+                             class="w-full h-full object-cover transition duration-300">
+
+                        <img id="dodepImg2"
+                             src="photo_2026-10-23_01-23-19.jpg"
+                             data-filename="photo_2026-10-23_01-23-19.jpg"
+                             alt="Алхимик Cool Skeleton"
+                             onerror="this.src=createCustomPoster('COOL SKELETON', 'Алхимик с жёлтой бутылкой', '#78350f', '#fbbf24', '🍾☠️')"
+                             class="hidden w-full h-full object-cover transition duration-300">
+
+                        <button onclick="toggleDodepPersonality()" class="arcade-btn absolute bottom-3 right-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5">
+                            <i class="fa-solid fa-masks-theater"></i> Сменить личность (Фаза 2)
+                        </button>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col justify-between bg-[#161a2b]">
+                        <div>
+                            <h3 id="dodepTitle" class="font-display text-xl text-amber-400">
+                                ДОДЕПМЕН 👌🎰
+                            </h3>
+                            <p id="dodepDesc" class="text-xs sm:text-sm font-bold text-gray-200 mt-1.5 leading-relaxed">
+                                <strong>Дневная личность:</strong> Активировал красные глаза и жест «ОК». Готов на додеп в любой гаче. По вечерам трансформируется в Cool Skeleton!
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-4">
+                            <button onclick="toggleDodepPersonality()" class="arcade-btn bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold py-2.5 px-2 rounded-lg">
+                                🔄 Альтер-Эго
+                            </button>
+                            <button onclick="triggerDodepAction()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold py-2.5 px-2 rounded-lg">
+                                ⚡ Ультануть!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 2: Казначей -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-purple-600 text-white px-2 py-0.5 rounded">999 IQ СОВЕТНИК</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-22_23-49-07.jpg" data-filename="photo_2026-10-22_23-49-07.jpg"
+                             onerror="this.src=createCustomPoster('ТАКТИЧЕСКИЙ ГЕНИЙ', 'Ухмылка в аудитории', '#312e81', '#38bdf8', '🤓📈')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-sky-400">КАЗНАЧЕЙ «ДИМАСТИИ» 🎓</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Просчитал все сюжетные дыры в новеллах и переписал третью почку на баланс клана.
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('КАЗНАЧЕЙ «ДИМАСТИИ» 🎓', '999 IQ СОВЕТНИК', 'photo_2026-10-22_23-49-07.jpg', 'Казначей Димастии рассчитал: вероятность легендарного застолья сегодня составляет ровно 146%!', '🤓📈')" class="arcade-btn mt-4 w-full bg-sky-500 hover:bg-sky-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            📐 Просчитать тактику
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 3: Легенда Войс-Чата -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-amber-400 text-black px-2 py-0.5 rounded">VOICE SUPPORT</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-22_23-49-15.jpg" data-filename="photo_2026-10-22_23-49-15.jpg"
+                             onerror="this.src=createCustomPoster('ГОЛОСОВОЙ ЧАТ', 'Улыбка в наушниках', '#854d0e', '#facc15', '🎧😂')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-amber-400">ЛЕГЕНДА ВОЙС-ЧАТА 🎧</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Тот самый бро в наушниках, с которым слитая катка в Overwatch превращается в стендап.
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('ЛЕГЕНДА ВОЙС-ЧАТА 🎧', 'VOICE SUPPORT', 'photo_2026-10-22_23-49-15.jpg', 'В войс-чате Димастии раздался дикий ор! Мораль Димы повышена до максимума!', '🎧😂')" class="arcade-btn mt-4 w-full bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🎙️ Ворваться в голосовой
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 4: Пресс-секретарь -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-emerald-500 text-black px-2 py-0.5 rounded">ПРЯМОЙ ЭФИР</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
+                             onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-emerald-400">ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Заявляет федеральным каналам: «Глава Димастии постарел на год, но его Стенд безупречен».
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('ПРЕСС-СЕКРЕТАРЬ ДИМЫ 🎙️', 'ПРЯМОЙ ЭФИР', 'photo_2026-10-22_23-49-48.jpg', 'СРОЧНО В НОМЕР: День Рождения Димы официально объявлен государственным праздником!', '🎙️📺')" class="arcade-btn mt-4 w-full bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            📺 Заявление прессе
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 5: Мухоловка -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-amber-500 text-black px-2 py-0.5 rounded">ДЕНДРО-АРХОНТ</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden flex items-center justify-center p-2">
+                        <img src="photo_2026-10-23_01-23-27.jpg" data-filename="photo_2026-10-23_01-23-27.jpg"
+                             onerror="this.src=createCustomPoster('ПИВКОМ ПОЛЕЙ МЕНЯ', 'Пива в горшок мне', '#14532d', '#facc15', '🪴🚬')"
+                             class="w-full h-full object-contain rounded-lg">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-amber-400">МУХОЛОВКА ДИМАСТИИ 🪴</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                «ПИВКОМ ПОЛЕЙ МЕНЯ! ПИВА БЛЯДЬ В ГОРШОК МНЕ!»
+                            </p>
+                        </div>
+                        <button onclick="triggerBeerPlant()" class="arcade-btn mt-4 w-full bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🍺 Налить пива в горшок!
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 6: Джарвис -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-cyan-400 text-black px-2 py-0.5 rounded">AI СКАНЕР</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-21-42.jpg" data-filename="photo_2026-10-23_01-21-42.jpg"
+                             onerror="this.src=createCustomPoster('ДЖАРВИС...', 'Чё за хуйня?!', '#083344', '#22d3ee', '🤖😳')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-cyan-400">ДЖАРВИС, ЧЁ ЗА Х*ЙНЯ 🤖</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Лицо Димы при виде рандомов на поинте в Overwatch.
+                            </p>
+                        </div>
+                        <button onclick="triggerJarvisHud()" class="arcade-btn mt-4 w-full bg-cyan-400 hover:bg-cyan-300 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🔍 Запустить сканер
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 7: Мудрый Орангутан -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-orange-500 text-black px-2 py-0.5 rounded">WINSTON MAIN</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-22-52.jpg" data-filename="photo_2026-10-23_01-22-52.jpg"
+                             onerror="this.src=createCustomPoster('БОСС КАЧКИ', 'Ухмылка примата', '#7c2d12', '#fb923c', '🦧😏')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-orange-400">МУДРЫЙ PRIMAL RAGE 🦧</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Знает, чем закончится сегодняшняя тусовка.
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('МУДРЫЙ PRIMAL RAGE 🦧', 'WINSTON MAIN', 'photo_2026-10-23_01-22-52.jpg', 'У-У-А-А! Мудрый Орангутан благословил Диму на винстрик и мощный сюжетный поворот!', '🦧😏')" class="arcade-btn mt-4 w-full bg-orange-500 hover:bg-orange-400 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🍌 Банановая мудрость
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 8: Кото-Батон -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-amber-300 text-black px-2 py-0.5 rounded">ХИЛЕР СПИНЫ</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-21-49.jpg" data-filename="photo_2026-10-23_01-21-49.jpg"
+                             onerror="this.src=createCustomPoster('КОТ-БУХАНКА', 'Вежливый батон', '#9a3412', '#fdba74', '🐱🍞')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-amber-300">ВЕЖЛИВЫЙ КОТО-БАТОН 🐱🍞</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Сидит буханкой и вдохновляет Диму на уютные главы новеллы.
+                            </p>
+                        </div>
+                        <button onclick="openSquadModal('ВЕЖЛИВЫЙ КОТО-БАТОН 🐱🍞', 'ХИЛЕР СПИНЫ', 'photo_2026-10-23_01-21-49.jpg', 'МЯУ! Рыжий Кото-Батон помурчал — боль в спине снижена на 100%, уют повышен до максимума!', '🐱🍞')" class="arcade-btn mt-4 w-full bg-amber-300 hover:bg-amber-200 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🐾 Погладить буханку
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточка 9: Absolute Cinema -->
+                <div class="arcade-card rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-3.5 py-2 flex items-center justify-between border-b-2 border-slate-700">
+                        <span class="font-pixel text-[9px] bg-white text-black px-2 py-0.5 rounded">10/10 ОСКАРОВ</span>
+                        <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
+                    </div>
+                    <div class="relative aspect-square bg-slate-950 overflow-hidden">
+                        <img src="photo_2026-10-23_01-23-01.jpg" data-filename="photo_2026-10-23_01-23-01.jpg"
+                             onerror="this.src=createCustomPoster('ABSOLUTE CINEMA', 'Шедевр', '#1f2937', '#ffffff', '🙌🎥')"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg text-white">ABSOLUTE CINEMA 🙌</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-200 mt-1">
+                                Реакция читателей на финалы новелл Димы.
+                            </p>
+                        </div>
+                        <button onclick="triggerAbsoluteCinema()" class="arcade-btn mt-4 w-full bg-white hover:bg-gray-200 text-black text-xs font-extrabold py-2.5 rounded-lg">
+                            🎬 Включить Cinema
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="switchPage('home')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НА ГЛАВНУЮ
+                </button>
+                <button onclick="switchPage('gacha')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: ГАЧА ДОДЕПА →
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 3: GACHA ================= -->
+        <div id="page-gacha" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
+            <div class="arcade-card rounded-2xl p-6 bg-[#181d30] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <span class="bg-sky-400 text-black font-pixel text-[10px] px-2.5 py-1 rounded border border-black">GACHA MACHINE // ДОДЕП EDITION</span>
+                    <h2 class="font-display text-2xl sm:text-4xl text-white mt-2">
+                        🎰 МОЛИТВА «ДИМАСТИИ»: БАННЕР СТАРОСТИ И МЕМАСОВ
+                    </h2>
+                    <p class="text-sm font-bold text-gray-300 mt-1">
+                        Крути слот-машину! В пуле Патриарх Дима, Двойная Лега Додепмен/Cool Skeleton, Мухоловка и другие легенды.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 bg-slate-950 border-3 border-amber-400 px-4 py-2.5 rounded-xl shrink-0">
+                    <span class="text-2xl">💎</span>
+                    <div>
+                        <div class="text-[10px] font-pixel text-amber-300">ПРИМОГЕМЫ:</div>
+                        <div id="primogemBalance" class="font-mono font-extrabold text-lg text-white">32 000</div>
+                    </div>
+                    <button onclick="refillPrimogems()" class="arcade-btn ml-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-extrabold px-2.5 py-1.5 rounded-lg">
+                        + Додеп
+                    </button>
+                </div>
+            </div>
+
+            <div class="arcade-card rounded-2xl p-6 bg-[#141828]">
+                <div id="gachaStage" class="min-h-[320px] flex flex-col items-center justify-center text-center p-5 rounded-xl border-3 border-slate-700 bg-slate-950">
+                    <div id="gachaDefaultView" class="space-y-4 max-w-lg">
+                        <div class="text-5xl">🌠</div>
+                        <h3 class="font-display text-xl sm:text-2xl text-amber-400">
+                            АВТОМАТ ЗАРЯЖЕН НА 5★ ЛЕГЕНДУ!
+                        </h3>
+                        <p class="text-sm font-bold text-gray-300">
+                            Жми «Крутка ×1» или «ДЕСЯТКА ×10»! (Собери все 13/13).
+                        </p>
+                    </div>
+                    <div id="gachaResultView" class="hidden w-full"></div>
+                </div>
+
+                <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+                    <div class="text-xs font-mono text-gray-300">
+                        Сделано круток: <strong id="pityCounter" class="text-amber-400">0</strong> | Коллекция: <strong id="collectionCounter" class="text-sky-400">0 / 13</strong>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="rollGenshinGacha(1)" class="arcade-btn bg-amber-200 hover:bg-white text-black font-extrabold px-5 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <span>✨ Крутка ×1</span>
+                            <span class="bg-black text-amber-300 px-2 py-0.5 rounded text-xs font-mono">💎 160</span>
+                        </button>
+                        <button onclick="rollGenshinGacha(10)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-6 py-3 rounded-xl flex items-center gap-2 text-sm">
+                            <span>🌟 ДЕСЯТКА ×10</span>
+                            <span class="bg-black text-amber-400 px-2 py-0.5 rounded text-xs font-mono">💎 1600</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-5 border-t-2 border-slate-800">
+                    <div class="text-xs font-pixel text-gray-400 uppercase mb-3">
+                        🎒 ИНВЕНТАРЬ ДИМЫ:
+                    </div>
+                    <div id="gachaInventoryList" class="flex flex-wrap gap-2 text-xs text-gray-400 font-bold">
+                        Пока пусто — крути барабан!
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="switchPage('dimasty')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НАЗАД К ОТРЯДУ
+                </button>
+                <button onclick="switchPage('arcade')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: МИНИ-ИГРЫ & РЫБАЛКА →
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 4: ARCADE & FISHING ================= -->
+        <div id="page-arcade" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- JoJo Stand Rush -->
+                <div class="arcade-card rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-purple-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">ARCADE SLOT #1 // JOJO</span>
+                        <h3 class="font-display text-2xl text-white mt-3">СТЕНД-РАШ: «ORA ORA ORA!» 👊</h3>
+                        <p class="text-sm font-bold text-gray-300 mt-1">
+                            Набей комбо за здоровье Димы! Каждые +93 удара приближают легендарную пасхалку.
+                        </p>
+                    </div>
+                    <div class="my-5 text-center py-4 bg-slate-950 rounded-xl border-2 border-purple-500">
+                        <div class="text-[10px] font-pixel text-purple-300">КОМБО УДАРОВ СТЕНДА:</div>
+                        <div id="oraCount" class="font-display text-5xl text-amber-400 mt-2">0</div>
+                    </div>
+                    <button onclick="oraOraPunch()" class="arcade-btn w-full bg-purple-600 hover:bg-purple-500 text-white font-display text-base py-3.5 rounded-xl">
+                        👊 УДАРИТЬ СТЕНДОМ (ORA! +93)
+                    </button>
+                </div>
+
+                <!-- Yakuza Караоке + GIFS -->
+                <div class="arcade-card rounded-2xl p-6 flex flex-col justify-between">
+                    <div class="flex items-center gap-4">
+                        <!-- GIF Фрейм 1 -->
+                        <div class="w-28 h-24 rounded-xl overflow-hidden border-3 border-red-500 shrink-0 bg-black relative flex items-center justify-center">
+                            <img id="yakuzaGif1"
+                                 src="friday-night-yakuza0.gif"
+                                 data-filename="friday-night-yakuza0.gif"
+                                 data-alt-filename="friday-night-yakuza0.jpg"
+                                 alt="Friday Night Yakuza"
+                                 onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='friday-night-yakuza0.jpg';}else if(!this.dataset.triedWeb){this.dataset.triedWeb='1';this.src='https://media.tenor.com/images/c4c12113049c3d46d7a03c1b027b1775/tenor.gif';}else{this.src=createCustomPoster('YAKUZA DANCE', 'Friday Night', '#991b1b', '#facc15', '🕺');}"
+                                 class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <span class="bg-red-600 text-white font-pixel text-[9px] px-2.5 py-1 rounded border border-black">ARCADE SLOT #2 // YAKUZA</span>
+                            <h3 class="font-display text-xl sm:text-2xl text-white mt-2">КАРАОКЕ И ТАНЦЫ ДИМЫ 🎤</h3>
+                            <p class="text-xs sm:text-sm font-bold text-gray-300 mt-1">Спеть Baka Mitai или пробить Tiger Drop!</p>
+                        </div>
+                    </div>
+
+                    <!-- GIF Фрейм 2 (Goro Majima Hustle — подогнан под полный размер без обрезки) -->
+                    <div class="my-4 w-full h-72 sm:h-80 rounded-xl overflow-hidden border-3 border-red-600 bg-slate-950 relative flex items-center justify-center p-1">
+                        <img id="yakuzaGif2"
+                             src="goro-majima-hustle.gif"
+                             data-filename="goro-majima-hustle.gif"
+                             data-alt-filename="goro-majima-hustle.jpg"
+                             alt="Goro Majima Hustle"
+                             onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='goro-majima-hustle.jpg';}else if(!this.dataset.triedWeb){this.dataset.triedWeb='1';this.src='https://media1.tenor.com/m/D5_t6n_8y4kAAAAC/goro-majima-hustle.gif';}else{this.src=createCustomPoster('MAJIMA HUSTLE', 'Let\'s Dance!', '#7f1d1d', '#f87171', '💃');}"
+                             class="w-full h-full object-contain rounded-lg">
+                        <div class="absolute bottom-2 right-2 bg-black/85 border border-red-500 px-2.5 py-1 rounded text-[10px] font-mono text-amber-300">
+                            МАДЗИМА И КИРЮ ТАНЦУЮТ ЗА ДИМУ
+                        </div>
+                    </div>
+
+                    <div id="bakaMitaiLyrics" class="mb-3 bg-slate-950 border-2 border-red-500 rounded-xl p-3 text-center text-xs font-bold text-amber-300">
+                        «Dame da ne... Dame yo... (Похмелье длится 2 дня)»
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="singBakaMitai()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-extrabold py-2.5 px-3 rounded-xl text-xs">
+                            🎤 Спеть Baka Mitai
+                        </button>
+                        <button onclick="triggerTigerDrop()" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold py-2.5 px-3 rounded-xl text-xs">
+                            🐅 TIGER DROP (R1 + ▲)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- НОВЫЙ РЕЖИМ: РЫБАЛКА С МЕГАЛАДОНОМ, МЯСОМ И САПОГОМ -->
+            <div class="arcade-card rounded-2xl p-6 bg-[#162035] border-sky-400">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <div>
+                        <span class="bg-sky-500 text-black font-pixel text-[9px] px-2.5 py-1 rounded border border-black">NEW ARCADE // РЫБАЛКА В ОЧЕРЕДНОЙ КАТКЕ</span>
+                        <h3 class="font-display text-xl sm:text-2xl text-white mt-2">
+                            🎣 СЕКРЕТНЫЙ РЫБНЫЙ УЛОВ ДИМЫ
+                        </h3>
+                    </div>
+                    <div class="bg-slate-950 border-2 border-sky-400 px-4 py-2 rounded-xl text-xs font-mono text-sky-300">
+                        Поймано уловов: <strong id="fishCount" class="text-white text-base">0</strong>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-5 aspect-square bg-slate-950 rounded-xl overflow-hidden border-3 border-sky-400 relative flex items-center justify-center p-3">
+                        <img id="fishDisplayImg" src="photo_2025-08-25_17-14-44.jpg" data-filename="photo_2025-08-25_17-14-44.jpg"
+                             onerror="this.src=createCustomPoster('МЕГАЛАДОН!', 'Главный приз рыбалки', '#0369a1', '#38bdf8', '🦈')"
+                             class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div class="md:col-span-7 space-y-4">
+                        <div id="fishResultBox" class="bg-slate-950 border-2 border-sky-400 rounded-xl p-4 text-sm sm:text-base font-bold text-sky-300">
+                            «Закинь удочку в мутные воды рейда! Можно выловить странное мясо на вертеле, рваный сапог или легендарный Мегаладон прямо в руки Димы!»
+                        </div>
+                        <button onclick="castFishingRod()" class="arcade-btn w-full bg-sky-500 hover:bg-sky-400 text-black font-display py-4 rounded-xl text-base">
+                            🎣 ЗАБРОСИТЬ УДОЧКУ!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Покемон-Бой -->
+            <div class="pokemon-box bg-slate-900 rounded-2xl p-5 sm:p-8 text-white">
+                <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
+                    <span class="bg-green-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black">GAMEBOY ADVANCE // POKÉMON DIMA VERSION</span>
+                    <span class="font-mono text-xs text-green-300">ЛОКАЦИЯ: ТРАВА У БАРА</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-6 bg-slate-800 border-3 border-white rounded-xl p-4">
+                        <div class="flex items-center justify-between font-pixel text-xs sm:text-sm text-amber-400">
+                            <span>БОСС ДИМА</span>
+                            <span>Lv.99</span>
+                        </div>
+                        <div class="mt-3">
+                            <div class="flex justify-between text-xs font-mono text-gray-300 mb-1">
+                                <span>HP (ЗАПАС МОЛОДОСТИ)</span>
+                                <span id="pokeEnemyHpText">100/100</span>
+                            </div>
+                            <div class="w-full h-4 bg-black rounded overflow-hidden border border-white">
+                                <div id="pokeEnemyHpBar" class="h-full bg-green-400 transition-all duration-300" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs font-bold text-gray-200 mt-3">
+                            Тип: <strong class="text-amber-400">АВТОР НОВЕЛЛ / ЛИДЕР ДИМАСТИИ</strong><br>
+                            Пассивка: Сюжетная броня!
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-6 flex justify-center">
+                        <div id="pokeSpriteWrapper" class="w-44 h-44 sm:w-52 sm:h-52 rounded-xl overflow-hidden border-4 border-amber-400 shadow-[6px_6px_0px_#000] transition transform bg-black">
+                            <img src="photo_2026-10-22_23-48-14.jpg" data-filename="photo_2026-10-22_23-48-14.jpg"
+                                 onerror="this.src=createCustomPoster('ДИМА LV.99', 'Вайб-чек', '#14532d', '#4ade80', '👾🧢')"
+                                 class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div id="pokeBattleLog" class="lg:col-span-7 bg-black border-3 border-white rounded-xl p-4 font-mono text-xs sm:text-sm text-green-400 flex items-center">
+                        Дикий ДИМА появился! Что вы предпримете?
+                    </div>
+                    <div class="lg:col-span-5 grid grid-cols-2 gap-2.5 font-pixel text-[10px]">
+                        <button onclick="pokemonAction('attack')" class="arcade-btn bg-red-600 hover:bg-red-500 text-white py-3 px-2 rounded-lg">
+                            ⚔️ ТОСТ-АТАКА
+                        </button>
+                        <button onclick="pokemonAction('bag')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black py-3 px-2 rounded-lg">
+                            🎒 РЮКЗАК
+                        </button>
+                        <button onclick="pokemonAction('squad')" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white py-3 px-2 rounded-lg">
+                            👑 ДИМАСТИЯ
+                        </button>
+                        <button onclick="pokemonAction('run')" class="arcade-btn bg-gray-700 hover:bg-gray-600 text-white py-3 px-2 rounded-lg">
+                            🏃 СБЕЖАТЬ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="switchPage('gacha')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НАЗАД К ГАЧЕ
+                </button>
+                <button onclick="switchPage('max')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: МЕССЕНДЖЕР MAX →
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 5: MAX MESSENGER ================= -->
+        <div id="page-max" class="page-view hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
+            <div class="arcade-card rounded-2xl p-6 sm:p-8 bg-[#131d38] border-blue-400">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-6 space-y-4">
+                        <span class="bg-blue-500 text-white font-pixel text-[9px] px-3 py-1.5 rounded border border-black inline-block">
+                            📡 НАЦИОНАЛЬНЫЙ КАРТРИДЖ СВЯЗИ
+                        </span>
+
+                        <h2 class="font-display text-2xl sm:text-4xl text-white leading-tight">
+                            МЕССЕНДЖЕР «MAX» — ЛОВИТ ДАЖЕ НА ПАРКОВКЕ (-5 ЭТАЖ)!
+                        </h2>
+
+                        <p class="text-gray-200 text-sm sm:text-base font-bold leading-relaxed">
+                            Весь клан <strong class="text-amber-400">«Димастия»</strong> переведён в государственный супер-мессенджер <strong class="text-sky-400">MAX</strong>. Тут Дима публикует новые главы новелл даже из железобетонного бункера!
+                        </p>
+
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <button onclick="sendMaxPing()" class="arcade-btn bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-4 py-3 rounded-xl text-xs sm:text-sm">
+                                📡 Проверить сигнал с парковки
+                            </button>
+                            <button onclick="triggerGosuslugiPrank(event)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-4 py-3 rounded-xl text-xs sm:text-sm">
+                                🆔 Войти через MAX ID (Подарок 18+)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-6">
+                        <div class="arcade-card rounded-2xl overflow-hidden bg-slate-950 border-blue-400">
+                            <div class="bg-blue-700 px-4 py-3 flex items-center justify-between border-b-3 border-black">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-lg bg-white text-blue-700 font-display flex items-center justify-center text-base border-2 border-black">
+                                        M
+                                    </div>
+                                    <div>
+                                        <div class="font-extrabold text-white text-sm">Чат клана «Димастия» (MAX)</div>
+                                        <div class="text-[11px] text-blue-200 font-mono">Подземная парковка • 5G Ультра</div>
+                                    </div>
+                                </div>
+                                <span class="bg-green-400 text-black font-pixel text-[9px] px-2 py-1 rounded border border-black">ONLINE</span>
+                            </div>
+
+                            <div id="maxChatMessages" class="p-4 space-y-3 max-h-80 overflow-y-auto text-xs sm:text-sm font-bold">
+                                <div class="bg-blue-950 border-2 border-blue-500 rounded-xl p-3">
+                                    <div class="text-sky-300 text-xs font-mono">🤖 Система MAX</div>
+                                    <p class="text-white mt-1">
+                                        Пользователь ДИМА назначен Верховным Админом клана. Удаление заблокировано Госуслугами.
+                                    </p>
+                                </div>
+
+                                <div class="bg-slate-900 border-2 border-amber-400 rounded-xl p-3">
+                                    <div class="text-amber-400 text-xs font-mono">🎰 Додепмен / Cool Skeleton</div>
+                                    <p class="text-gray-100 mt-1">
+                                        Дима, бро! Я на подземной парковке с Cool Skeleton! MAX ловит сквозь бетон! С Днюхой!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-slate-900 border-t-2 border-slate-800 flex flex-wrap gap-2">
+                                <button onclick="replyInMax('Я на парковке, дописываю главу новеллы и несу пиво! 🍺✍️')" class="arcade-btn flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold py-2 px-3 rounded-lg">
+                                    «Дописываю новеллу и несу пиво!»
+                                </button>
+                                <button onclick="replyInMax('Джарвис, почему MAX ловит в лифте?! 🤖')" class="arcade-btn flex-1 bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold py-2 px-3 rounded-lg">
+                                    «Джарвис, чё за х*йня?!»
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="switchPage('arcade')" class="arcade-btn bg-slate-700 hover:bg-slate-600 text-white font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ← НАЗАД К МИНИ-ИГРАМ
+                </button>
+                <button onclick="switchPage('vip')" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-display px-5 py-3 rounded-xl text-xs sm:text-sm">
+                    ДАЛЕЕ: VIP-ПОДАРОК 18+ →
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 6: VIP GIFT ================= -->
+        <div id="page-vip" class="page-view hidden max-w-4xl mx-auto px-4 py-8 space-y-8">
+            <div class="arcade-card rounded-2xl p-6 sm:p-10 bg-[#1a1d2e] border-amber-400">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1.5 rounded border border-black uppercase">
+                        🎁 SECRET DLC FOR DIMA
+                    </span>
+                    <h2 class="font-display text-2xl sm:text-4xl text-white mt-4">
+                        ПОЛУЧИТЬ 10 000 ПРИМОГЕМОВ И СЕКРЕТНЫЙ АРХИВ (18+)
+                    </h2>
+                    <p class="text-sm sm:text-base font-bold text-gray-300 mt-2">
+                        Дима, подтверди регистрацию главы клана, чтобы забрать подгон от кентов и спонсора <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" class="text-amber-400 underline font-extrabold">Three Kidneys</a>!
+                    </p>
+                </div>
+
+                <form onsubmit="triggerGosuslugiPrank(event)" class="space-y-4 max-w-xl mx-auto">
+                    <div>
+                        <label class="block text-xs font-pixel text-amber-400 mb-2">НИКНЕЙМ ГЛАВЫ «ДИМАСТИИ»:</label>
+                        <input type="text" required value="Dima_Patriarch_SSR"
+                               class="w-full bg-slate-950 border-3 border-slate-600 focus:border-amber-400 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-pixel text-gray-300 mb-2">ПАРОЛЬ ОТ СЕЙФА:</label>
+                            <input type="password" required placeholder="••••••••••••"
+                                   class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-pixel text-gray-300 mb-2">ЛЮБИМАЯ ВАЙФУ / СТЕНД:</label>
+                            <select class="w-full bg-slate-950 border-3 border-slate-600 rounded-xl px-4 py-3 text-white font-bold text-sm outline-none">
+                                <option>Роберт Э. О. Спидвагон (Лучшая вайфу)</option>
+                                <option>Горо Мадзима (Kiryuuu-chan!)</option>
+                                <option>Райдэн Сёгун / Яэ Мико</option>
+                                <option>D.Va / Мерси из Overwatch</option>
+                                <option>Мухоловка с пивом в горшке</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2.5 text-xs sm:text-sm font-bold text-gray-300 pt-1">
+                        <input type="checkbox" required checked class="w-4 h-4 rounded text-amber-400">
+                        <span>Подтверждаю, что я глава «Димастии», пишу топовые новеллы и готов к подарку 18+.</span>
+                    </div>
+
+                    <button type="submit" class="arcade-btn w-full bg-amber-400 hover:bg-amber-300 text-black font-display text-base sm:text-lg py-4 rounded-xl mt-2">
+                        🔥 ПОДТВЕРДИТЬ РЕГИСТРАЦИЮ И ЗАБРАТЬ БОНУС 🔥
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="relative z-10 bg-[#0d0f17] border-t-4 border-black py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div>
+                <div class="font-display text-lg text-amber-400">С ДНЁМ РОЖДЕНИЯ, ДИМА! 🎂🕹️</div>
+                <p class="text-xs sm:text-sm font-bold text-gray-400 mt-1">
+                    От всего клана «Димастия»! Пиши крутые новеллы, тащи в Овервотче и живи без тильта!
+                </p>
+            </div>
+            <div class="arcade-card rounded-xl px-5 py-3 bg-slate-900 border-red-500">
+                <div class="text-[10px] font-pixel text-red-400 uppercase">Генеральный спонсор Димастии:</div>
+                <a href="https://j-starling.github.io/Three-Kidneys/" target="_blank" rel="noopener noreferrer"
+                   class="text-sm sm:text-base font-extrabold text-amber-400 hover:text-amber-300 underline flex items-center justify-center sm:justify-start gap-2 mt-1">
+                    <i class="fa-solid fa-link"></i> j-starling.github.io/Three-Kidneys/
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- OVERLAYS & MODALS -->
     <div id="toBeContinuedOverlay" onclick="toggleToBeContinued()" class="hidden fixed bottom-8 left-8 z-50 cursor-pointer select-none">
         <div class="bg-[#d4b483] border-4 border-black px-6 py-3 shadow-[8px_8px_0px_#000] flex items-center gap-3">
             <i class="fa-solid fa-arrow-left-long text-2xl text-black"></i>
@@ -1254,8 +1245,8 @@
         </div>
     </div>
 
-    <div id="yakuzaBossModal" onclick="closeYakuzaBoss()" class="hidden centered-modal-backdrop z-50 bg-black/90 cursor-pointer">
-        <div class="centered-modal-content max-w-2xl w-full text-center relative yakuza-title-anim arcade-card p-8 rounded-2xl bg-slate-950 border-red-600">
+    <div id="yakuzaBossModal" onclick="closeYakuzaBoss()" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-2xl w-full text-center relative yakuza-title-anim arcade-card p-8 rounded-2xl bg-slate-950 border-red-600">
             <div class="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-2xl overflow-hidden border-4 border-red-600 shadow-[6px_6px_0px_#000] mb-6">
                 <img src="photo_2026-10-22_23-48-56.jpg" data-filename="photo_2026-10-22_23-48-56.jpg"
                      onerror="this.src=createCustomPoster('ПАТРИАРХ ДИМА', 'Босс в костюме', '#991b1b', '#facc15', '🐉🤵')"
@@ -1273,8 +1264,8 @@
         </div>
     </div>
 
-    <div id="loginModal" onclick="if(event.target === this) closeLoginModal()" class="hidden centered-modal-backdrop z-50 bg-black/85">
-        <div class="centered-modal-content arcade-card max-w-md w-full rounded-2xl p-6 sm:p-8 border-amber-400 relative bg-[#141622]">
+    <div id="loginModal" class="hidden fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4">
+        <div class="arcade-card max-w-md w-full rounded-2xl p-6 sm:p-8 border-amber-400 relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1294,8 +1285,8 @@
     </div>
 
     <!-- 10 СЕКУНД ДО ГОСУСЛУГ -->
-    <div id="gosuslugiPrankOverlay" class="hidden centered-modal-backdrop z-[100] police-siren-bg text-center">
-        <div class="centered-modal-content max-w-2xl w-full bg-slate-950 border-4 border-amber-400 shadow-[10px_10px_0px_#000] rounded-2xl p-6 sm:p-10 space-y-5">
+    <div id="gosuslugiPrankOverlay" class="hidden fixed inset-0 z-[100] police-siren-bg flex items-center justify-center p-4 text-center">
+        <div class="max-w-2xl w-full bg-slate-950 border-4 border-amber-400 shadow-[10px_10px_0px_#000] rounded-2xl p-6 sm:p-10 space-y-5">
             <div class="text-5xl sm:text-6xl animate-bounce">🚨🚔🚨</div>
             <div class="bg-red-600 text-white font-pixel text-[10px] px-4 py-1.5 rounded border-2 border-black inline-block uppercase">
                 ФЕДЕРАЛЬНАЯ СИСТЕМА АНТИ-ХЕНТАЙ КОНТРОЛЯ & MAX ID
@@ -1324,11 +1315,11 @@
     </div>
 
     <!-- ABSOLUTE CINEMA -->
-    <div id="cinemaOverlay" onclick="closeAbsoluteCinema()" class="hidden centered-modal-backdrop z-[90] bg-black/90 flex-col justify-between cursor-pointer p-0">
-        <div class="h-14 bg-black w-full border-b-2 border-white/20 flex items-center justify-center text-xs font-pixel text-gray-400 shrink-0">
+    <div id="cinemaOverlay" onclick="closeAbsoluteCinema()" class="hidden fixed inset-0 z-[90] bg-black/90 flex flex-col justify-between cursor-pointer">
+        <div class="h-14 bg-black w-full border-b-2 border-white/20 flex items-center justify-center text-xs font-pixel text-gray-400">
             NOVEL SCENARIO BY DIMA // DIRECTED BY MARTIN SCORSESE
         </div>
-        <div class="flex-1 flex flex-col items-center justify-center p-4 text-center overflow-hidden">
+        <div class="flex-1 flex flex-col items-center justify-center p-4 text-center">
             <div class="w-64 sm:w-80 rounded-2xl overflow-hidden border-4 border-white shadow-[8px_8px_0px_#000] bg-black yakuza-title-anim">
                 <img src="photo_2026-10-23_01-23-01.jpg" data-filename="photo_2026-10-23_01-23-01.jpg"
                      onerror="this.src=createCustomPoster('ABSOLUTE CINEMA', 'Шедевр', '#111827', '#ffffff', '🙌🎬')"
@@ -1338,14 +1329,14 @@
                 🙌 ABSOLUTE CINEMA 🙌
             </h3>
         </div>
-        <div class="h-14 bg-black w-full border-t-2 border-white/20 flex items-center justify-center text-xs font-mono text-amber-400 shrink-0">
+        <div class="h-14 bg-black w-full border-t-2 border-white/20 flex items-center justify-center text-xs font-mono text-amber-400">
             СУБТИТРЫ: «Эта глава жизни Димы достойна экранизации!»
         </div>
     </div>
 
     <!-- JARVIS HUD -->
-    <div id="jarvisOverlay" onclick="closeJarvisHud()" class="hidden centered-modal-backdrop z-[90] bg-black/90 cursor-pointer">
-        <div class="centered-modal-content max-w-2xl w-full arcade-card rounded-2xl p-6 sm:p-8 bg-slate-950 border-cyan-400">
+    <div id="jarvisOverlay" onclick="closeJarvisHud()" class="hidden fixed inset-0 z-[90] bg-black/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-2xl w-full arcade-card rounded-2xl p-6 sm:p-8 bg-slate-950 border-cyan-400">
             <div class="flex items-center justify-between text-xs font-pixel text-cyan-400 border-b-2 border-cyan-500/40 pb-3 mb-4">
                 <span>STARK HUD // DIMA-OS</span>
                 <span class="animate-pulse text-red-400">⚠️ CRINGE OVERLOAD</span>
@@ -1370,9 +1361,9 @@
     </div>
 
     <!-- BEER PLANT OVERLAY -->
-    <div id="beerOverlay" onclick="closeBeerPlant()" class="hidden centered-modal-backdrop z-[90] cursor-pointer overflow-hidden p-0 relative">
+    <div id="beerOverlay" onclick="closeBeerPlant()" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 cursor-pointer overflow-hidden">
         <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-amber-600 via-yellow-500/90 to-amber-100 border-t-8 border-white beer-wave-active pointer-events-none"></div>
-        <div class="centered-modal-content relative z-10 max-w-lg w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center m-4">
+        <div class="relative z-10 max-w-lg w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center">
             <div class="w-56 h-48 mx-auto rounded-xl overflow-hidden border-3 border-amber-400 mb-4 bg-black flex items-center justify-center p-2">
                 <img src="photo_2026-10-23_01-23-27.jpg" data-filename="photo_2026-10-23_01-23-27.jpg"
                      onerror="this.src=createCustomPoster('ПИВКОМ ПОЛЕЙ МЕНЯ', 'Пива в горшок мне', '#14532d', '#facc15', '🪴🍺')"
@@ -1388,8 +1379,8 @@
     </div>
 
     <!-- SQUAD ACTION MODAL -->
-    <div id="squadActionOverlay" onclick="closeSquadModal()" class="hidden centered-modal-backdrop z-[92] bg-black/90 cursor-pointer">
-        <div class="centered-modal-content max-w-lg w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+    <div id="squadActionOverlay" onclick="closeSquadModal()" class="hidden fixed inset-0 z-[92] bg-black/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-lg w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 text-center yakuza-title-anim" onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b-2 border-slate-800 pb-2 mb-4">
                 <span id="squadModalBadge" class="bg-amber-400 text-black font-pixel text-[9px] px-2.5 py-1 rounded border border-black">УЛЬТА ОТРЯДА</span>
                 <button onclick="closeSquadModal()" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
@@ -1404,8 +1395,8 @@
     </div>
 
     <!-- OVERWATCH ULT -->
-    <div id="overwatchUltOverlay" onclick="closeOverwatchUlt()" class="hidden centered-modal-backdrop z-[95] bg-orange-950/90 cursor-pointer">
-        <div class="centered-modal-content max-w-xl w-full arcade-card bg-slate-950 border-orange-500 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+    <div id="overwatchUltOverlay" onclick="closeOverwatchUlt()" class="hidden fixed inset-0 z-[95] bg-orange-950/90 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-xl w-full arcade-card bg-slate-950 border-orange-500 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
             <div class="inline-flex items-center gap-2 bg-orange-500 text-black font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black animate-bounce">
                 ⚠️ ULTIMATE READY [Q] // PLAY OF THE GAME
             </div>
@@ -1428,8 +1419,8 @@
     </div>
 
     <!-- GACHA 13/13 FULL COLLECTION MODAL -->
-    <div id="gachaFullCollectionOverlay" onclick="closeGachaFullModal()" class="hidden centered-modal-backdrop z-[96] bg-black/95 cursor-pointer">
-        <div class="centered-modal-content max-w-xl w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+    <div id="gachaFullCollectionOverlay" onclick="closeGachaFullModal()" class="hidden fixed inset-0 z-[96] bg-black/95 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-xl w-full arcade-card bg-slate-950 border-amber-400 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
             <div class="bg-red-600 text-white font-pixel text-[10px] px-3 py-1.5 rounded border-2 border-black inline-block">
                 🎰 ДОСТИЖЕНИЕ ЛУДОМАНА: СОБРАНО 13 ИЗ 13! 🎰
             </div>
@@ -1452,14 +1443,14 @@
     </div>
 
     <!-- 1488 STAND RUSH MODAL -->
-    <div id="stand1488Overlay" onclick="closeStand1488Modal()" class="hidden centered-modal-backdrop z-[96] bg-black/95 cursor-pointer">
-        <div class="centered-modal-content max-w-lg w-full arcade-card bg-slate-950 border-red-500 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
+    <div id="stand1488Overlay" onclick="closeStand1488Modal()" class="hidden fixed inset-0 z-[96] bg-black/95 flex items-center justify-center p-4 cursor-pointer">
+        <div class="max-w-lg w-full arcade-card bg-slate-950 border-red-500 rounded-2xl p-6 sm:p-8 text-center yakuza-title-anim" onclick="event.stopPropagation()">
             <div class="bg-amber-400 text-black font-pixel text-[10px] px-3 py-1 rounded border border-black inline-block">
                 ⚡ СЕКРЕТНОЕ КОМБО: 1488 УДАРОВ СТЕНДА ⚡
             </div>
             <div class="text-6xl my-4">🙋‍♂️🎨🇩🇪</div>
             <h3 class="font-display text-2xl sm:text-3xl text-red-500 uppercase">
-                АВСТРИЙСКИЙ ХУДОЖНИК И ШТРОХАЙМ В АХУЕ!
+                АВСТРИЙЙСКИЙ ХУДОЖНИК И ШТРОХАЙМ В АХУЕ!
             </h3>
             <p class="text-sm sm:text-base font-bold text-gray-200 mt-3 leading-relaxed bg-slate-900 border-2 border-red-500 p-4 rounded-xl">
                 Счётчик пробил ровно <strong class="text-amber-400">1488</strong>! Адольф уронил мольберт и прослезился, а майор Штрохайм заорал:<br><br>
@@ -1474,86 +1465,11 @@
     <!-- JAVASCRIPT -->
     <script>
         const loadedPhotoMap = {};
-        const loadedAudioMap = {};
         let customCinemaAudioUrl = null;
         let activeCinemaAudio = null;
         let activeCinemaNodes = [];
-        let activeDeckAudio = null;
 
-        // МЕНЕДЖЕР МОДАЛЬНЫХ ОКОН (Идеальное центрирование без потери скролла)
-        let savedScrollPosition = 0;
-        let isModalOpenLock = false;
-
-        function openModalCentered(modalId) {
-            const el = document.getElementById(modalId);
-            if (!el) return;
-            if (!isModalOpenLock) {
-                savedScrollPosition = window.scrollY || window.pageYOffset || 0;
-                document.documentElement.style.overflow = 'hidden';
-                isModalOpenLock = true;
-            }
-            el.classList.remove('hidden');
-            el.scrollTop = 0;
-        }
-
-        function closeModalCentered(modalId) {
-            const el = document.getElementById(modalId);
-            if (el) el.classList.add('hidden');
-
-            const allModals = [
-                'yakuzaBossModal', 'loginModal', 'gosuslugiPrankOverlay',
-                'cinemaOverlay', 'jarvisOverlay', 'beerOverlay',
-                'squadActionOverlay', 'overwatchUltOverlay',
-                'gachaFullCollectionOverlay', 'stand1488Overlay'
-            ];
-            const stillOpen = allModals.some(id => {
-                const m = document.getElementById(id);
-                return m && !m.classList.contains('hidden');
-            });
-
-            if (!stillOpen && isModalOpenLock) {
-                document.documentElement.style.overflow = '';
-                isModalOpenLock = false;
-                window.scrollTo({ top: savedScrollPosition, left: 0, behavior: 'instant' });
-            }
-        }
-
-        // АУДИОПЛЕЕР ДЛЯ САУНДБОДА ИЗ GITHUB ИЛИ ЛОКАЛЬНО
-        function playTrackFile(fileName, fallbackSynthType) {
-            if (activeDeckAudio) {
-                try {
-                    activeDeckAudio.pause();
-                    activeDeckAudio.currentTime = 0;
-                } catch (e) {}
-                activeDeckAudio = null;
-            }
-            const src = loadedAudioMap[fileName] || loadedAudioMap[getBaseName(fileName)] || fileName;
-            try {
-                const audio = new Audio(src);
-                audio.volume = 0.95;
-                activeDeckAudio = audio;
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        if (fallbackSynthType) playSound(fallbackSynthType);
-                    });
-                }
-            } catch (e) {
-                if (fallbackSynthType) playSound(fallbackSynthType);
-            }
-        }
-
-        function stopTrackFile() {
-            if (activeDeckAudio) {
-                try {
-                    activeDeckAudio.pause();
-                    activeDeckAudio.currentTime = 0;
-                } catch (e) {}
-                activeDeckAudio = null;
-            }
-        }
-
-        // Если сайт открыт на GitHub Pages — автоматически прячем техническую полоску
+        // Если сайт открыт на GitHub Pages — автоматически прячем техническую полоску для превью
         if (window.location.hostname.includes('github.io')) {
             const helperBar = document.getElementById('photoHelperBar');
             if (helperBar) helperBar.classList.add('hidden');
@@ -1574,21 +1490,17 @@
                     const base = getBaseName(file.name);
 
                     if (file.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a)$/i.test(file.name)) {
-                        loadedAudioMap[file.name] = objectUrl;
-                        loadedAudioMap[base] = objectUrl;
-                        if (base.includes('cinema') || base.includes('absolut')) {
-                            customCinemaAudioUrl = objectUrl;
-                        }
+                        customCinemaAudioUrl = objectUrl;
                         return;
                     }
 
                     loadedPhotoMap[file.name] = objectUrl;
                     loadedPhotoMap[base] = objectUrl;
 
-                    if (base.includes('820855') || base.includes('27427') || base.includes('meat') || base.includes('мяс') || base.includes('шашлык')) {
+                    if (base.includes('820855') || base.includes('meat') || base.includes('мяс') || base.includes('шашлык')) {
                         loadedPhotoMap['image_820855.png'] = objectUrl;
                     }
-                    if (base.includes('820b1c') || base.includes('u3yio') || base.includes('boot') || base.includes('сапог') || base.includes('ботин')) {
+                    if (base.includes('820b1c') || base.includes('boot') || base.includes('сапог') || base.includes('ботин')) {
                         loadedPhotoMap['image_820b1c.jpg'] = objectUrl;
                     }
 
@@ -1932,11 +1844,11 @@
                     stopCinemaSound();
 
                     // Пробуем сыграть загруженный или лежащий в папке GitHub файл absolut-cinema-meme.mp3
-                    const audioSrc = customCinemaAudioUrl || loadedAudioMap['absolut-cinema-meme.mp3'] || 'absolut-cinema-meme.mp3';
+                    const audioSrc = customCinemaAudioUrl || 'absolut-cinema-meme.mp3';
                     activeCinemaAudio = new Audio(audioSrc);
                     activeCinemaAudio.volume = 0.85;
                     activeCinemaAudio.play().catch(() => {
-                        // Если mp3 не найден, включаем гитарный синтезатор риффа
+                        // Если mp3 не найден (например, в превью), включаем гитарный синтезатор риффа
                         playSynthGuitarCinema(ctx);
                     });
                 }
@@ -1951,7 +1863,7 @@
                 text: "Поймано: СТРАННОЕ МЯСО на вертеле! Низкополигональный шашлык пахнет как катка в Овервотче после полуночи.",
                 emoji: "🥩",
                 img: "image_820855.png",
-                altImg: "27427.jpg",
+                altImg: "meat.png",
                 fallbackSvg: () => window.createFishingLootSvg('meat')
             },
             {
@@ -1959,7 +1871,7 @@
                 text: "Поймано: РВАНЫЙ САПОГ с крючком и пробковым поплавком! Внутри него лежала записка: «Сделай додеп!»",
                 emoji: "🥾",
                 img: "image_820b1c.jpg",
-                altImg: "U3YIO8beehP2q0jtceiXeQ.jpeg",
+                altImg: "boot.jpg",
                 fallbackSvg: () => window.createFishingLootSvg('boot')
             },
             {
@@ -2087,41 +1999,34 @@
         }
 
         function triggerScreenShake() {
-            const wrapper = document.getElementById('contentWrapper');
-            wrapper.classList.remove('shake-active');
-            void wrapper.offsetWidth;
-            wrapper.classList.add('shake-active');
-            setTimeout(() => wrapper.classList.remove('shake-active'), 460);
+            const body = document.getElementById('mainBody');
+            body.classList.remove('shake-active');
+            void body.offsetWidth;
+            body.classList.add('shake-active');
         }
 
         function triggerOverwatchUlt() {
             playSound('overwatch');
             triggerScreenShake();
-            openModalCentered('overwatchUltOverlay');
+            document.getElementById('overwatchUltOverlay').classList.remove('hidden');
         }
         function closeOverwatchUlt() {
-            closeModalCentered('overwatchUltOverlay');
+            document.getElementById('overwatchUltOverlay').classList.add('hidden');
         }
 
         function triggerYakuzaBoss() {
             playSound('tiger');
             triggerScreenShake();
-            openModalCentered('yakuzaBossModal');
+            document.getElementById('yakuzaBossModal').classList.remove('hidden');
         }
         function closeYakuzaBoss() {
-            closeModalCentered('yakuzaBossModal');
+            document.getElementById('yakuzaBossModal').classList.add('hidden');
         }
 
         function toggleToBeContinued() {
-            const overlay = document.getElementById('toBeContinuedOverlay');
-            if (overlay.classList.contains('hidden')) {
-                playTrackFile('untitled_1071.mp3', 'powerup');
-            } else {
-                stopTrackFile();
-                playSound('poke');
-            }
-            overlay.classList.toggle('hidden');
-            document.getElementById('contentWrapper').classList.toggle('jojo-sepia');
+            playSound('powerup');
+            document.getElementById('toBeContinuedOverlay').classList.toggle('hidden');
+            document.getElementById('mainBody').classList.toggle('jojo-sepia');
         }
 
         let oraTotal = 0;
@@ -2133,11 +2038,11 @@
 
             if (oraTotal === 1488) {
                 playSound('siren');
-                openModalCentered('stand1488Overlay');
+                document.getElementById('stand1488Overlay').classList.remove('hidden');
             }
         }
         function closeStand1488Modal() {
-            closeModalCentered('stand1488Overlay');
+            document.getElementById('stand1488Overlay').classList.add('hidden');
         }
 
         const bakaLines = [
@@ -2173,54 +2078,50 @@
         }
 
         function triggerZaWarudo() {
-            playTrackFile('za-warudo-effect-green-screen_160k-1.mp3', 'zawarudo');
+            playSound('zawarudo');
             triggerScreenShake();
-            const wrapper = document.getElementById('contentWrapper');
-            wrapper.classList.add('time-stopped');
+            const body = document.getElementById('mainBody');
+            body.classList.add('time-stopped');
             setTimeout(() => {
-                wrapper.classList.remove('time-stopped');
+                body.classList.remove('time-stopped');
                 playSound('powerup');
             }, 4000);
         }
 
         function triggerAbsoluteCinema() {
             playSound('cinema');
-            openModalCentered('cinemaOverlay');
+            document.getElementById('cinemaOverlay').classList.remove('hidden');
         }
         function closeAbsoluteCinema() {
             stopCinemaSound();
-            closeModalCentered('cinemaOverlay');
+            document.getElementById('cinemaOverlay').classList.add('hidden');
         }
 
         function triggerJarvisHud() {
-            playTrackFile('welcome-home-from-jarvis.mp3', 'powerup');
-            openModalCentered('jarvisOverlay');
+            playSound('powerup');
+            document.getElementById('jarvisOverlay').classList.remove('hidden');
         }
         function closeJarvisHud() {
-            stopTrackFile();
-            closeModalCentered('jarvisOverlay');
+            document.getElementById('jarvisOverlay').classList.add('hidden');
         }
 
         let beerLiters = 0;
-        let beerTimer = null;
         function triggerBeerPlant() {
-            playTrackFile('pivkom-polei-menia.mp3', 'gacha5');
+            playSound('gacha5');
             beerLiters += 0.5;
             document.getElementById('beerLitersCounter').textContent = beerLiters.toFixed(1);
-            openModalCentered('beerOverlay');
-            if(beerTimer) clearTimeout(beerTimer);
-            beerTimer = setTimeout(() => closeBeerPlant(), 4000);
+            const overlay = document.getElementById('beerOverlay');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('hidden'), 3000);
         }
         function closeBeerPlant() {
-            if(beerTimer) clearTimeout(beerTimer);
-            stopTrackFile();
-            closeModalCentered('beerOverlay');
+            document.getElementById('beerOverlay').classList.add('hidden');
         }
 
         function toggleDeepFry() {
-            playTrackFile('za-warudo-effect-green-screen_160k-1.mp3', 'punch');
+            playSound('punch');
             triggerScreenShake();
-            document.getElementById('contentWrapper').classList.toggle('deep-fry-mode');
+            document.getElementById('mainBody').classList.toggle('deep-fry-mode');
         }
 
         function squadUlt(message) {
@@ -2230,6 +2131,7 @@
         function openSquadModal(title, badge, imgFile, message, emojiIcon = '👑') {
             playSound('powerup');
             triggerScreenShake();
+            const modal = document.getElementById('squadActionOverlay');
             const imgEl = document.getElementById('squadModalImg');
             document.getElementById('squadModalTitle').textContent = title;
             document.getElementById('squadModalBadge').textContent = badge;
@@ -2240,10 +2142,10 @@
                 this.src = window.createCustomPoster(title.slice(0, 18), badge, '#1e293b', '#fbbf24', emojiIcon);
             };
             imgEl.src = resolvePhotoUrl(imgFile);
-            openModalCentered('squadActionOverlay');
+            modal.classList.remove('hidden');
         }
         function closeSquadModal() {
-            closeModalCentered('squadActionOverlay');
+            document.getElementById('squadActionOverlay').classList.add('hidden');
         }
 
         function replyInMax(text) {
@@ -2343,7 +2245,7 @@
                 fullCollectionShown = true;
                 setTimeout(() => {
                     playSound('coins');
-                    openModalCentered('gachaFullCollectionOverlay');
+                    document.getElementById('gachaFullCollectionOverlay').classList.remove('hidden');
                 }, 500);
             }
 
@@ -2414,7 +2316,7 @@
         }
 
         function closeGachaFullModal() {
-            closeModalCentered('gachaFullCollectionOverlay');
+            document.getElementById('gachaFullCollectionOverlay').classList.add('hidden');
         }
 
         function updateInventoryUI() {
@@ -2451,16 +2353,17 @@
         let redirectTimer = null;
         function openLoginModal() {
             playSound('poke');
-            openModalCentered('loginModal');
+            document.getElementById('loginModal').classList.remove('hidden');
         }
         function closeLoginModal() {
-            closeModalCentered('loginModal');
+            document.getElementById('loginModal').classList.add('hidden');
         }
         function triggerGosuslugiPrank(event) {
             if (event) event.preventDefault();
             closeLoginModal();
+            const overlay = document.getElementById('gosuslugiPrankOverlay');
             const countEl = document.getElementById('redirectCountdown');
-            openModalCentered('gosuslugiPrankOverlay');
+            overlay.classList.remove('hidden');
             playSound('siren');
             triggerScreenShake();
 
@@ -2480,7 +2383,7 @@
         }
         function cancelPrankRedirect() {
             if (redirectTimer) clearInterval(redirectTimer);
-            closeModalCentered('gosuslugiPrankOverlay');
+            document.getElementById('gosuslugiPrankOverlay').classList.add('hidden');
         }
     </script>
 </body>
