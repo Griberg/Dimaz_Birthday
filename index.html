@@ -1464,6 +1464,14 @@
 
     <!-- JAVASCRIPT -->
     <script>
+        // --- ДОБАВЛЕННЫЕ АУДИОФАЙЛЫ ---
+        // Переименуй свои 4 загруженных трека в эти названия
+        const audioZaWarudo = new Audio('za_warudo.mp3');
+        const audioJarvis = new Audio('jarvis.mp3');
+        const audioPiva = new Audio('piva.mp3');
+        const audioRoundabout = new Audio('roundabout.mp3');
+        // ------------------------------
+
         const loadedPhotoMap = {};
         let customCinemaAudioUrl = null;
         let activeCinemaAudio = null;
@@ -1716,7 +1724,7 @@
                     gong.frequency.setValueAtTime(98, now + 0.08);
                     gong.frequency.exponentialRampToValueAtTime(55, now + 0.9);
                     gGain.gain.setValueAtTime(0.5, now + 0.08);
-                    gGain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+                    gGain.exponentialRampToValueAtTime(0.001, now + 0.95);
                     gong.connect(gGain);
                     gGain.connect(ctx.destination);
                     gong.start(now + 0.08);
@@ -2024,8 +2032,14 @@
         }
 
         function toggleToBeContinued() {
-            playSound('powerup');
-            document.getElementById('toBeContinuedOverlay').classList.toggle('hidden');
+            const overlay = document.getElementById('toBeContinuedOverlay');
+            if (overlay.classList.contains('hidden')) {
+                audioRoundabout.currentTime = 0;
+                audioRoundabout.play().catch(e => playSound('powerup')); // подстраховка старым звуком, если плеер не завёлся
+            } else {
+                audioRoundabout.pause();
+            }
+            overlay.classList.toggle('hidden');
             document.getElementById('mainBody').classList.toggle('jojo-sepia');
         }
 
@@ -2078,7 +2092,8 @@
         }
 
         function triggerZaWarudo() {
-            playSound('zawarudo');
+            audioZaWarudo.currentTime = 0;
+            audioZaWarudo.play().catch(e => playSound('zawarudo'));
             triggerScreenShake();
             const body = document.getElementById('mainBody');
             body.classList.add('time-stopped');
@@ -2098,7 +2113,8 @@
         }
 
         function triggerJarvisHud() {
-            playSound('powerup');
+            audioJarvis.currentTime = 0;
+            audioJarvis.play().catch(e => playSound('powerup'));
             document.getElementById('jarvisOverlay').classList.remove('hidden');
         }
         function closeJarvisHud() {
@@ -2107,7 +2123,8 @@
 
         let beerLiters = 0;
         function triggerBeerPlant() {
-            playSound('gacha5');
+            audioPiva.currentTime = 0;
+            audioPiva.play().catch(e => playSound('gacha5'));
             beerLiters += 0.5;
             document.getElementById('beerLitersCounter').textContent = beerLiters.toFixed(1);
             const overlay = document.getElementById('beerOverlay');
