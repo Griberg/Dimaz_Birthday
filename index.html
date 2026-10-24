@@ -692,7 +692,7 @@
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
                         <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
-                             onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для pressy', '#065f46', '#ffffff', '🎙️📺')"
+                             onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
                              class="w-full h-full object-cover">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
@@ -1472,7 +1472,9 @@
 
     <!-- LASTDEP GIF OVERLAY -->
     <div id="lastdepGifOverlay" class="hidden fixed inset-0 z-[110] bg-black flex items-center justify-center">
-        <img id="lastdepGif" src="lastdep.gif" data-filename="lastdep.gif" class="w-full h-full max-w-5xl object-contain">
+        <img id="lastdepGif" src="lastdep.gif" data-filename="lastdep.gif"
+             onerror="this.src=createCustomPoster('ЛАСТДЕП', 'ГИФКА НЕ ЗАГРУЖЕНА', '#000000', '#dc2626', '🔥')"
+             class="w-full h-full max-w-5xl object-contain">
     </div>
 
     <!-- JAVASCRIPT -->
@@ -1549,7 +1551,8 @@
                         loadedPhotoMap['image_820b1c.jpg'] = objectUrl;
                     }
 
-                    document.querySelectorAll('img[data-filename]').forEach(el => {
+                    // Обновленная часть, чтобы подхватывались и картинки, и видео
+                    document.querySelectorAll('img[data-filename], video[data-filename]').forEach(el => {
                         const targetFile = el.getAttribute('data-filename');
                         const altFile = el.getAttribute('data-alt-filename');
                         if (
@@ -1559,6 +1562,9 @@
                             (altFile && getBaseName(altFile) === base)
                         ) {
                             el.src = objectUrl;
+                            if (el.tagName.toLowerCase() === 'video') {
+                                el.load(); // принудительно подгружаем новое видео
+                            }
                         }
                     });
                 });
@@ -2399,6 +2405,10 @@
         function triggerLastDep() {
             playSound('powerup');
             const overlay = document.getElementById('lastdepGifOverlay');
+            const gifEl = document.getElementById('lastdepGif');
+            
+            // Принудительно подтягиваем загруженный файл (если он был загружен через верхнюю панель)
+            gifEl.src = resolvePhotoUrl('lastdep.gif');
             
             overlay.classList.remove('hidden');
             audioLastdep.currentTime = 0;
