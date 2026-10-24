@@ -691,7 +691,7 @@
                         <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
+                        <img src="photo_2026-10-23_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
                              onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
                              class="w-full h-full object-cover">
                     </div>
@@ -883,7 +883,8 @@
                     <div class="text-xs font-mono text-gray-300">
                         Сделано круток: <strong id="pityCounter" class="text-amber-400">0</strong> | Коллекция: <strong id="collectionCounter" class="text-sky-400">0 / 13</strong>
                     </div>
-                    <div class="flex flex-wrap gap-3">
+                    
+                    <div id="normalGachaBtns" class="flex flex-wrap gap-3">
                         <button onclick="rollGenshinGacha(1)" class="arcade-btn bg-amber-200 hover:bg-white text-black font-extrabold px-5 py-3 rounded-xl flex items-center gap-2 text-sm">
                             <span>✨ Крутка ×1</span>
                             <span class="bg-black text-amber-300 px-2 py-0.5 rounded text-xs font-mono">💎 160</span>
@@ -891,6 +892,12 @@
                         <button onclick="rollGenshinGacha(10)" class="arcade-btn bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-6 py-3 rounded-xl flex items-center gap-2 text-sm">
                             <span>🌟 ДЕСЯТКА ×10</span>
                             <span class="bg-black text-amber-400 px-2 py-0.5 rounded text-xs font-mono">💎 1600</span>
+                        </button>
+                    </div>
+                    
+                    <div id="lastdepBtnContainer" class="hidden flex flex-wrap gap-3 w-full sm:w-auto">
+                        <button onclick="triggerLastDep()" class="arcade-btn w-full bg-red-600 hover:bg-red-500 text-white font-display px-6 py-3.5 rounded-xl text-lg animate-pulse shadow-[0_0_15px_#dc2626]">
+                            🔥 ЛАСТДЕП 🔥
                         </button>
                     </div>
                 </div>
@@ -1437,7 +1444,7 @@
                 Поздравляем, Дима! Ты выбил все <strong class="text-amber-400">13 из 13</strong> карт баннера! Квартира успешно переписана на казино, третья почка ушла в <strong class="text-red-400">Three Kidneys</strong>, а Додепмен произнёс:<br><br>
                 <span class="text-amber-300 italic">«Настоящий лудоман не останавливается! 99% игроков бросают крутить прямо перед тем, как им выпадет 14-я супер-лега. Делай додеп, бро!»</span>
             </p>
-            <button onclick="closeGachaFullModal()" class="arcade-btn mt-5 w-full bg-amber-400 hover:bg-amber-300 text-black font-display py-3.5 rounded-xl text-sm">
+            <button onclick="sellGarageAction()" class="arcade-btn mt-5 w-full bg-amber-400 hover:bg-amber-300 text-black font-display py-3.5 rounded-xl text-sm">
                 👌 ПРОДАТЬ ГАРАЖ И ПРОДОЛЖИТЬ КРУТИТЬ
             </button>
         </div>
@@ -1461,6 +1468,11 @@
                 ЯРЕ ЯРЕ ДАЗЕ, ПРОДОЛЖАЕМ РАШ! 👊
             </button>
         </div>
+    </div>
+
+    <!-- LASTDEP VIDEO OVERLAY -->
+    <div id="lastdepVideoOverlay" class="hidden fixed inset-0 z-[110] bg-black flex items-center justify-center">
+        <video id="lastdepVideo" src="lastdep.mp4" class="w-full h-full max-w-5xl object-contain" playsinline></video>
     </div>
 
     <!-- JAVASCRIPT -->
@@ -2164,12 +2176,6 @@
             document.getElementById('beerOverlay').classList.add('hidden');
         }
 
-        function toggleDeepFry() {
-            playSound('punch');
-            triggerScreenShake();
-            document.getElementById('mainBody').classList.toggle('deep-fry-mode');
-        }
-
         function squadUlt(message) {
             openSquadModal('ОТРЯД «ДИМАСТИЯ»', 'АКТИВАЦИЯ УЛЬТЫ', 'photo_2026-10-22_23-49-07.jpg', message, '👑');
         }
@@ -2378,6 +2384,31 @@
 
         function closeGachaFullModal() {
             document.getElementById('gachaFullCollectionOverlay').classList.add('hidden');
+        }
+
+        function sellGarageAction() {
+            playSound('powerup');
+            closeGachaFullModal();
+            document.getElementById('normalGachaBtns').classList.add('hidden');
+            document.getElementById('lastdepBtnContainer').classList.remove('hidden');
+        }
+
+        function triggerLastDep() {
+            playSound('powerup');
+            const overlay = document.getElementById('lastdepVideoOverlay');
+            const vid = document.getElementById('lastdepVideo');
+            
+            overlay.classList.remove('hidden');
+            vid.currentTime = 0;
+            vid.play().catch(e => console.log('Video error:', e));
+
+            setTimeout(() => {
+                vid.pause();
+                overlay.classList.add('hidden');
+                
+                document.getElementById('lastdepBtnContainer').classList.add('hidden');
+                document.getElementById('normalGachaBtns').classList.remove('hidden');
+            }, 5000);
         }
 
         function updateInventoryUI() {
