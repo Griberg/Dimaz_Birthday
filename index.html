@@ -1472,8 +1472,8 @@
 
     <!-- LASTDEP GIF OVERLAY -->
     <div id="lastdepGifOverlay" class="hidden fixed inset-0 z-[110] bg-black flex items-center justify-center">
-        <img id="lastdepGif" src="lastdep.gif" data-filename="lastdep.gif"
-             onerror="this.src=createCustomPoster('ЛАСТДЕП', 'ГИФКА НЕ ЗАГРУЖЕНА', '#000000', '#dc2626', '🔥')"
+        <img id="lastdepGif" src="rickroll.webp" data-filename="rickroll.webp"
+             onerror="this.src=createCustomPoster('ЛАСТДЕП', 'ФОТО НЕ ЗАГРУЖЕНО', '#000000', '#dc2626', '🔥')"
              class="w-full h-full max-w-5xl object-contain">
     </div>
 
@@ -2408,7 +2408,7 @@
             const gifEl = document.getElementById('lastdepGif');
             
             // Принудительно подтягиваем загруженный файл (если он был загружен через верхнюю панель)
-            gifEl.src = resolvePhotoUrl('lastdep.gif');
+            gifEl.src = resolvePhotoUrl('rickroll.webp');
             
             overlay.classList.remove('hidden');
             audioLastdep.currentTime = 0;
