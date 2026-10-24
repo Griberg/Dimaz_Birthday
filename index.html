@@ -255,7 +255,7 @@
             <div class="flex items-center gap-3">
                 <label class="cursor-pointer bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3 py-1 rounded border-2 border-black shadow-[2px_2px_0px_#000] transition flex items-center gap-1.5">
                     <i class="fa-solid fa-floppy-disk"></i> Вставить файлы
-                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*,video/*" class="hidden">
+                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*" class="hidden">
                 </label>
                 <button onclick="document.getElementById('photoHelperBar').classList.add('hidden')" class="text-gray-400 hover:text-white px-1">
                     <i class="fa-solid fa-xmark text-base"></i>
@@ -692,7 +692,7 @@
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
                         <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
-                             onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
+                             onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для pressy', '#065f46', '#ffffff', '🎙️📺')"
                              class="w-full h-full object-cover">
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between">
@@ -1470,9 +1470,9 @@
         </div>
     </div>
 
-    <!-- LASTDEP VIDEO OVERLAY -->
-    <div id="lastdepVideoOverlay" class="hidden fixed inset-0 z-[110] bg-black flex items-center justify-center">
-        <video id="lastdepVideo" src="lastdep.mp4" data-filename="lastdep.mp4" class="w-full h-full max-w-5xl object-contain" playsinline></video>
+    <!-- LASTDEP GIF OVERLAY -->
+    <div id="lastdepGifOverlay" class="hidden fixed inset-0 z-[110] bg-black flex items-center justify-center">
+        <img id="lastdepGif" src="lastdep.gif" data-filename="lastdep.gif" class="w-full h-full max-w-5xl object-contain">
     </div>
 
     <!-- JAVASCRIPT -->
@@ -1492,6 +1492,9 @@
         
         // --- НОВЫЙ ЗВУК ДЛЯ КНОПКИ ORA ---
         const audioOra = new Audio('ora.mp3');
+
+        // --- НОВЫЙ ЗВУК ДЛЯ ЛАСТДЕПА ---
+        const audioLastdep = new Audio('lastdep.mp3');
 
         // Переменная для отслеживания текущего звука отряда
         let activeSquadAudio = null;
@@ -1546,8 +1549,7 @@
                         loadedPhotoMap['image_820b1c.jpg'] = objectUrl;
                     }
 
-                    // Обновленная часть, чтобы подхватывались и картинки, и видео
-                    document.querySelectorAll('img[data-filename], video[data-filename]').forEach(el => {
+                    document.querySelectorAll('img[data-filename]').forEach(el => {
                         const targetFile = el.getAttribute('data-filename');
                         const altFile = el.getAttribute('data-alt-filename');
                         if (
@@ -1557,9 +1559,6 @@
                             (altFile && getBaseName(altFile) === base)
                         ) {
                             el.src = objectUrl;
-                            if (el.tagName.toLowerCase() === 'video') {
-                                el.load(); // принудительно подгружаем новое видео
-                            }
                         }
                     });
                 });
@@ -2399,15 +2398,14 @@
 
         function triggerLastDep() {
             playSound('powerup');
-            const overlay = document.getElementById('lastdepVideoOverlay');
-            const vid = document.getElementById('lastdepVideo');
+            const overlay = document.getElementById('lastdepGifOverlay');
             
             overlay.classList.remove('hidden');
-            vid.currentTime = 0;
-            vid.play().catch(e => console.log('Video error:', e));
+            audioLastdep.currentTime = 0;
+            audioLastdep.play().catch(e => playSound('gacha5')); // Подстраховка стандартным звуком
 
             setTimeout(() => {
-                vid.pause();
+                audioLastdep.pause();
                 overlay.classList.add('hidden');
                 
                 document.getElementById('lastdepBtnContainer').classList.add('hidden');
