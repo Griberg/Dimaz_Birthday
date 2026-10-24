@@ -1375,6 +1375,7 @@
             <p class="text-sm font-bold text-gray-200 mt-2">
                 Мухоловка затянулась и передаёт: «С Днюхой, Дима! Да здравствует Димастия!»
             </p>
+            <p class="text-amber-400 font-mono text-xs sm:text-sm mt-4">[ Кликни в любое место, чтобы закрыть ]</p>
         </div>
     </div>
 
@@ -1476,6 +1477,9 @@
         const audioPress = new Audio('press.mp3');
         const audioWinston = new Audio('winston.mp3');
         const audioCat = new Audio('cat.mp3');
+        
+        // --- НОВЫЙ ЗВУК ДЛЯ КНОПКИ ORA ---
+        const audioOra = new Audio('ora.mp3');
 
         // Переменная для отслеживания текущего звука отряда
         let activeSquadAudio = null;
@@ -2065,7 +2069,9 @@
         function oraOraPunch() {
             oraTotal += 93;
             document.getElementById('oraCount').textContent = oraTotal;
-            playSound('punch');
+            
+            audioOra.currentTime = 0;
+            audioOra.play().catch(e => playSound('punch')); // Подстраховка стандартным звуком
             triggerScreenShake();
 
             if (oraTotal === 1488) {
@@ -2136,6 +2142,9 @@
             document.getElementById('jarvisOverlay').classList.remove('hidden');
         }
         function closeJarvisHud() {
+            if (audioJarvis) {
+                try { audioJarvis.pause(); audioJarvis.currentTime = 0; } catch(e) {}
+            }
             document.getElementById('jarvisOverlay').classList.add('hidden');
         }
 
@@ -2147,9 +2156,11 @@
             document.getElementById('beerLitersCounter').textContent = beerLiters.toFixed(1);
             const overlay = document.getElementById('beerOverlay');
             overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('hidden'), 3000);
         }
         function closeBeerPlant() {
+            if (audioPiva) {
+                try { audioPiva.pause(); audioPiva.currentTime = 0; } catch(e) {}
+            }
             document.getElementById('beerOverlay').classList.add('hidden');
         }
 
