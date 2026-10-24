@@ -255,7 +255,7 @@
             <div class="flex items-center gap-3">
                 <label class="cursor-pointer bg-amber-400 hover:bg-amber-300 text-black font-extrabold px-3 py-1 rounded border-2 border-black shadow-[2px_2px_0px_#000] transition flex items-center gap-1.5">
                     <i class="fa-solid fa-floppy-disk"></i> Вставить файлы
-                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*" class="hidden">
+                    <input type="file" id="localPhotosInput" multiple accept="image/*,audio/*,video/*" class="hidden">
                 </label>
                 <button onclick="document.getElementById('photoHelperBar').classList.add('hidden')" class="text-gray-400 hover:text-white px-1">
                     <i class="fa-solid fa-xmark text-base"></i>
@@ -691,7 +691,7 @@
                         <span class="text-xs font-mono text-gray-400">ДИМАСТИЯ</span>
                     </div>
                     <div class="relative aspect-square bg-slate-950 overflow-hidden">
-                        <img src="photo_2026-10-23_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
+                        <img src="photo_2026-10-22_23-49-48.jpg" data-filename="photo_2026-10-22_23-49-48.jpg"
                              onerror="this.src=createCustomPoster('ЭКСТРЕННЫЙ БРИФИНГ', 'Заявление для прессы', '#065f46', '#ffffff', '🎙️📺')"
                              class="w-full h-full object-cover">
                     </div>
@@ -1472,7 +1472,7 @@
 
     <!-- LASTDEP VIDEO OVERLAY -->
     <div id="lastdepVideoOverlay" class="hidden fixed inset-0 z-[110] bg-black flex items-center justify-center">
-        <video id="lastdepVideo" src="lastdep.mp4" class="w-full h-full max-w-5xl object-contain" playsinline></video>
+        <video id="lastdepVideo" src="lastdep.mp4" data-filename="lastdep.mp4" class="w-full h-full max-w-5xl object-contain" playsinline></video>
     </div>
 
     <!-- JAVASCRIPT -->
@@ -1546,16 +1546,20 @@
                         loadedPhotoMap['image_820b1c.jpg'] = objectUrl;
                     }
 
-                    document.querySelectorAll('img[data-filename]').forEach(img => {
-                        const targetFile = img.getAttribute('data-filename');
-                        const altFile = img.getAttribute('data-alt-filename');
+                    // Обновленная часть, чтобы подхватывались и картинки, и видео
+                    document.querySelectorAll('img[data-filename], video[data-filename]').forEach(el => {
+                        const targetFile = el.getAttribute('data-filename');
+                        const altFile = el.getAttribute('data-alt-filename');
                         if (
                             targetFile === file.name ||
                             altFile === file.name ||
                             getBaseName(targetFile) === base ||
                             (altFile && getBaseName(altFile) === base)
                         ) {
-                            img.src = objectUrl;
+                            el.src = objectUrl;
+                            if (el.tagName.toLowerCase() === 'video') {
+                                el.load(); // принудительно подгружаем новое видео
+                            }
                         }
                     });
                 });
